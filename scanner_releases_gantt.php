@@ -30,7 +30,14 @@
                 }
 
                 getDataTableRow(){
-                    return [this.id, this.name, this.open_date, this.rtm_date, null, 100, null];
+                    var percentComplete = 0;
+                    switch(this.status){
+                        case "Draft": percentComplete = 25; break;
+                        case "Active": percentComplete = 50; break;
+                        case "Completed": percentComplete = 75; break;
+                        case "Released": percentComplete = 100; break;
+                    }
+                    return [this.id, this.name, this.open_date, this.rtm_date, null, percentComplete, null];
                 }
             }
 
@@ -83,20 +90,15 @@
 
                 rawData.sort((a, b) => (a.open_date > b.open_date) ? 1 : -1);
 
-                
-
                 rawData.forEach(function (element){data.addRow(element.getDataTableRow())});
-
-                console.log(data);
 
                 var trackHeight = 30;
 
                 var options = {
                     height: data.getNumberOfRows() * trackHeight + 50,
-                    width: 1200,
+                    width: 1600,
                     gantt: {
-                        trackHeight: trackHeight,
-                        percentEnabled: false
+                        trackHeight: trackHeight
                     }
                 };
 
