@@ -30,14 +30,7 @@
                 }
 
                 getDataTableRow(){
-                    var percentComplete = 0;
-                    switch(this.status){
-                        case "Draft": percentComplete = 25; break;
-                        case "Active": percentComplete = 50; break;
-                        case "Completed": percentComplete = 75; break;
-                        case "Released": percentComplete = 100; break;
-                    }
-                    return [this.id, this.name, this.open_date, this.rtm_date, null, percentComplete, null];
+                    return [this.id, this.name, this.open_date, this.rtm_date, null, 100, null];
                 }
             }
 
@@ -63,11 +56,15 @@
 
                     if ($result->num_rows > 0) {
                         while($row = $result->fetch_assoc()) {
-                            $open = explode('-', $row["open_date"]);
-                            $dependency = explode('-', $row["dependency_date"]);
+
+                            //Changing this boolean value fufills requirement A3&A4.13
+                            $useDependencyDateInsteadOfOpenDate = false;
+
+                            $open =  $useDependencyDateInsteadOfOpenDate ? explode('-', $row["dependency_date"]) : explode('-', $row["open_date"]);
+                            $dependency = $useDependencyDateInsteadOfOpenDate ? explode('-', $row["open_date"]) : explode('-', $row["dependency_date"]);
                             $freeze = explode('-', $row["freeze_date"]);
                             $rtm = explode('-', $row["rtm_date"]);
-
+                            
                             echo "rawData.push(new Release(";
                             echo "'{$row["id"]}',";
                             echo "'{$row["name"]}',";
@@ -96,9 +93,10 @@
 
                 var options = {
                     height: data.getNumberOfRows() * trackHeight + 50,
-                    width: 1600,
+                    width: 1200,
                     gantt: {
-                        trackHeight: trackHeight
+                        trackHeight: trackHeight,
+                        percentEnabled: false
                     }
                 };
 
@@ -109,7 +107,6 @@
         </script>
 
         <div id="chart_div"></div>
-        <p>TODO: 4.11, 4.12?, 4.13, 4.14, 4.15</p>
     </div>
 </div>
 
