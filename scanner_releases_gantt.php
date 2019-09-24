@@ -61,7 +61,7 @@
                     $tDate = $row2["to_date"];
                     }
                     
-                    $sql = "SELECT * FROM `releases` WHERE `type` IN ($type_list) AND `status` IN ($status_list) AND `open_date` >= '$fDate' AND `rtm_date` < '$tDate'";
+                    $sql = "SELECT * FROM `releases` WHERE `type` IN ($type_list) AND `status` IN ($status_list) AND `open_date` >= '$fDate' AND `rtm_date` <= '$tDate'";
                     $result = $db->query($sql);
 
                     if ($result->num_rows > 0) {
