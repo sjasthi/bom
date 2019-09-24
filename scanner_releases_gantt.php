@@ -10,7 +10,7 @@
 <div class="right-content">
     <div class="container">
 
-        <h3 style = "color: #01B0F1;">Scanner -> System Releases Gantt</h3>
+        <h3 style = "color: #01B0F1;">Scanner -> System Releases Gantt</h3><br>
 
         <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
         <script type="text/javascript">
@@ -51,7 +51,17 @@
                 data.addColumn('string', 'Dependencies');
 
                 <?php
-                    $sql = "SELECT * from releases";
+                    $prefs = "SELECT * FROM `preferences` WHERE `name` = 'gantt'";
+                    $result2 = $db->query($prefs);
+
+                    while($row2 = $result2->fetch_assoc()) {
+                    $status_list = $row2["status_list"];
+                    $type_list = $row2["type_list"];
+                    $fDate = $row2["from_date"];
+                    $tDate = $row2["to_date"];
+                    }
+                    
+                    $sql = "SELECT * FROM `releases` WHERE `type` IN ($type_list) AND `status` IN ($status_list) AND `open_date` >= '$fDate' AND `rtm_date` < '$tDate'";
                     $result = $db->query($sql);
 
                     if ($result->num_rows > 0) {
