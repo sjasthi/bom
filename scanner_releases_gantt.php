@@ -51,9 +51,28 @@
                 data.addColumn('string', 'Dependencies');
 
                 <?php
-                    $prefs = "SELECT * FROM `preferences` WHERE `name` = 'gantt'";
-                    $result2 = $db->query($prefs);
+                    /*
+                    //Selecting the preferences by id instead of by a single line. Only one line is ecxpected, 
+                    //The sql may need to be adjusted once the table is ready
+                     
+                    $pref_fdate= "SELECT * FROM `preferences` WHERE `id` = ‘gantt_start’";
+                    $result_fdate = $db->query($pref_fdate);
+                    $fDate = ($result_fdate -> num_rows = 1 ? $row[“value”]: 'now()');
 
+                    $pref_tdate= "SELECT * FROM `preferences` WHERE `id` = ‘gantt_end’";
+                    $result_tdate = $db->query($pref_tdate);
+                    $tDate = ($result_tdate -> num_rows = 1 ? $row[“value”]: 'now() + 365');
+
+                    $pref_status= "SELECT * FROM `preferences` WHERE `id` = ‘gantt_status’";
+                    $result_status = $db->query($pref_status);
+                    $status = ($result_status-> num_rows = 1 ? $row[“value”]: 'Active');
+
+                    $pref_type= "SELECT * FROM `preferences` WHERE `id` = ‘gantt_type’";
+                    $result_type = $db->query($pref_type);
+                    $status = ($result_type-> num_rows = 1 ? $row[“value”]: 'Async');
+                    */
+
+                    
                     while($row2 = $result2->fetch_assoc()) {
                     $status_list = $row2["status_list"];
                     $type_list = $row2["type_list"];
