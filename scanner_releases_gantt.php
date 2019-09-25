@@ -10,7 +10,7 @@
 <div class="right-content">
     <div class="container">
 
-        <h3 style = "color: #01B0F1;">Scanner -> System Releases Gantt</h3>
+        <h3 style = "color: #01B0F1;">Scanner -> System Releases Gantt</h3><br>
 
         <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
         <script type="text/javascript">
@@ -51,7 +51,61 @@
                 data.addColumn('string', 'Dependencies');
 
                 <?php
-                    $sql = "SELECT * from releases";
+                    //pulls the from aka start date from the preferences table
+                    $pref_fdate= "SELECT value FROM preferences WHERE id = 'gantt_start';";
+                    $result_fdate = $db->query($pref_fdate);
+                    if ($result_fdate -> num_rows > 0) {
+                        // output data of each row
+                        while ($row = $result_fdate -> fetch_assoc()) {
+                            $fDate = $row["value"];
+                              }//end while
+                            }//end if
+                            else {
+                                $fDate = 'now()';
+                            }//end else
+                            $result_fdate -> close(); //Closing the database results
+
+                    //pulls the to aka end date from the preferences table
+                    $pref_tdate= "SELECT * FROM preferences WHERE id = 'gantt_end';";
+                    $result_tdate = $db->query($pref_tdate);
+                    if ($result_tdate -> num_rows > 0) {
+                        // output data of each row
+                        while ($row = $result_tdate -> fetch_assoc()) {
+                            $tDate = $row["value"];
+                              }//end while
+                            }//end if
+                            else {
+                                $tDate = 'now()';
+                            }//end else
+                            $result_tdate -> close(); //Closing the database results
+
+                    //pulls the from status from the preference table
+                    $pref_status= "SELECT * FROM preferences WHERE id = 'gantt_status';";
+                    $result_status = $db->query($pref_status);
+                    if ($result_status-> num_rows > 0) {
+                        while ($row = $result_status -> fetch_assoc()) {
+                        $status_list = $row["value"];
+                          }//end while
+                        }//end if
+                        else {
+                            $status_list  = 'Active';
+                        }//end else
+                        $result_status -> close(); //Closing the database results
+
+                    //pulls the from types from the preference table
+                    $pref_type= "SELECT * FROM preferences WHERE id = 'gantt_type';";
+                    $result_type = $db->query($pref_type);
+                    if ($result_type -> num_rows > 0) {
+                        while ($row = $result_type  -> fetch_assoc()) {
+                        $type_list = $row["value"];
+                          }//end while
+                        }//end if
+                        else {
+                            $type_list  = 'Async';
+                        }//end else
+                        $result_type -> close(); //Closing the database results
+
+                    $sql = "SELECT * FROM `releases` WHERE `type` IN ($type_list) AND `status` IN ($status_list) AND `open_date` >= '$fDate' AND `rtm_date` <= '$tDate'";
                     $result = $db->query($sql);
 
                     if ($result->num_rows > 0) {
