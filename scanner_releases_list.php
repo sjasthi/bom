@@ -36,28 +36,14 @@
                 </tr>
               </thead>
 
-              <tfoot>
-                <tr>
-                        <th>Name</th>
-                        <th>Name</th>
-                        <th>Type</th>
-                        <th>Status</th>
-                        <th>Open Date</th>
-                        <th>Dependency Date</th>
-                        <th>Content Date</th>
-                        <th>RTM Date(s)</th>
-                        <th>Manager</th>
-                        <th>Author</th>
-                        <th>BOM ID</th>
-                </tr>
-              </tfoot>
+              
 
               <tbody>
 
               <?php
 
-$sql = "SELECT * from releases ORDER BY rtm_date ASC;";
-$result = $db->query($sql);
+                 $sql = "SELECT * from releases ORDER BY rtm_date ASC;";
+                 $result = $db->query($sql);
 
                 if ($result->num_rows > 0) {
                     // output data of each row
@@ -85,43 +71,60 @@ $result = $db->query($sql);
                 ?>
 
               </tbody>
-        </table>
 
+              <tfoot>
+                <tr>
+                        <th>id</th>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>Status</th>
+                        <th>Open Date</th>
+                        <th>Dependency Date</th>
+                        <th>Content Date</th>
+                        <th>RTM Date(s)</th>
+                        <th>Manager</th>
+                        <th>Author</th>
+                        <th>BOM ID</th>
+                </tr>
+              </tfoot>
+        </table>
+    </div>
+</div>            
 
         <script type="text/javascript" language="javascript">
-    $(document).ready( function () {
-        
-        $('#info').DataTable( {
-            dom: 'lfrtBip',
-            buttons: [
-                'copy', 'excel', 'csv', 'pdf'
-            ] }
-        );
+          $(document).ready( function () {
+              
+              $('#info').DataTable( {
+                  dom: 'lfrtBip',
+                  buttons: [
+                      'copy', 'excel', 'csv', 'pdf'
+                  ] }
+              );
 
-        $('#info thead tr').clone(true).appendTo( '#info thead' );
-        $('#info thead tr:eq(1) th').each( function (i) {
-            var title = $(this).text();
-            $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
-    
-            $( 'input', this ).on( 'keyup change', function () {
-                if ( table.column(i).search() !== this.value ) {
-                    table
-                        .column(i)
-                        .search( this.value )
-                        .draw();
-                }
-            } );
-        } );
-    
-        var table = $('#info').DataTable( {
-            orderCellsTop: true,
-            fixedHeader: true,
-            retrieve: true
-        } );
-        
-    } );
+              $('#info thead tr').clone(true).appendTo( '#info thead' );
+              $('#info thead tr:eq(1) th').each( function (i) {
+                  var title = $(this).text();
+                  $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+          
+                  $( 'input', this ).on( 'keyup change', function () {
+                      if ( table.column(i).search() !== this.value ) {
+                          table
+                              .column(i)
+                              .search( this.value )
+                              .draw();
+                      }
+                  } );
+              } );
+          
+              var table = $('#info').DataTable( {
+                  orderCellsTop: true,
+                  fixedHeader: true,
+                  retrieve: true
+              } );
+              
+          } );
 
-</script>
+         </script>
 
         
 
