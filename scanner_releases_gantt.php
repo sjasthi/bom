@@ -51,35 +51,60 @@
                 data.addColumn('string', 'Dependencies');
 
                 <?php
-                    /*
-                    //Selecting the preferences by id instead of by a single line. Only one line is ecxpected, 
-                    //The sql may need to be adjusted once the table is ready
-                     
-                    $pref_fdate= "SELECT * FROM `preferences` WHERE `id` = ‘gantt_start’";
+                    //pulls the from aka start date from the preferences table
+                    $pref_fdate= "SELECT value FROM preferences WHERE id = 'gantt_start';";
                     $result_fdate = $db->query($pref_fdate);
-                    $fDate = ($result_fdate -> num_rows = 1 ? $row[“value”]: 'now()');
+                    if ($result_fdate -> num_rows > 0) {
+                        // output data of each row
+                        while ($row = $result_fdate -> fetch_assoc()) {
+                            $fDate = $row["value"];
+                              }//end while
+                            }//end if
+                            else {
+                                $fDate = 'now()';
+                            }//end else
+                            $result_fdate -> close(); //Closing the database results
 
-                    $pref_tdate= "SELECT * FROM `preferences` WHERE `id` = ‘gantt_end’";
+                    //pulls the to aka end date from the preferences table
+                    $pref_tdate= "SELECT * FROM preferences WHERE id = 'gantt_end';";
                     $result_tdate = $db->query($pref_tdate);
-                    $tDate = ($result_tdate -> num_rows = 1 ? $row[“value”]: 'now() + 365');
+                    if ($result_tdate -> num_rows > 0) {
+                        // output data of each row
+                        while ($row = $result_tdate -> fetch_assoc()) {
+                            $tDate = $row["value"];
+                              }//end while
+                            }//end if
+                            else {
+                                $tDate = 'now()';
+                            }//end else
+                            $result_tdate -> close(); //Closing the database results
 
-                    $pref_status= "SELECT * FROM `preferences` WHERE `id` = ‘gantt_status’";
+                    //pulls the from status from the preference table
+                    $pref_status= "SELECT * FROM preferences WHERE id = 'gantt_status';";
                     $result_status = $db->query($pref_status);
-                    $status = ($result_status-> num_rows = 1 ? $row[“value”]: 'Active');
+                    if ($result_status-> num_rows > 0) {
+                        while ($row = $result_status -> fetch_assoc()) {
+                        $status_list = $row["value"];
+                          }//end while
+                        }//end if
+                        else {
+                            $status_list  = 'Active';
+                        }//end else
+                        $result_status -> close(); //Closing the database results
 
-                    $pref_type= "SELECT * FROM `preferences` WHERE `id` = ‘gantt_type’";
+                    //pulls the from types from the preference table
+                    $pref_type= "SELECT * FROM preferences WHERE id = 'gantt_type';";
                     $result_type = $db->query($pref_type);
-                    $status = ($result_type-> num_rows = 1 ? $row[“value”]: 'Async');
-                    */
+                    if ($result_type -> num_rows > 0) {
+                        while ($row = $result_type  -> fetch_assoc()) {
+                        $type_list = $row["value"];
+                          }//end while
+                        }//end if
+                        else {
+                            $type_list  = 'Async';
+                        }//end else
+                        $result_type -> close(); //Closing the database results
 
-                    
-                    while($row2 = $result2->fetch_assoc()) {
-                    $status_list = $row2["status_list"];
-                    $type_list = $row2["type_list"];
-                    $fDate = $row2["from_date"];
-                    $tDate = $row2["to_date"];
-                    }
-                    
                     $sql = "SELECT * FROM `releases` WHERE `type` IN ($type_list) AND `status` IN ($status_list) AND `open_date` >= '$fDate' AND `rtm_date` <= '$tDate'";
                     $result = $db->query($sql);
 
