@@ -19,30 +19,26 @@ if (isset($_POST['new_sDate'])){
     header('location: setup_gantt_preference.php?preferencesUpdated=Success');
 }//end if
 
-if (isset($_POST['new_status1']) or isset($_POST['new_status2']) or isset($_POST['new_status3']) or isset($_POST['new_status4'])){
-
-    $status1 = $_POST['new_status1'];
-    $status2 = $_POST['new_status2'];
-    $status3 = $_POST['new_status3'];
-    $status4 = $_POST['new_status4'];
-
-          
-    //$sql1 = "UPDATE `preferences` SET `value`= $status WHERE `name` = 'gantt_status'";
-
-    
-
-    //mysqli_query($db, $sql1);
-    //header('location: setup_gantt_preference.php?preferencesUpdated=Success');
-}//end if
-
-/*if (isset($_POST['new_type1'])){
-
-    $type = mysqli_real_escape_string($db, $_POST['new_type']);
-          
-    $sql1 = "UPDATE `preferences` SET `value`= $type WHERE `name` = 'gantt_type'";
-
-    mysqli_query($db, $sql1);
-    
-    header('location: setup_gantt_preference.php?preferencesUpdated=Success');
-}/end if*/
+if(isset($_POST['status_submit'])){
+    if (!empty($_POST['status_list'])){
+        $status = $_POST['status_list'];
+        $result = "'" . implode ( "', '", $status ) . "'";
+        $sql1 = "UPDATE `preferences` SET `value`= \"" .$result. "\" WHERE `id` = 'gantt_status'";
+        mysqli_query($db, $sql1);
+        header('location: setup_gantt_preference.php?preferencesUpdated=Success');
+    }else{
+    header('location: setup_gantt_preference.php?preferencesUpdated=StatusFail');
+    }
+}   
+if(isset($_POST['type_submit'])){
+    if (!empty($_POST['type_list'])){
+        $type = $_POST['type_list'];
+        $result = "'" . implode ( "', '", $type ) . "'";
+        $sql1 = "UPDATE `preferences` SET `value`= \"" .$result. "\" WHERE `id` = 'gantt_type'";
+        mysqli_query($db, $sql1);
+        header('location: setup_gantt_preference.php?preferencesUpdated=Success');
+    }else{
+        header('location: setup_gantt_preference.php?preferencesUpdated=TypeFail');   
+    }
+}
 ?>

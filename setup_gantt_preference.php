@@ -60,6 +60,16 @@
                 echo "<br><h3 align=center style='color:green'>Success! The Preferences have been updated!</h3>";
             }
         }
+        if(isset($_GET['preferencesUpdated'])){
+            if($_GET["preferencesUpdated"] == "StatusFail"){
+                echo "<br><h3 align=center style='color:red'>Update Failed! Please select at least one status to view!</h3>";
+            }
+        }
+        if(isset($_GET['preferencesUpdated'])){
+            if($_GET["preferencesUpdated"] == "TypeFail"){
+                echo "<br><h3 align=center style='color:red'>Update Failed! Please select at least one type to view!</h3>";
+            }
+        }
     ?>
         <div class="right-content">
             <div class="container">
@@ -125,12 +135,12 @@
                                 <tr>
                                     <td style="width200px">Select Status Range:</td>
                                     <td>
-                                        <?php $a=1; while($rows = $statusSet->fetch_assoc()){
+                                        <?php while($rows = $statusSet->fetch_assoc()){
                                                 $status=$rows['status']; 
-                                        echo"<input type='checkbox' name='new_status$a' Value='$status'>&nbsp; $status &nbsp;&nbsp;"; $a++;}?></td>
+                                        echo"<input type='checkbox' name='status_list[]' Value='$status'>&nbsp; $status &nbsp;&nbsp;";}?></td>
                                 </tr>
                             </table><br>
-                            <button type="submit" name="submit" class="btn btn-primary btn-md align-items-center">Modify Status</button>
+                            <button type="submit" name="status_submit" class="btn btn-primary btn-md align-items-center">Modify Status</button>
                         </form>
                     </div>
                 </div>
@@ -156,12 +166,12 @@
                                     <tr>
                                         <td style="width200px">Select Type Range:</td>
                                         <td style="width300px">
-                                            <?php $a=1; while($rows = $typeSet->fetch_assoc()){
+                                            <?php while($rows = $typeSet->fetch_assoc()){
                                                     $type=$rows['type']; 
-                                            echo"<input type='checkbox' name='new_type$a' Value=''$type''>&nbsp; $type &nbsp;&nbsp;"; $a++;}?></td>
+                                            echo"<input type='checkbox' name='type_list[]' Value='$type'>&nbsp; $type &nbsp;&nbsp;";}?></td>
                                     </tr>
                                 </table><br>
-                            <button type="submit" name="submit" class="btn btn-primary btn-md align-items-center">Modify Type</button>
+                            <button type="submit" name="type_submit" class="btn btn-primary btn-md align-items-center">Modify Type</button>
                         </form>
                     </div>
                 </div>
