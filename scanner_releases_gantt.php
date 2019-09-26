@@ -1,4 +1,3 @@
-
 <?php
     $nav_selected = "SCANNER"; 
     $left_buttons = "YES"; 
@@ -163,6 +162,18 @@
 
         <div id="chart_div"></div>
     </div>
-  </body>
-</html>          
+</div>
 
+<style>
+    tfoot {
+        display: table-header-group;
+    }
+    #chart_div{
+        overflow-x: scroll;
+        overflow-y: hidden;
+    }
+</style>
+
+<?php
+include("./footer.php");
+?>
