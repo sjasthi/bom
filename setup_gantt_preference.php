@@ -54,7 +54,13 @@
     </head>
 
     <body>
-
+    <?php
+        if(isset($_GET['preferencesUpdated'])){
+            if($_GET["preferencesUpdated"] == "Success"){
+                echo "<br><h3 align=center style='color:green'>Success! The Preferences have been updated!</h3>";
+            }
+        }
+    ?>
         <div class="right-content">
             <div class="container">
 
@@ -85,12 +91,12 @@
                                 <tr>
                                     <td style="width:200px">Set Start Date:</td>
                                     <td><input disabled type="date" maxlength="12" size="15" value="<?php echo $sDate; ?>" title="Current value"></td> 
-                                    <td><input required type="date" name="new_sDate" maxlength="12" size="15" title="Enter a number"></td>
+                                    <td><input required type="date" name="new_sDate" maxlength="12" size="15" title="Enter a start date"></td>
                                 </tr>
                                 <tr>
                                     <td style="width200px">Set End Date:</td>
                                     <td><input disabled type="date" maxlength="12" size="15" value="<?php echo $eDate; ?>" title="Current value"></td> 
-                                    <td><input required type="date" name="new_eDate" maxlength="12" size="15" title="Enter a number"></td>
+                                    <td><input required type="date" name="new_eDate" maxlength="12" size="15" title="Enter a end date"></td>
                                 </tr>
                             </table><br>
                             <button type="submit" name="submit" class="btn btn-primary btn-md align-items-center">Modify Dates</button>
@@ -106,24 +112,26 @@
                 </div>
                 <div id="collapse-release-date" class="panel-collapse collapse">
                     <div class="panel-body">
-                        <table style="width:5500px">
-                            <tr>
-                                <th style="width:200px"></th>
-                                <th>Statuses</th> 
-                            </tr>
-                            <tr>
-                                <td style="width:200px">Current Status Range:</td>
-                                <td><input disabled type="string" maxlength="250" size="50" value="<?php echo $status; ?>" title="Current status"></td> 
-                            </tr>
-                            <tr>
-                                <td style="width200px">Select Status Range:</td>
-                                <td>
-                                    <?php while($rows = $statusSet->fetch_assoc()){
-                                            $status=$rows['status']; 
-                                    echo"<input type='checkbox' Value=''$status''>&nbsp; $status &nbsp;&nbsp;";}?></td>
-                            </tr>
-                        </table><br>
-                        <button type="submit" name="submit" class="btn btn-primary btn-md align-items-center">Modify Status</button>
+                        <form action="modifyThePreferences.php" method="POST">
+                            <table style="width:5500px">
+                                <tr>
+                                    <th style="width:200px"></th>
+                                    <th>Statuses</th> 
+                                </tr>
+                                <tr>
+                                    <td style="width:200px">Current Status Range:</td>
+                                    <td><input disabled type="string" maxlength="250" size="50" value="<?php echo $status; ?>" title="Current status"></td> 
+                                </tr>
+                                <tr>
+                                    <td style="width200px">Select Status Range:</td>
+                                    <td>
+                                        <?php $a=1; while($rows = $statusSet->fetch_assoc()){
+                                                $status=$rows['status']; 
+                                        echo"<input type='checkbox' name='new_status$a' Value='$status'>&nbsp; $status &nbsp;&nbsp;"; $a++;}?></td>
+                                </tr>
+                            </table><br>
+                            <button type="submit" name="submit" class="btn btn-primary btn-md align-items-center">Modify Status</button>
+                        </form>
                     </div>
                 </div>
                 </div>
@@ -135,24 +143,26 @@
                 </div>
                 <div id="collapse-type" class="panel-collapse collapse">
                     <div class="panel-body">
-                        <table style="width:5500px">
-                                <tr>
-                                    <th style="width:200px"></th>
-                                    <th>Types</th> 
-                                </tr>
-                                <tr>
-                                    <td style="width:200px">Current Type Range:</td>
-                                    <td><input disabled type="string" maxlength="250" size="50" value="<?php echo $types; ?>" title="Current status"></td> 
-                                </tr>
-                                <tr>
-                                    <td style="width200px">Select Type Range:</td>
-                                    <td style="width300px">
-                                        <?php while($rows = $typeSet->fetch_assoc()){
-                                                $type=$rows['type']; 
-                                        echo"<input type='checkbox' Value=''$type''>&nbsp; $type &nbsp;&nbsp;";}?></td>
-                                </tr>
-                            </table><br>
+                        <form action="modifyThePreferences.php" method="POST">
+                            <table style="width:5500px">
+                                    <tr>
+                                        <th style="width:200px"></th>
+                                        <th>Types</th> 
+                                    </tr>
+                                    <tr>
+                                        <td style="width:200px">Current Type Range:</td>
+                                        <td><input disabled type="string" maxlength="250" size="50" value="<?php echo $types; ?>" title="Current status"></td> 
+                                    </tr>
+                                    <tr>
+                                        <td style="width200px">Select Type Range:</td>
+                                        <td style="width300px">
+                                            <?php $a=1; while($rows = $typeSet->fetch_assoc()){
+                                                    $type=$rows['type']; 
+                                            echo"<input type='checkbox' name='new_type$a' Value=''$type''>&nbsp; $type &nbsp;&nbsp;"; $a++;}?></td>
+                                    </tr>
+                                </table><br>
                             <button type="submit" name="submit" class="btn btn-primary btn-md align-items-center">Modify Type</button>
+                        </form>
                     </div>
                 </div>
                 </div>
