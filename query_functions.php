@@ -234,5 +234,40 @@ function delete_user($id) {
     }
 }
 
+function findPreference($pref_id, $table_name, $column_name, $value_pref){
+    global $db;
+    $pref_query= "SELECT value FROM preferences WHERE id = '".$pref_id."';"; 
+    $result_pref = $db->query($pref_query); //queries the table based on the prederence id
+    if ($result_pref -> num_rows > 0) { // if a preferences is found it outputs the data into the preference variable
+        while ($row = $result_pref -> fetch_assoc()) {
+            $pref = $row["value"];
+              }//end while
+            }//end if
+            else { //if the preference is not found it will search the table for the available values
+                if ($value_pref = 'last'){ //first it verifies to use the last value in the table
+                    $order = 'DESC';
+                } else {
+                    $order = 'ASC';
+                }
+                $table_query= "SELECT DISTINCT ".$column_name." FROM ".$table_name." WHERE id = '".$pref_id." ORDER BY ".$order."';";
+                $result_table = $db->query($pref_query); //queries the table for possible values
+                if ($result_table -> num_rows > 0) {// output data of each row
+                    if ($value_table = 'all'){ //checks if all of the table values should be included
+                    while ($row2 = $result_table -> fetch_assoc()) {
+                        $pref .= $row2["$column_name"].','; //places all of the values into the varable
+                    }//end while
+                } else {
+                    $pref = $row2[0]; //places first value into the variable
+                }
+                $result_table-> close(); //Closing the database results
+            }//end if
+                else {
+                    $pref = null; //if nothing is found in either the preferences or table, sets the variable to null
+                }
+            }//end else
+            $result_pref -> close(); //Closing the database results
+            return $pref;
+            
+}
 
 ?>
