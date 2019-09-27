@@ -6,6 +6,7 @@
   include("./nav.php");
  ?>
 
+<!--Imports-->
 <link href="jQueryTreeTable/css/jquery.treetable.css" rel="stylesheet" type="text/css" />
 <link href="jQueryTreeTable/css/jquery.treetable.theme.default.css" rel="stylesheet" type="text/css" />
 <script src="jQueryTreeTable/jquery.treetable.js"></script>
@@ -15,6 +16,7 @@
       <h3 style = "color: #01B0F1;">Scanner --> BOM Tree</h3>
 
       <script type="text/javascript">
+        //We only use php to pull the rows from the sbom table and store them into an array
         let sbomArray = [];
 
         <?php
@@ -32,8 +34,9 @@
         $result->close();
         ?>
 
+        //Build a very nested Map
+        //I did this to simulate a tree datastructure w/o actually implementing a tree datastructure (take that, ICS-340)
         let tree = new Map();        
-
         sbomArray.forEach(row => {
           //If the tree doesn't have the app_name, add it
           if(!tree.has(row['app_name'])){
@@ -51,6 +54,7 @@
           }
         });
 
+        //Build a table that the jQuery treetable plugin can understand
         let container = document.getElementById('container');
 
         let root = document.createElement('table');
@@ -58,9 +62,13 @@
 
         root.appendChild(tbody);
 
+        //These three variables keep track of unique id's and parent:child relationships.
         let idCount = 1;
         let app_nameParentId = -1;
         let app_idParentId = -1;
+
+
+        //Three nested for loops to generate the table and relationships between rows. TC is O(n^2 * log n)..... Gross.
 
         //Loop over app_name
         tree.forEach((value, key) => {
@@ -102,14 +110,16 @@
           });
         });
 
-        container.appendChild(root);
         root.setAttribute('id', 'maintreetable');
+        container.appendChild(root);
 
+        //Params for the treetable
         let params = {
           expandable: true,
           clickableNodeNames: true
         };
 
+        //Generate tree table
         $("#maintreetable").treetable(params);
       </script>
     </div>
