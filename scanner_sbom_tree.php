@@ -6,6 +6,7 @@
   include("./nav.php");
  ?>
 
+<link href="jQueryTreeTable/css/jquery.treetable.css" rel="stylesheet" type="text/css" />
 <link href="jQueryTreeTable/css/jquery.treetable.theme.default.css" rel="stylesheet" type="text/css" />
 <script src="jQueryTreeTable/jquery.treetable.js"></script>
 
@@ -94,6 +95,7 @@
               tbody.appendChild(tr);
 
               let data = document.createElement('td');
+              //data.innerHTML = Object.entries(value);
               data.innerHTML = value['cmp_name'];
               tr.appendChild(data);
             });
@@ -103,7 +105,12 @@
         container.appendChild(root);
         root.setAttribute('id', 'maintreetable');
 
-        $("#maintreetable").treetable({ expandable: true, clickableNodeNames: true });
+        let params = {
+          expandable: true,
+          clickableNodeNames: true
+        };
+
+        $("#maintreetable").treetable(params);
       </script>
     </div>
 </div>
