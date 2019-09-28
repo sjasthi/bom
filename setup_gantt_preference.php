@@ -7,42 +7,18 @@
     include("./nav.php");
     global $db;
 
+    //pulls the start date from the preferences table
+    $sDate = findPreference('gantt_start', 'releases', 'open_date', 'first');
+    //pulls the end date from the preferences table
+    $eDate = findPreference('gantt_end', 'releases', 'rtm_date', 'last');
+    //pulls the status from the preference table
+    $status = findPreference('gantt_status', 'releases', 'status', 'all');
+    //pulls the types from the preference table
+    $types  = findPreference('gantt_type', 'releases', 'type', 'all');
+
     $statusSet = $db->query("SELECT DISTINCT `status` FROM releases ORDER BY `status` ASC");
     $typeSet = $db->query("SELECT DISTINCT `type` FROM releases ORDER BY `type` ASC"); 
 
-    $typeResults = $db->query("SELECT `value` FROM `preferences` WHERE `id` = 'gantt_type'");
-    $statusResults = $db->query("SELECT `value` FROM `preferences` WHERE `id` = 'gantt_status'"); 
-    $sdateResults = $db->query("SELECT `value` FROM `preferences` WHERE `id` = 'gantt_start'");
-    $edateResults = $db->query("SELECT `value` FROM `preferences` WHERE `id` = 'gantt_end'");
-    
-    if(mysqli_num_rows($typeResults)>0){
-        while($row = mysqli_fetch_assoc($typeResults)){
-            $a[] = $row;
-        }
-    }
-    $types = $a[0]['value'];
-    
-    if(mysqli_num_rows($statusResults)>0){
-        while($row = mysqli_fetch_assoc($statusResults)){
-            $b[] = $row;
-        }
-    }
-    $status = $b[0]['value'];
-
-    if(mysqli_num_rows($sdateResults)>0){
-        while($row = mysqli_fetch_assoc($sdateResults)){
-            $c[] = $row;
-        }
-    }
-    $sDate = $c[0]['value'];
-    
-    if(mysqli_num_rows($edateResults)>0){
-        while($row = mysqli_fetch_assoc($edateResults)){
-            $d[] = $row;
-        }
-    }
-    $eDate = $d[0]['value'];
-    
 ?>
 <html>
 
