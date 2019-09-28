@@ -11,9 +11,6 @@
     <div class="container">
 
         <h3 style = "color: #01B0F1;">Scanner -> System Releases Gantt</h3><br>
-        <?php echo findPreference('release_status', 'releases', 'rtm_date', 'last'); ?>
-
-
         <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
         <script type="text/javascript">
             class Release{
