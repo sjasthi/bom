@@ -29,7 +29,7 @@
                 }
 
                 getDataTableRow(){
-                    return [this.id, this.name, this.open_date, this.rtm_date, null, 100, null];
+                    return [this.id, this.name,this.status, this.open_date, this.rtm_date, null, 100, null];
                 }
             }
 
@@ -43,6 +43,7 @@
 
                 data.addColumn('string', 'Task ID');
                 data.addColumn('string', 'Task Name');
+                data.addColumn('string', 'Resource');
                 data.addColumn('date', 'Start Date');
                 data.addColumn('date', 'End Date');
                 data.addColumn('number', 'Duration');
