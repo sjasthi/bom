@@ -77,12 +77,12 @@
                                 <tr>
                                     <td style="width:200px">Set Start Date:</td>
                                     <td><input disabled type="date" maxlength="12" size="15" value="<?php echo $sDate; ?>" title="Current value"></td> 
-                                    <td><input required type="date" name="new_sDate" maxlength="12" size="15" title="Enter a start date"></td>
+                                    <td><input required type="date" name="new_sDate" maxlength="12" size="15" value="<?php echo $sDate; ?>" title="Enter a start date"></td>
                                 </tr>
                                 <tr>
                                     <td style="width200px">Set End Date:</td>
                                     <td><input disabled type="date" maxlength="12" size="15" value="<?php echo $eDate; ?>" title="Current value"></td> 
-                                    <td><input required type="date" name="new_eDate" maxlength="12" size="15" title="Enter a end date"></td>
+                                    <td><input required type="date" name="new_eDate" maxlength="12" size="15" value="<?php echo $eDate; ?>" title="Enter a end date"></td>
                                 </tr>
                             </table><br>
                             <button type="submit" name="submit" class="btn btn-primary btn-md align-items-center">Modify Dates</button>
