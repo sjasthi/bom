@@ -111,9 +111,16 @@
                                 <tr>
                                     <td style="width200px">Select Status Range:</td>
                                     <td>
-                                        <?php while($rows = $statusSet->fetch_assoc()){
-                                                $status=$rows['status']; 
-                                        echo"<input type='checkbox' name='status_list[]' Value='$status'>&nbsp; $status &nbsp;&nbsp;";}?></td>
+                                        <?php 
+                                        $statusList = prefCheckbox('gantt_status', 'releases', 'status', 'status_list[]');
+                                        echo  $statusList;
+                                        /*
+                                        while($rows = $statusSet->fetch_assoc()){
+                                            $status=$rows['status']; 
+                                        echo"<input type='checkbox' name='status_list[]' Value='$status'>&nbsp; $status &nbsp;&nbsp;";}
+                                        */
+                                        ?>
+                                        </td>
                                 </tr>
                             </table><br>
                             <button type="submit" name="status_submit" class="btn btn-primary btn-md align-items-center">Modify Status</button>
@@ -142,9 +149,16 @@
                                     <tr>
                                         <td style="width200px">Select Type Range:</td>
                                         <td style="width300px">
-                                            <?php while($rows = $typeSet->fetch_assoc()){
+                                            <?php 
+                                            $type_list = prefCheckbox('gantt_type', 'releases', 'type', 'type_list[]');
+                                            echo $type_list;
+                                            /*
+                                            while($rows = $typeSet->fetch_assoc()){
                                                     $type=$rows['type']; 
-                                            echo"<input type='checkbox' name='type_list[]' Value='$type'>&nbsp; $type &nbsp;&nbsp;";}?></td>
+                                            echo"<input type='checkbox' name='type_list[]' Value='$type' checked>&nbsp; $type &nbsp;&nbsp;";}
+                                            */
+                                            ?>
+                                            </td>
                                     </tr>
                                 </table><br>
                             <button type="submit" name="type_submit" class="btn btn-primary btn-md align-items-center">Modify Type</button>

@@ -234,6 +234,9 @@ function delete_user($id) {
     }
 }
 
+//function pulls in the preference id to find available preference values. If there is not a preference entry it 
+//will use the table name and column name to query the database for a default value which can be the first available value, last available value
+// or all of the available values by enterng first, last, or all as the value_pref
 function findPreference($pref_id, $table_name, $column_name, $value_pref){
     global $db;
     $pref = null;
@@ -269,5 +272,42 @@ function findPreference($pref_id, $table_name, $column_name, $value_pref){
             
             return $pref;
         }
+        //function takes in the preference id to find from the preferences table, table name and column name to pull in the available values,
+        //and the input name to include in the list. It returns the html for the input list where the values from the preference table 
+        //are preselected.
+        function prefCheckbox($pref_id, $table_name, $column_name, $input_name){
+            global $db;
+            //initializes the variable that will return the list to display_errors
+            $list = null; 
+            //$val_list = null;
+            $add_check = false;
+            //finds the values from the preference table
+            $pref = findPreference($pref_id, $table_name, $column_name, 'all');
+            //Places all of the variables into the array
+            $pref_array = array(explode(",", trim($pref)));
+            //finds the values from the table
+            $table_query= "SELECT DISTINCT ".$column_name." FROM ".$table_name." ORDER BY ".$column_name." ASC;";
+            $result_table = $db->query($table_query); //queries the table for possible values
+            
+            if ($result_table -> num_rows > 0) {// output data of each row
+                while ($row2 = $result_table -> fetch_assoc()) {
+                    $val = $row2[$column_name];
+                    //SHOULD BE CHECKING FOR VARIABLE WITHIN THE ARRAY, BUT NOT WORKING
+                    $add_check = in_array($val, $pref_array);
+                    $list .= "<input type='checkbox' name='$input_name' Value='$row2[$column_name]'";
+                    //WHEN $add_check returns true, this will add the checked option to the input variable
+                    if ($add_check) {
+                        $list .= "checked";
+                    }
+                    $list .= ">&nbsp; $row2[$column_name] &nbsp;&nbsp;<br/>";
+                } //end while
+                $result_table -> close(); //Closing the database results
+            } else {
+                $list = null; //if nothing is found in the table, sets the variable to null
+            }
+            ;
+            return $list;
+        }
+
 
 ?>
