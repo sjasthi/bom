@@ -292,8 +292,8 @@ function findPreference($pref_id, $table_name, $column_name, $value_pref){
             if ($result_table -> num_rows > 0) {// output data of each row
                 while ($row2 = $result_table -> fetch_assoc()) {
                     $val = $row2[$column_name];
-                    //SHOULD BE CHECKING FOR VARIABLE WITHIN THE ARRAY, BUT NOT WORKING
-                    $add_check = in_array($val, $pref_array);
+                    //Uses searches the preferences as a string to find it the value should be checked
+                    $add_check = find_in_list($val, $pref);
                     $list .= "<input type='checkbox' name='$input_name' Value='$row2[$column_name]'";
                     //WHEN $add_check returns true, this will add the checked option to the input variable
                     if ($add_check) {
@@ -308,6 +308,13 @@ function findPreference($pref_id, $table_name, $column_name, $value_pref){
             ;
             return $list;
         }
-
+function find_in_list($val,$list){
+    $current = strripos($list, $val);  
+    if ($current > 0) {
+            return true;
+        } else{
+            return false;
+        }
+    }
 
 ?>
