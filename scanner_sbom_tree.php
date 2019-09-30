@@ -7,9 +7,9 @@
  ?>
 
 <!--Imports-->
-<link href="jQueryTreeTable/css/jquery.treetable.css" rel="stylesheet" type="text/css" />
-<link href="jQueryTreeTable/css/jquery.treetable.theme.default.css" rel="stylesheet" type="text/css" />
-<script src="jQueryTreeTable/jquery.treetable.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-treetable/3.2.0/css/jquery.treetable.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-treetable/3.2.0/css/jquery.treetable.theme.default.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-treetable/3.2.0/jquery.treetable.js"></script>
 
  <div class="right-content">
     <div class="container" id="container">
