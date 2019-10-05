@@ -121,8 +121,152 @@
 
         //Generate tree table
         $("#maintreetable").treetable(params);
-      </script>
+        </script>
     </div>
 </div>
-
+<div>
+  <table id = 'bom_treetable'>
+    <thead >
+      <th>Name</th>
+      <th>ID</th>
+      <th>Version</th>
+      <th>Status</th>
+      <th>Notes</th>
+    </thead>
+    <tbody>
+      <?php
+      //finds parent data
+      $sql_parent = "SELECT DISTINCT app_name from sbom;";
+      $result_parent = $db->query($sql_parent);
+      $p = 1;
+      if ($result_parent->num_rows > 0) {
+        while($row_parent = $result_parent->fetch_assoc()) {
+          $app_name = $row_parent["app_name"];
+          echo "<tr data-tt-id = '".$p."'>";
+          echo "<td>".$app_name."</td>";
+          echo "</tr>";
+          //Finds child data
+          $sql_child = "SELECT DISTINCT app_id, app_version, app_status from sbom 
+                          where app_name = '".$app_name."';";
+          $result_child = $db->query($sql_child);
+          $c = 1;
+          if ($result_child->num_rows > 0) {
+            // output data of child
+            while($row_child = $result_child->fetch_assoc()) {
+              $app_id = $row_child["app_id"];
+              $app_version = $row_child["app_version"];
+              $app_status = $row_child["app_status"];
+              echo "<tr data-tt-id = '".$p."-".$c."' data-tt-parent-id='".$p."'>";
+              echo "<td> </td>";
+              echo "<td>".$app_id." ";
+              echo "<td>".$app_version." ";
+              echo "<td>".$app_status;
+              echo "</tr>";
+            } $c++;
+            $result_child -> close();
+          } else {
+            echo "<tr data-tt-id = '".$p."-".$c."' data-tt-parent-id='".$p."'>";
+              echo "<td> </td>";
+              echo "<td> </td>";
+              echo "<td> </td>";
+              echo "</tr>";
+          }
+          $sql_gchild = "SELECT DISTINCT cmp_type from sbom 
+                          where app_name = '".$app_name."' 
+                          and app_id = '".$app_id."' 
+                          and app_version = '".$app_version."' 
+                          and app_status = '".$app_status."';";
+          $result_gchild = $db->query($sql_gchild);
+          $gc = 1;
+          if ($result_gchild->num_rows > 0) {
+            // output data of grand child
+            while($row_gchild = $result_gchild->fetch_assoc()) {
+              $cmp_type = $row_gchild["cmp_type"];
+              echo "<tr data-tt-id = '".$p."-".$c."-".$gc."' data-tt-parent-id='".$p."'>";
+              echo "<td>".$cmp_type."</td>";
+              echo "</tr>";
+            } $gc++;
+            $result_gchild -> close();
+          } else {
+            echo "<tr data-tt-id = '".$p."-".$c."-".$gc."' data-tt-parent-id='".$p."'>";
+              echo "<td> </td>";
+              echo "</tr>";
+          }
+          $sql_ggchild = "SELECT DISTINCT cmp_name from sbom 
+                            where app_name = '".$app_name."' 
+                            and app_id = '".$app_id."' 
+                            and app_version = '".$app_version."' 
+                            and app_status = '".$app_status."'
+                            and cmp_type = '".$cmp_type."';";
+          $result_ggchild = $db->query($sql_ggchild.";");
+          $ggc = 1;
+          if ($result_ggchild->num_rows > 0) {
+            // output data of great grand child
+            while($row_ggchild = $result_ggchild->fetch_assoc()) {
+              $cmp_name = $row_ggchild["cmp_name"];
+              echo "<tr data-tt-id = '".$p."-".$c."-".$gc,"-".$ggc."' data-tt-parent-id='".$p."'>";
+              echo "<td>".$cmp_name."</td>";
+              echo "</tr>";
+            } $ggc++;
+            $result_ggchild -> close();
+          } else {
+            echo "<tr data-tt-id = '".$p."-".$c."-".$gc,"-".$ggc."' data-tt-parent-id='".$p."'>";
+            echo "<td> </td>";
+            echo "</tr>";
+          }
+          $sql_gggchild = "SELECT DISTINCT cmp_id, cmp_version, cmp_status, notes from sbom 
+                            where app_name = '".$app_name."' 
+                            and app_id = '".$app_id."' 
+                            and app_version = '".$app_version."' 
+                            and app_status = '".$app_status."'
+                            and cmp_type = '".$cmp_type."'
+                            and cmp_name = '".$cmp_name."';";
+          $result_gggchild = $db->query($sql_gggchild);
+          $gggc = 1;
+          if ($result_gggchild->num_rows > 0) {
+            // output data of great grand child
+            while($row_gggchild = $result_gggchild->fetch_assoc()) {
+              $cmp_id = $row_gggchild["cmp_id"];
+              $cmp_version = $row_gggchild["cmp_version"];
+              $cmp_status = $row_gggchild["cmp_status"];
+              $notes = $row_gggchild["notes"];
+              echo "<tr data-tt-id = '".$p."-".$c."-".$gc."-".$ggc."-".$gggc."' data-tt-parent-id='".$p."'>";
+              echo "<td> </td>";
+              echo "<td>".$cmp_id."</td>";
+              echo "<td>".$cmp_version."</td>";
+              echo "<td>".$cmp_status."</td>";
+              echo "<td>".$notes."</td>";
+              echo "</tr>";
+            } $gggc++;
+            $result_gggchild -> close();
+          } else {
+            echo "<tr data-tt-id = '".$p."-".$c."-".$gc."-".$ggc."-".$gggc."' data-tt-parent-id='".$p."'>";
+            echo "<td> </td>";
+            echo "<td> </td>";
+            echo "<td> </td>";
+            echo "<td> </td>";
+            echo "</tr>";
+          }
+        } 
+        $p++;
+        $result_parent->close();
+      }
+      else{
+        echo "<tr data-tt-id = '".$p."'>";
+        echo "<td>No Results Found</td>";
+        echo "</tr>";
+      }
+      ?>
+    </tbody>
+  </table>
+  <script>
+    //Params for the treetable
+    let sbom_params = {
+          expandable: true,
+          clickableNodeNames: true
+        };
+  $("#bom_treetable").treetable(sbom_params);
+  
+  </script>
+</div>
 <?php include("./footer.php"); ?>
