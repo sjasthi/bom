@@ -104,14 +104,14 @@
 </div>
 <?php include("./footer.php"); ?>
 <script>
-      //Params for the treetable
-      let sbom_params = {
-            expandable: true,
-            clickableNodeNames: true
-          };
-          $("#bom_treetable").treetable(sbom_params);
-          $("#bom_treetable tbody").on("mousedown", "tr", function() {
-            $(".selected").not(this).removeClass("selected");
-            $(this).toggleClass("selected");
-            }); 
-    </script>
+  //Params for the treetable
+  let sbom_params = {
+    expandable: true,
+    clickableNodeNames: true
+    };
+    $("#bom_treetable").treetable(sbom_params);
+    $("#bom_treetable tbody").on("mousedown", "tr", function() {
+      $(".selected").not(this).removeClass("selected");
+      $(this).toggleClass("selected");
+      }); 
+      </script>
