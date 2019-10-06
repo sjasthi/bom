@@ -9,13 +9,12 @@
 <!--Imports-->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-treetable/3.2.0/css/jquery.treetable.css" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-treetable/3.2.0/css/jquery.treetable.theme.default.css" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-treetable/3.2.0/jquery.treetable.js"></script>
 
- <div class="right-content">
+<div class="right-content">
     <div class="container" id="container">
       <h3 style = "color: #01B0F1;">Scanner --> BOM Tree</h3>
 <div>
-  <table id = 'bom_treetable'>
+  <table id = "bom_treetable" class = "treetable">
       <caption>
         <a href="#" onclick="$('#bom_treetable').treetable('expandAll'); return false;">Expand all</a>
         <a href="#" onclick="$('#bom_treetable').treetable('collapseAll'); return false;">Collapse all</a>
@@ -100,7 +99,11 @@
           ?>
         </tbody>
       </table>
-    <script>
+
+  </div>
+</div>
+<?php include("./footer.php"); ?>
+<script>
       //Params for the treetable
       let sbom_params = {
             expandable: true,
@@ -110,8 +113,5 @@
           $("#bom_treetable tbody").on("mousedown", "tr", function() {
             $(".selected").not(this).removeClass("selected");
             $(this).toggleClass("selected");
-            });  
+            }); 
     </script>
-  </div>
-</div>
-<?php include("./footer.php"); ?>
