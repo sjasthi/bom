@@ -9,11 +9,12 @@
 <!--Imports-->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-treetable/3.2.0/css/jquery.treetable.css" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-treetable/3.2.0/css/jquery.treetable.theme.default.css" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-treetable/3.2.0/jquery.treetable.js"></script>
 
  <div class="right-content">
     <div class="container" id="container">
       <h3 style = "color: #01B0F1;">Scanner --> BOM Tree</h3>
+      <a href="#" onclick="$('#maintreetable').treetable('expandAll'); return false;">Expand all</a>
+      <a href="#" onclick="$('#maintreetable').treetable('collapseAll'); return false;">Collapse all</a>
 
       <script type="text/javascript">
         //We only use php to pull the rows from the sbom table and store them into an array
@@ -113,16 +114,19 @@
         root.setAttribute('id', 'maintreetable');
         container.appendChild(root);
 
-        //Params for the treetable
-        let params = {
+ 
+      </script>
+    </div>
+</div>
+
+<?php include("./footer.php"); ?>
+<script>
+       //Params for the treetable
+       let params = {
           expandable: true,
           clickableNodeNames: true
         };
 
         //Generate tree table
         $("#maintreetable").treetable(params);
-      </script>
-    </div>
-</div>
-
-<?php include("./footer.php"); ?>
+  </script>
