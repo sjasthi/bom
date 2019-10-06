@@ -93,7 +93,7 @@
                                     }
                                     else{
                                       echo "<tr data-tt-id = 'No Results'>";
-                                      echo "<td>No Results Found</td>";
+                                      echo "<td>No Results Found</td><td></td><td></td><td></td><td></td>";
                                       echo "</tr>";
                                     }
           ?>
