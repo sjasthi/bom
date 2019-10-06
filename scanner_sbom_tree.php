@@ -30,22 +30,24 @@
       <tbody>
       <?php
       //finds parent data
-      $sql_parent = "SELECT DISTINCT app_name, app_id, app_version from sbom order by app_name;";
+      $sql_parent = "SELECT DISTINCT app_name, app_id, app_version, app_status from sbom order by app_name;";
       $result_parent = $db->query($sql_parent);
       if ($result_parent->num_rows > 0) {
         while($row_parent = $result_parent->fetch_assoc()) {
           $app_name = $row_parent["app_name"];
           $app_id = $row_parent["app_id"];
           $app_version = $row_parent["app_version"];
-          $p_id = $app_name."-".$app_id."-".$app_version;
+          $app_status = $row_parent["app_status"];
+          $p_id = $app_name."-".$app_id."-".$app_version."-".$app_status;
           echo "<tr data-tt-id = '".$p_id."'>";
-          echo "<td>".$app_name." (".$app_id.") Version: .".$app_version."</td>";
+          echo "<td>".$app_name."</td><td>".$app_id."</td><td>".$app_version."</td><td>".$app_status."</td>";
           echo "</tr>";
           //Finds child data
           $sql_child = "SELECT distinct cmp_type from sbom 
                         where app_name = '".$app_name."' 
                         and app_id = '".$app_id."' 
                         and app_version = '".$app_version."'
+                        and app_status = '".$app_status."'
                         order by cmp_type;";
                         $result_child = $db->query($sql_child);
                         if ($result_child->num_rows > 0) {
@@ -61,6 +63,7 @@
                                             where app_name = '".$app_name."' 
                                             and app_id = '".$app_id."' 
                                             and app_version = '".$app_version."' 
+                                            and app_status = '".$app_status."'
                                             and cmp_type = '".$cmp_type."'
                                             order by app_name, cmp_type, cmp_name; ";
                                             $result_gchild = $db->query($sql_gchild);
