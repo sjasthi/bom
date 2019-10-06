@@ -40,7 +40,7 @@
           $app_status = $row_parent["app_status"];
           $p_id = $app_name."-".$app_id."-".$app_version."-".$app_status;
           echo "<tr data-tt-id = '".$p_id."'>";
-          echo "<td>".$app_name."</td><td>".$app_id."</td><td>".$app_version."</td><td>".$app_status."</td>";
+          echo "<td>".$app_name."</td><td>".$app_id."</td><td>".$app_version."</td><td>".$app_status."</td><td></td>";
           echo "</tr>";
           //Finds child data
           $sql_child = "SELECT distinct cmp_type from sbom 
@@ -56,7 +56,7 @@
                             $cmp_type = $row_child["cmp_type"];
                             $c_id=$p_id."-".$cmp_type;
                             echo "<tr data-tt-id = '".$c_id."' data-tt-parent-id='".$p_id."'>";
-                            echo "<td>".$cmp_type."</td>";
+                            echo "<td>".$cmp_type."</td><td></td><td></td><td></td><td></td>";
                             echo "</tr>";
                             //find grandchild data
                             $sql_gchild = "SELECT * from sbom 
