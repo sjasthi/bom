@@ -10,123 +10,108 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-treetable/3.2.0/css/jquery.treetable.css" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-treetable/3.2.0/css/jquery.treetable.theme.default.css" />
 
- <div class="right-content">
+<div class="right-content">
     <div class="container" id="container">
       <h3 style = "color: #01B0F1;">Scanner --> BOM Tree</h3>
-      <a href="#" onclick="$('#maintreetable').treetable('expandAll'); return false;">Expand all</a>
-      <a href="#" onclick="$('#maintreetable').treetable('collapseAll'); return false;">Collapse all</a>
+<div>
+  <table id = "bom_treetable" class = "treetable">
+      <caption>
+        <a href="#" onclick="$('#bom_treetable').treetable('expandAll'); return false;">Expand all</a>
+        <a href="#" onclick="$('#bom_treetable').treetable('collapseAll'); return false;">Collapse all</a>
+      </caption>
+      <thead >
+        <th>Name</th>
+        <th>ID</th>
+        <th>Version</th>
+        <th>Status</th>
+        <th>Notes</th>
+      </thead>
+      <tbody>
+      <?php
+      //finds parent data
+      $sql_parent = "SELECT DISTINCT app_name, app_id, app_version, app_status from sbom order by app_name;";
+      $result_parent = $db->query($sql_parent);
+      if ($result_parent->num_rows > 0) {
+        while($row_parent = $result_parent->fetch_assoc()) {
+          $app_name = $row_parent["app_name"];
+          $app_id = $row_parent["app_id"];
+          $app_version = $row_parent["app_version"];
+          $app_status = $row_parent["app_status"];
+          $p_id = $app_name."-".$app_id."-".$app_version."-".$app_status;
+          echo "<tr data-tt-id = '".$p_id."'>";
+          echo "<td>".$app_name."</td><td>".$app_id."</td><td>".$app_version."</td><td>".$app_status."</td><td></td>";
+          echo "</tr>";
+          //Finds child data
+          $sql_child = "SELECT distinct cmp_type from sbom 
+                        where app_name = '".$app_name."' 
+                        and app_id = '".$app_id."' 
+                        and app_version = '".$app_version."'
+                        and app_status = '".$app_status."'
+                        order by cmp_type;";
+                        $result_child = $db->query($sql_child);
+                        if ($result_child->num_rows > 0) {
+                          // output data of child
+                          while($row_child = $result_child->fetch_assoc()) {
+                            $cmp_type = $row_child["cmp_type"];
+                            $c_id=$p_id."-".$cmp_type;
+                            echo "<tr data-tt-id = '".$c_id."' data-tt-parent-id='".$p_id."'>";
+                            echo "<td>".$cmp_type."</td><td></td><td></td><td></td><td></td>";
+                            echo "</tr>";
+                            //find grandchild data
+                            $sql_gchild = "SELECT * from sbom 
+                                            where app_name = '".$app_name."' 
+                                            and app_id = '".$app_id."' 
+                                            and app_version = '".$app_version."' 
+                                            and app_status = '".$app_status."'
+                                            and cmp_type = '".$cmp_type."'
+                                            order by app_name, cmp_type, cmp_name; ";
+                                            $result_gchild = $db->query($sql_gchild);
+                                            if ($result_gchild->num_rows > 0) {
+                                              // output data of grandchild
+                                              while($row_gchild = $result_gchild->fetch_assoc()) {
+                                                $cmp_name = $row_gchild["cmp_name"];
+                                                $cmp_id = $row_gchild["cmp_id"];
+                                                $cmp_version = $row_gchild["cmp_version"];
+                                                $cmp_status = $row_gchild["cmp_status"];
+                                                $notes = $row_gchild["notes"];
+                                                $gc_id=$c_id."-".$cmp_name."-".$cmp_id."-".$cmp_version."-".$cmp_status;
+                                                echo "<tr data-tt-id = '".$gc_id."' data-tt-parent-id='".$c_id."'>";
+                                                echo "<td>".$cmp_name."</td>";
+                                                echo "<td>".$cmp_id."</td>";
+                                                echo "<td>".$cmp_version."</td>";
+                                                echo "<td>".$cmp_status."</td>";
+                                                echo "<td>".$notes."</td>";
+                                                echo "</tr>";
+                                              } 
+                                              $result_gchild -> close();
+                                            }
+                                          } 
+                                          $result_child -> close();
+                                        } 
+                                      } 
+                                      $result_parent->close();
+                                    }
+                                    else{
+                                      echo "<tr data-tt-id = 'No Results'>";
+                                      echo "<td>No Results Found</td><td></td><td></td><td></td><td></td>";
+                                      echo "</tr>";
+                                    }
+          ?>
+        </tbody>
+      </table>
 
-      <script type="text/javascript">
-        //We only use php to pull the rows from the sbom table and store them into an array
-        let sbomArray = [];
-
-        <?php
-        $sql = "SELECT * from sbom";
-        $result = $db->query($sql);
-
-        if ($result->num_rows > 0) {
-          while($row = $result->fetch_assoc()) {
-            echo "sbomArray.push(", json_encode($row), ");\r\n";
-          }
-        }else {
-          echo "0 results";
-        }
-
-        $result->close();
-        ?>
-
-        //Build a very nested Map
-        //I did this to simulate a tree datastructure w/o actually implementing a tree datastructure (take that, ICS-340)
-        let tree = new Map();        
-        sbomArray.forEach(row => {
-          //If the tree doesn't have the app_name, add it
-          if(!tree.has(row['app_name'])){
-            tree.set(row['app_name'], new Map());
-          }
-
-          //if the tree doesn't have the app_id of an app_name, add it
-          if(!tree.get(row['app_name']).has(row['app_id'])){
-            tree.get(row['app_name']).set(row['app_id'], new Map());
-          }
-
-          //if the tree doesn't have the cmp_name of an app_id of an app_name, add it
-          if(!tree.get(row['app_name']).get(row['app_id']).has(row['cmp_name'])){
-            tree.get(row['app_name']).get(row['app_id']).set(row['cmp_name'], row);
-          }
-        });
-
-        //Build a table that the jQuery treetable plugin can understand
-        let container = document.getElementById('container');
-
-        let root = document.createElement('table');
-        let tbody = document.createElement('tbody');
-
-        root.appendChild(tbody);
-
-        //These three variables keep track of unique id's and parent:child relationships.
-        let idCount = 1;
-        let app_nameParentId = -1;
-        let app_idParentId = -1;
-
-
-        //Three nested for loops to generate the table and relationships between rows. TC is O(n^2 * log n)..... Gross.
-
-        //Loop over app_name
-        tree.forEach((value, key) => {
-          let tr = document.createElement('tr');
-          tr.setAttribute('data-tt-id', idCount);
-          tbody.appendChild(tr);
-
-          let data = document.createElement('td');
-          data.innerHTML = key;
-          tr.appendChild(data);
-
-          app_nameParentId = idCount++;
-
-          //loop over app_id
-          value.forEach((value, key) => {
-            tr = document.createElement('tr');
-            tr.setAttribute('data-tt-id', idCount);
-            tr.setAttribute('data-tt-parent-id', app_nameParentId);
-            tbody.appendChild(tr);
-
-            let data = document.createElement('td');
-            data.innerHTML = key;
-            tr.appendChild(data);
-
-            app_idParentId = idCount++;
-
-            //loop over cmp_name
-            value.forEach((value, key) => {
-              tr = document.createElement('tr');
-              tr.setAttribute('data-tt-id', idCount);
-              tr.setAttribute('data-tt-parent-id', app_idParentId);
-              tbody.appendChild(tr);
-
-              let data = document.createElement('td');
-              //data.innerHTML = Object.entries(value);
-              data.innerHTML = value['cmp_name'];
-              tr.appendChild(data);
-            });
-          });
-        });
-
-        root.setAttribute('id', 'maintreetable');
-        container.appendChild(root);
-
- 
-      </script>
-    </div>
+  </div>
 </div>
-
 <?php include("./footer.php"); ?>
 <script>
-       //Params for the treetable
-       let params = {
-          expandable: true,
-          clickableNodeNames: true
-        };
-
-        //Generate tree table
-        $("#maintreetable").treetable(params);
-  </script>
+  //Params for the treetable
+  let sbom_params = {
+    expandable: true,
+    clickableNodeNames: true
+    };
+    $("#bom_treetable").treetable(sbom_params);
+    $("#bom_treetable tbody").on("mousedown", "tr", function() {
+      $(".selected").not(this).removeClass("selected");
+      $(this).toggleClass("selected");
+      }); 
+      </script>
