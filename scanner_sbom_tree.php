@@ -24,6 +24,7 @@
         <th>ID</th>
         <th>Version</th>
         <th>Status</th>
+        <th>Type</th>
         <th>Notes</th>
       </thead>
       <tbody>
@@ -39,10 +40,10 @@
           $app_status = $row_parent["app_status"];
           $p_id = $app_name."-".$app_id."-".$app_version."-".$app_status;
           echo "<tr data-tt-id = '".$p_id."'>";
-          echo "<td>".$app_name."</td><td>".$app_id."</td><td>".$app_version."</td><td>".$app_status."</td><td></td>";
+          echo "<td>".$app_name."</td><td>".$app_id."</td><td>".$app_version."</td><td>".$app_status."</td><td></td><td></td>";
           echo "</tr>";
           //Finds child data
-          $sql_child = "SELECT distinct cmp_type from sbom 
+          $sql_child = "SELECT distinct cmp_type, request_id, request_date, request_status, request_step from sbom 
                         where app_name = '".$app_name."' 
                         and app_id = '".$app_id."' 
                         and app_version = '".$app_version."'
@@ -53,9 +54,18 @@
                           // output data of child
                           while($row_child = $result_child->fetch_assoc()) {
                             $cmp_type = $row_child["cmp_type"];
-                            $c_id=$p_id."-".$cmp_type;
+                            $request_id = $row_child["request_id"];
+                            $request_date= $row_child["request_date"];
+                            $request_status = $row_child["request_status"];
+                            $request_step = $row_child["request_step"];
+                            $c_id=$p_id."-".$request_id."-".$request_date."-".$request_status."-".$request_step;
                             echo "<tr data-tt-id = '".$c_id."' data-tt-parent-id='".$p_id."'>";
-                            echo "<td>".$cmp_type."</td><td></td><td></td><td></td><td></td>";
+                            echo "<td>Request for ".$app_name."</td>";
+                            echo "<td>".$request_id."</td>";
+                            echo "<td>".$request_step."</td>";
+                            echo "<td>".$request_status."</td>";
+                            echo "<td></td>";
+                            echo "<td>Requested On ".$request_date."</td>";
                             echo "</tr>";
                             //find grandchild data
                             $sql_gchild = "SELECT * from sbom 
@@ -63,7 +73,9 @@
                                             and app_id = '".$app_id."' 
                                             and app_version = '".$app_version."' 
                                             and app_status = '".$app_status."'
-                                            and cmp_type = '".$cmp_type."'
+                                            and request_id = '".$request_id."'
+                                            and request_status = '".$request_step."'
+                                            and request_status = '".$request_status."'
                                             order by app_name, cmp_type, cmp_name; ";
                                             $result_gchild = $db->query($sql_gchild);
                                             if ($result_gchild->num_rows > 0) {
@@ -74,12 +86,13 @@
                                                 $cmp_version = $row_gchild["cmp_version"];
                                                 $cmp_status = $row_gchild["cmp_status"];
                                                 $notes = $row_gchild["notes"];
-                                                $gc_id=$c_id."-".$cmp_name."-".$cmp_id."-".$cmp_version."-".$cmp_status;
+                                                $gc_id=$c_id."-".$cmp_name."-".$cmp_id."-".$cmp_version."-".$cmp_status."-".$cmp_type;
                                                 echo "<tr data-tt-id = '".$gc_id."' data-tt-parent-id='".$c_id."'>";
                                                 echo "<td>".$cmp_name."</td>";
                                                 echo "<td>".$cmp_id."</td>";
                                                 echo "<td>".$cmp_version."</td>";
                                                 echo "<td>".$cmp_status."</td>";
+                                                echo "<td>".$cmp_type."</td>";
                                                 echo "<td>".$notes."</td>";
                                                 echo "</tr>";
                                               } 
