@@ -29,6 +29,10 @@
                         <th>CMP Type</th>
                         <th>App Status</th>
                         <th>CMP Status</th>
+                        <th>Request ID</th>
+                        <th>Request Date</th>
+                        <th>Request Status</th>
+                        <th>Request Step</th>                        
                         <th>Notes</th>
                 </tr>
               </thead>
@@ -45,6 +49,10 @@
                         <th>CMP Type</th>
                         <th>App Status</th>
                         <th>CMP Status</th>
+                        <th>Request ID</th>
+                        <th>Request Date</th>
+                        <th>Request Status</th>
+                        <th>Request Step</th> 
                         <th>Notes</th>
                 </tr>
               </tfoot>
@@ -70,6 +78,10 @@ $result = $db->query($sql);
                                 <td>'.$row["cmp_type"].' </span> </td>
                                 <td>'.$row["app_status"].' </span> </td>
                                 <td>'.$row["cmp_status"].' </span> </td>
+                                <td>'.$row["request_id"].'</td>
+                                <td>'.$row["request_date"].'</td>
+                                <td>'.$row["request_status"].'</td>
+                                <td>'.$row["request_step"].'</td>
                                 <td>'.$row["notes"].' </span> </td>
                             </tr>';
                     }//end while
