@@ -15,7 +15,72 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-    
+
+        <!-- Google Pie Chart API Code -->
+
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script type="text/javascript">
+        google.charts.load('current', {'packages':['corechart']});
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+
+            var data = google.visualization.arrayToDataTable([
+            ['Task', 'Hours per Day'],
+            ['Work',     11],
+            ['Eat',      2],
+            ['Commute',  2],
+            ['Watch TV', 2],
+            ['Sleep',    7]
+            ]);
+
+            var options = {
+            title: 'My Daily Activities'
+            };
+
+            var chart = new google.visualization.PieChart(document.getElementById('pie_chart'));
+
+            chart.draw(data, options);
+        }
+        </script>
+
+        <!-- End Google Pie Chart API Code -->
+
+        <!-- Google Bar Chart API Code -->
+
+        <script type="text/javascript">
+        google.charts.load('current', {packages: ['corechart', 'bar']});
+        google.charts.setOnLoadCallback(drawMultSeries);
+
+        function drawMultSeries() {
+            var data = google.visualization.arrayToDataTable([
+                ['City', '2010 Population', '2000 Population'],
+                ['New York City, NY', 8175000, 8008000],
+                ['Los Angeles, CA', 3792000, 3694000],
+                ['Chicago, IL', 2695000, 2896000],
+                ['Houston, TX', 2099000, 1953000],
+                ['Philadelphia, PA', 1526000, 1517000]
+            ]);
+
+            var options = {
+                title: 'Population of Largest U.S. Cities',
+                chartArea: {width: '50%'},
+                hAxis: {
+                title: 'Total Population',
+                minValue: 0
+                },
+                vAxis: {
+                title: 'City'
+                }
+            };
+
+            var chart = new google.visualization.BarChart(document.getElementById('bar_chart'));
+            chart.draw(data, options);
+        }
+        </script>
+
+        <!-- End Google Bar Chart API Code -->
+
     </head>
 
     <body>
@@ -40,7 +105,9 @@
                 </div>
                 <div id="collapse-pie-chart" class="panel-collapse collapse in">
                     <div class="panel-body">
-                        <h3>Display pie-chart here!</h3>
+                        <!-- Google Pie Chart API Code -->
+                        <div id="pie_chart" style="width: 900px; height: 500px;"></div>
+                        <!-- End Google Pie Chart API Code -->
                     </div>
                 </div>
                 </div>
@@ -53,7 +120,9 @@
                 </div>
                 <div id="collapse-bar-chart" class="panel-collapse collapse">
                     <div class="panel-body">
-                        <h3>Display bar-chart here!</h3>
+                        <!-- Google Bar Chart API Code -->
+                        <div id="bar_chart"></div>
+                        <!-- End Google Bar Chart API Code -->
                     </div>
                 </div>
                 </div>               
