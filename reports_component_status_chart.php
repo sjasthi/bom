@@ -16,64 +16,62 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
 
-        <!--Google pie Chart Code
-        -->
+        <script type="text/javascript">
+
+        let queryArray = [['Component Status', 'Count', {role:'annotation'}]];
+
+        <?php
+        $query = $db->query("SELECT cmp_status, COUNT(cmp_status) AS occurrences FROM sbom GROUP BY cmp_status;");
+
+        while($query_row = $query->fetch_assoc()) {
+            echo 'queryArray.push(["'.$query_row["cmp_status"].'", '.$query_row["occurrences"].', "'.$query_row["cmp_status"].'"]);';
+        }
+        ?>
+        </script>
+
+        <!-- Google Pie Chart API Code -->
         <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
         <script type="text/javascript">
-            google.charts.load('current', {'packages':['corechart']});
-            google.charts.setOnLoadCallback(drawChart);
+        google.charts.load('current', {'packages':['corechart']});
+        google.charts.setOnLoadCallback(drawPieChart);
 
-            function drawChart() {
+        function drawPieChart() {
+            var data = google.visualization.arrayToDataTable(queryArray);
 
-                var data = google.visualization.arrayToDataTable([
-                ['Task', 'Hours per Day'],
-                ['Work',     11],
-                ['Eat',      2],
-                ['Commute',  2],
-                ['Watch TV', 2],
-                ['Sleep',    7]
-                ]);
+            var options = {
+            title: 'Component Report'
+            };
 
-                var options = {
-                title: 'My Daily Activities'
-                };
+            var chart = new google.visualization.PieChart(document.getElementById('pie_chart'));
 
-                var chart = new google.visualization.PieChart(document.getElementById('piechart'));
-
-                chart.draw(data, options);
-            }
+            chart.draw(data, options);
+        }
         </script>
-        
-        <!-- Google bar chart
-        -->
-        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <!-- End Google Pie Chart API Code -->
+
+        <!-- Google Bar Chart API Code -->
         <script type="text/javascript">
-            google.charts.load('current', {'packages':['bar']});
-            google.charts.setOnLoadCallback(drawChart);
+        google.charts.load('current', {packages: ['corechart', 'bar']});
+        google.charts.setOnLoadCallback(drawBarChart);
 
-            function drawChart() {
-                var data = google.visualization.arrayToDataTable([
-                ['Year', 'Sales', 'Expenses', 'Profit'],
-                ['2014', 1000, 400, 200],
-                ['2015', 1170, 460, 250],
-                ['2016', 660, 1120, 300],
-                ['2017', 1030, 540, 350]
-                ]);
+        function drawBarChart() {
+            var data = google.visualization.arrayToDataTable(queryArray);
 
-                var options = {
-                chart: {
-                    title: 'Company Performance',
-                    subtitle: 'Sales, Expenses, and Profit: 2014-2017',
-                },
-                bars: 'horizontal' // Required for Material Bar Charts.
-                };
+            var options = {
+                title: 'Component Report',
+                //chartArea: {width: '50%'},
+                width: 900,
+                height: 500,
+                hAxis: {title: 'Occurrences', minValue: 0},
+                vAxis: {title: 'Component Status'},
+                legend: { position: "none" }
+            };
 
-                var chart = new google.charts.Bar(document.getElementById('barchart_material'));
-
-                chart.draw(data, google.charts.Bar.convertOptions(options));
-            }
+            var chart = new google.visualization.BarChart(document.getElementById('bar_chart'));
+            chart.draw(data, options);
+        }
         </script>
-    
+        <!-- End Google Bar Chart API Code -->
     </head>
 
     <body>
@@ -98,8 +96,7 @@
                 </div>
                 <div id="collapse-pie-chart" class="panel-collapse collapse in">
                     <div class="panel-body">
-                        <h3>Display pie-chart here!</h3>
-                        <div id="piechart" style="width: 900px; height: 500px;"></div>
+                        <div id="pie_chart" style="width: 900px; height: 500px;"></div>
                     </div>
                 </div>
                 </div>
@@ -112,8 +109,7 @@
                 </div>
                 <div id="collapse-bar-chart" class="panel-collapse collapse">
                     <div class="panel-body">
-                        <h3>Display bar-chart here!</h3>
-                        <div id="barchart_material" style="width: 900px; height: 500px;"></div>
+                        <div id="bar_chart" style="width: 900px; height: 500px;"></div>
                     </div>
                 </div>
                 </div>               

@@ -16,26 +16,30 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
 
-        <!-- Google Pie Chart API Code -->
+        <script type="text/javascript">
 
+        let queryArray = [['Application Status', 'Count', {role:'annotation'}]];
+
+        <?php
+        $query = $db->query("SELECT app_status, COUNT(app_status) AS occurrences FROM sbom GROUP BY app_status;");
+
+        while($query_row = $query->fetch_assoc()) {
+            echo 'queryArray.push(["'.$query_row["app_status"].'", '.$query_row["occurrences"].', "'.$query_row["app_status"].'"]);';
+        }
+        ?>
+        </script>
+
+        <!-- Google Pie Chart API Code -->
         <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
         <script type="text/javascript">
         google.charts.load('current', {'packages':['corechart']});
-        google.charts.setOnLoadCallback(drawChart);
+        google.charts.setOnLoadCallback(drawPieChart);
 
-        function drawChart() {
-
-            var data = google.visualization.arrayToDataTable([
-            ['Task', 'Hours per Day'],
-            ['Work',     11],
-            ['Eat',      2],
-            ['Commute',  2],
-            ['Watch TV', 2],
-            ['Sleep',    7]
-            ]);
+        function drawPieChart() {
+            var data = google.visualization.arrayToDataTable(queryArray);
 
             var options = {
-            title: 'My Daily Activities'
+            title: 'Application Report'
             };
 
             var chart = new google.visualization.PieChart(document.getElementById('pie_chart'));
@@ -43,44 +47,31 @@
             chart.draw(data, options);
         }
         </script>
-
         <!-- End Google Pie Chart API Code -->
 
         <!-- Google Bar Chart API Code -->
-
         <script type="text/javascript">
         google.charts.load('current', {packages: ['corechart', 'bar']});
-        google.charts.setOnLoadCallback(drawMultSeries);
+        google.charts.setOnLoadCallback(drawBarChart);
 
-        function drawMultSeries() {
-            var data = google.visualization.arrayToDataTable([
-                ['City', '2010 Population', '2000 Population'],
-                ['New York City, NY', 8175000, 8008000],
-                ['Los Angeles, CA', 3792000, 3694000],
-                ['Chicago, IL', 2695000, 2896000],
-                ['Houston, TX', 2099000, 1953000],
-                ['Philadelphia, PA', 1526000, 1517000]
-            ]);
+        function drawBarChart() {
+            var data = google.visualization.arrayToDataTable(queryArray);
 
             var options = {
-                title: 'Population of Largest U.S. Cities',
-                chartArea: {width: '50%'},
-                hAxis: {
-                title: 'Total Population',
-                minValue: 0
-                },
-                vAxis: {
-                title: 'City'
-                }
+                title: 'Application Report',
+                //chartArea: {width: '50%'},
+                width: 900,
+                height: 500,
+                hAxis: {title: 'Occurrences', minValue: 0},
+                vAxis: {title: 'Application Status'},
+                legend: { position: "none" }
             };
 
             var chart = new google.visualization.BarChart(document.getElementById('bar_chart'));
             chart.draw(data, options);
         }
         </script>
-
         <!-- End Google Bar Chart API Code -->
-
     </head>
 
     <body>
@@ -121,7 +112,7 @@
                 <div id="collapse-bar-chart" class="panel-collapse collapse">
                     <div class="panel-body">
                         <!-- Google Bar Chart API Code -->
-                        <div id="bar_chart"></div>
+                        <div id="bar_chart" style="width: 900px; height: 500px;"></div>
                         <!-- End Google Bar Chart API Code -->
                     </div>
                 </div>
