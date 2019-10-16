@@ -10,12 +10,69 @@
 ?>
 <html>
 
-    <head>
+<head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-    
+
+        <script type="text/javascript">
+
+        let queryArray = [['Request Step', 'Count', {role:'annotation'}]];
+
+        <?php
+        $query = $db->query("SELECT request_step, COUNT(request_step) AS occurrences FROM sbom GROUP BY request_step;");
+
+        while($query_row = $query->fetch_assoc()) {
+            echo 'queryArray.push(["'.$query_row["request_step"].'", '.$query_row["occurrences"].', "'.$query_row["request_step"].'"]);';
+        }
+        ?>
+        </script>
+
+        <!-- Google Pie Chart API Code -->
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script type="text/javascript">
+        google.charts.load('current', {'packages':['corechart']});
+        google.charts.setOnLoadCallback(drawPieChart);
+
+        function drawPieChart() {
+            var data = google.visualization.arrayToDataTable(queryArray);
+
+            var options = {
+            title: 'Application Report'
+            };
+
+            var chart = new google.visualization.PieChart(document.getElementById('pie_chart'));
+
+            chart.draw(data, options);
+        }
+        </script>
+        <!-- End Google Pie Chart API Code -->
+
+        <!-- Google Bar Chart API Code -->
+        <script type="text/javascript">
+        google.charts.load('current', {packages: ['corechart', 'bar']});
+        google.charts.setOnLoadCallback(drawBarChart);
+
+        function drawBarChart() {
+            var data = google.visualization.arrayToDataTable(queryArray);
+
+            var options = {
+                title: 'Application Report',
+                //chartArea: {width: '50%'},
+                width: 900,
+                height: 500,
+                hAxis: {title: 'Occurrences', minValue: 0},
+                vAxis: {title: 'Request Step'},
+                legend: { position: "none" }
+            };
+
+            var chart = new google.visualization.BarChart(document.getElementById('bar_chart'));
+            chart.draw(data, options);
+        }
+        </script>
+        <!-- End Google Bar Chart API Code -->
+
     </head>
 
     <body>
@@ -40,7 +97,7 @@
                 </div>
                 <div id="collapse-pie-chart" class="panel-collapse collapse in">
                     <div class="panel-body">
-                        <h3>Display pie-chart here!</h3>
+                        <div id="pie_chart" style="width: 900px; height: 500px;"></div>
                     </div>
                 </div>
                 </div>
@@ -53,12 +110,12 @@
                 </div>
                 <div id="collapse-bar-chart" class="panel-collapse collapse">
                     <div class="panel-body">
-                        <h3>Display bar-chart here!</h3>
+                        <div id="bar_chart" style="width: 900px; height: 500px;"></div>
                     </div>
                 </div>
                 </div>               
                 
-            </div> 
+            </div>  
         </div>
 
         <h3> &nbsp; &nbsp; &nbsp; &nbsp; File for this page: reports_<span style="color:red">request_step</span>_chart.php</h3>
