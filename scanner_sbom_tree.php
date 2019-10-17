@@ -122,7 +122,7 @@
                     $request_id = $row_gchild["request_id"];
                     $gc_id=$request_id."-".$ct_id."-".$gc;
                     echo "<tr data-tt-id = '".$gc_id."' data-tt-parent-id='".$ct_id."' >";
-                    echo "<td id = 'grandchild' style='background-color:red;'>".$request_id."</td>";
+                    echo "<td id = 'grandchild' style='background-color:pink;'>".$request_id."</td>";
                     echo "</tr>";
                     $gc++;
                     //find child table data
