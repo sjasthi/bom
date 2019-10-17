@@ -7,9 +7,9 @@
  ?>
 
 <!--Imports-->
+<link rel="stylesheet" href="tree_style.css" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-treetable/3.2.0/css/jquery.treetable.css" />
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-treetable/3.2.0/css/jquery.treetable.theme.default.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-treetable/3.2.0/css/jquery.treetable.theme.default.css">
 
 <div class="right-content">
     <div class="container" id="container">
@@ -20,7 +20,13 @@
         <a href="#" onclick="$('#bom_treetable').treetable('expandAll'); return false;">Expand all</a>
         <a href="#" onclick="$('#bom_treetable').treetable('collapseAll'); return false;">Collapse all</a>
       </caption>
-    
+      <thead id='bom_header'>
+      <th></th>
+        <th>ID</th>
+        <th>Version</th>
+        <th>Status</th>
+        <th>Notes</th>
+      </thead>
       <tbody>
       <?php
       //finds parent data
@@ -37,8 +43,8 @@
         while($row_parent = $result_parent->fetch_assoc()) {
           $app_name = $row_parent["app_name"];
           $p_id = $app_name ."-".$p;
-          echo "<tr data-tt-id = '".$p_id."' id = 'parent' style='background-color:lightgreen;'>";
-          echo "<td >".$app_name."</td>";
+          echo "<tr data-tt-id = '".$p_id."' >";
+          echo "<td id = 'parent'>".$app_name."</td>";
           echo "</tr>";
           $p++;
           
@@ -54,7 +60,8 @@
                 $app_status = $row_parent_table["app_status"];
                 $pt_id=$p_id."-".$pt;
                 echo "<tr data-tt-id = '".$pt_id."'  data-tt-parent-id='".$p_id."' id = 'parent_table'>";
-                echo "<td>".$app_id."</td><td>".$app_version."</td><td>".$app_status."</td>";
+                echo "<td id = 'parent_table'>".$app_name."</td>";
+                echo "<td id = 'parent_table'>".$app_id."</td><td id = 'parent_table'>".$app_version."</td><td id = 'parent_table'>".$app_status."</td>";
                 echo "</tr>";
                 $pt++;
                 
@@ -73,7 +80,7 @@
                             $cmp_name = $row_child["cmp_name"];
                             $c_id=$p_id."-".$cmp_name."-".$c;
                             echo "<tr data-tt-id = '".$c_id."' data-tt-parent-id='".$pt_id."' >";
-                            echo "<td id = 'child' style='background-color:yellow;'>".$cmp_name."</td>";
+                            echo "<td id = 'child'>".$cmp_name."</td>";
                             echo "</tr>";
                             $c++;
                             //find child table data
@@ -96,16 +103,17 @@
                                                 $notes = $row_child_table["notes"];
                                                 $ct_id = $c_id."-".$ct;
                                                 echo "<tr data-tt-id = '".$ct_id."' data-tt-parent-id='".$c_id."' id = 'child_table'>";
-                                                echo "<td>".$cmp_id."</td>";
-                                                echo "<td>".$cmp_version."</td>";
-                                                echo "<td>".$cmp_status."</td>";
-                                                echo "<td>".$notes."</td>";
+                                                echo "<td id = 'child_table'>".$cmp_name."</td>";
+                                                echo "<td id = 'child_table'>".$cmp_id."</td>";
+                                                echo "<td id = 'child_table'>".$cmp_version."</td>";
+                                                echo "<td id = 'child_table'>".$cmp_status."</td>";
+                                                echo "<td id = 'child_table'>".$notes."</td>";
                                                 echo "</tr>";
                                                 $ct++;
                                                 
                                               } 
                                                               // output data of child
-                $sql_gchild = "SELECT distinct request_id from sbom 
+                $sql_gchild = "SELECT distinct request_date from sbom 
                 where app_name = '".$app_name."' 
                 and app_id = '".$app_id."' 
                 and app_version = '".$app_version."'
@@ -119,10 +127,10 @@
                 if ($result_gchild->num_rows > 0) {
                   // output data of child
                   while($row_gchild = $result_gchild->fetch_assoc()) {
-                    $request_id = $row_gchild["request_id"];
-                    $gc_id=$request_id."-".$ct_id."-".$gc;
-                    echo "<tr data-tt-id = '".$gc_id."' data-tt-parent-id='".$ct_id."' >";
-                    echo "<td id = 'grandchild' style='background-color:pink;'>".$request_id."</td>";
+                    $request_date= $row_gchild["request_date"];
+                    $gc_id=$request_date."-".$ct_id."-".$gc;
+                    echo "<tr data-tt-id = '".$gc_id."' data-tt-parent-id='".$ct_id."'>";
+                    echo "<td id = 'grandchild'>Request Date ".$request_date."</td>";
                     echo "</tr>";
                     $gc++;
                     //find child table data
@@ -135,7 +143,7 @@
                                     and cmp_id = '".$cmp_id."' 
                                     and cmp_version = '".$cmp_version."'
                                     and cmp_status = '".$cmp_status."'
-                                    and request_id = '".$request_id."' 
+                                    and request_date = '".$request_date."' 
                                     ; ";
                                     $result_gchild_table= $db->query($sql_gchild_table);
                                     
@@ -144,12 +152,13 @@
                                       while($row_gchild_table = $result_gchild_table->fetch_assoc()) {
                                         $request_step = $row_gchild_table["request_step"];
                                         $request_status = $row_gchild_table["request_status"];
-                                        $request_date = $row_gchild_table["request_date"];
+                                        $request_id = $row_gchild_table["request_id"];
                                         $gct_id = $gc_id."-".$gct;
                                         echo "<tr data-tt-id = '".$gct_id."' data-tt-parent-id='".$gc_id."' id = 'grandchild_table'>";
-                                        echo "<td>".$request_status."</td>";
-                                        echo "<td>".$request_step."</td>";
-                                        echo "<td>".$request_date."</td>";
+                                        echo "<td id = 'grandchild_table'>Request Date ".$request_date."</td>";
+                                        echo "<td id = 'grandchild_table'>".$request_id."</td>";
+                                        echo "<td id = 'grandchild_table'>".$request_step."</td>";
+                                        echo "<td id = 'grandchild_table'>".$request_status."</td>";
                                         echo "</tr>";
                                         $gct++;
                                       } 
