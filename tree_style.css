@@ -1,0 +1,73 @@
+
+#bom_header{
+    background-color:white;
+    font-size: 14px;
+    margin: 4px;
+    transition: 0.35s;
+    text-decoration: none;
+  }
+  #parent {
+    background-color:green;
+    border: .2rem solid green;
+    color: white;
+    padding: 12px;
+    font-size: 16px;
+    margin: 4px;
+    transition: 0.35s;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  #parent_table {
+    background-color:rgb(128, 165, 128);
+    border: .2rem solid green;
+    font-size: 14px;
+    margin: 4px;
+    transition: 0.35s;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  #child {
+    background-color:yellow;
+    border: .2rem solid yellow;
+    color: black;
+    padding: 12px;
+    font-size: 16px;
+    margin: 4px;
+    transition: 0.35s;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  #child_table {
+    background-color:rgb(255, 255, 175);
+    border: .2rem solid yellow;
+    font-size: 14px;
+    margin: 4px;
+    transition: 0.35s;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  #grandchild {
+    background-color:red;
+    border: .2rem solid red;
+    color: white;
+    padding: 12px;
+    font-size: 16px;
+    margin: 4px;
+    transition: 0.35s;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  #grandchild_table {
+    background-color:rgb(255, 140, 140);
+    border: .2rem solid red;
+    font-size: 14px;
+    margin: 4px;
+    transition: 0.35s;
+    text-decoration: none;
+  }
+  
