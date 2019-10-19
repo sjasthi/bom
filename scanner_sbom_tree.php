@@ -24,7 +24,7 @@
           
         <a href="#" onclick="$('#bom_treetable').treetable('collapseAll'); return false;">Collapse All</a>
 </div>
-  <table id = "bom_treetable" class = "table table-sm table-hover">
+  <table id = "bom_treetable" class = "table table-striped table-hover">
  <thead >
    <th id = 'parent'>Application Name</th>
  </thead>
@@ -155,7 +155,7 @@
                     echo "</tr>";
                     $gc++;
                     //find child table data
-                    $sql_gchild_table = "SELECT request_id, request_step, request_status, request_date from sbom 
+                    $sql_gchild_table = "SELECT request_id, request_step, request_status, DATE_FORMAT(request_date, \"%m/%d/%y\") as request_date from sbom 
                                     where app_name = '".$app_name."' 
                                     and app_id = '".$app_id."' 
                                     and app_version = '".$app_version."' 
