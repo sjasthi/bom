@@ -8,25 +8,26 @@
 
 <!--Imports-->
 <link rel="stylesheet" href="tree_style.css" />
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<!--
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-treetable/3.2.0/css/jquery.treetable.css" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-treetable/3.2.0/css/jquery.treetable.theme.default.css">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-treetable/3.2.0/css/jquery.treetable.theme.default.css" />
+-->
 
 <div class="right-content">
     <div class="container" id="container">
       <h3 style = "color: #01B0F1;">Scanner --> BOM Tree</h3>
-<div>
-  <table id = "bom_treetable" class = "treetable">
-      <caption>
-        <a href="#" onclick="$('#bom_treetable').treetable('expandAll'); return false;">Expand all</a>
-        <a href="#" onclick="$('#bom_treetable').treetable('collapseAll'); return false;">Collapse all</a>
-      </caption>
-      <thead id='bom_header'>
-      <th></th>
-        <th>ID</th>
-        <th>Version</th>
-        <th>Status</th>
-        <th>Notes</th>
-      </thead>
+<div class="table-responsive">
+<div class="h2">
+        <a href="#" onclick="$('#bom_treetable').treetable('expandAll'); return false;">Expand All</a>
+          
+        <a href="#" onclick="$('#bom_treetable').treetable('collapseAll'); return false;">Collapse All</a>
+</div>
+  <table id = "bom_treetable" class = "table table-sm table-hover">
+ <thead >
+   <th id = 'parent'>Application Name</th>
+ </thead>
       <tbody>
       <?php
       //finds parent data
@@ -42,9 +43,9 @@
       if ($result_parent->num_rows > 0) {
         while($row_parent = $result_parent->fetch_assoc()) {
           $app_name = $row_parent["app_name"];
-          $p_id = $app_name ."-".$p;
+          $p_id = $p;
           echo "<tr data-tt-id = '".$p_id."' >";
-          echo "<td id = 'parent'>".$app_name."</td>";
+          echo "<td > <button type='button' class='btn btn-success' id = 'parent' > ".$app_name."</button></td>";
           echo "</tr>";
           $p++;
           
@@ -53,15 +54,22 @@
             $result_parent_table = $db->query($sql_parent_table);
             
             if ($result_parent_table->num_rows > 0) {
+              $pt_id=$p_id."-".$pt;
+              echo "<tr data-tt-id = '".$pt_id."'  data-tt-parent-id='".$p_id."' id = 'parent'>
+                    <th scope='col'>".$app_name." ID</th>
+                    <th scope='col'>".$app_name." Version</th>
+                    <th scope='col'>".$app_name." Status</th>
+                    </tr>";
+
               while($row_parent_table = $result_parent_table->fetch_assoc()) {
                 $app_name = $row_parent_table["app_name"];
                 $app_id = $row_parent_table["app_id"];
                 $app_version = $row_parent_table["app_version"];
                 $app_status = $row_parent_table["app_status"];
                 $pt_id=$p_id."-".$pt;
-                echo "<tr data-tt-id = '".$pt_id."'  data-tt-parent-id='".$p_id."' id = 'parent_table'>";
-                echo "<td id = 'parent_table'>".$app_name."</td>";
-                echo "<td id = 'parent_table'>".$app_id."</td><td id = 'parent_table'>".$app_version."</td><td id = 'parent_table'>".$app_status."</td>";
+                echo "<tr data-tt-id = '".$pt_id."'  data-tt-parent-id='".$p_id."' class='h3'>";
+                echo "<td> <button type='button' class='btn btn-success' id = 'parent' >".$app_id."</button></td>";
+                echo "<td>".$app_version."</td><td>".$app_status."</td>";
                 echo "</tr>";
                 $pt++;
                 
@@ -76,11 +84,13 @@
                         
                         if ($result_child->num_rows > 0) {
                           // output data of child
+                          $c_id=$pt_id."-".$c;
+                          echo "<tr data-tt-id = '".$c_id."' data-tt-parent-id='".$pt_id."'  id = 'child'> <th>".$app_name." Component Name</th></tr>";
                           while($row_child = $result_child->fetch_assoc()) {
                             $cmp_name = $row_child["cmp_name"];
-                            $c_id=$p_id."-".$cmp_name."-".$c;
+                            $c_id=$pt_id."-".$c;
                             echo "<tr data-tt-id = '".$c_id."' data-tt-parent-id='".$pt_id."' >";
-                            echo "<td id = 'child'>".$cmp_name."</td>";
+                            echo "<td> <button type='button' class='btn btn-warning' id = 'child' >".$cmp_name."</button></td>";
                             echo "</tr>";
                             $c++;
                             //find child table data
@@ -95,25 +105,34 @@
                                             
                                             if ($result_child_table->num_rows > 0) {
                                               // output data of child table
+                                              $ct_id = $c_id."-".$ct;
+                                              echo "<tr data-tt-id = '".$ct_id."' data-tt-parent-id='".$c_id."' id = 'child'>
+                                                  <th scope='col'>".$cmp_name." ID</th>
+                                                  <th scope='col'>".$cmp_name." Version</th>
+                                                  <th scope='col'>".$cmp_name." Status</th>
+                                                  <th scope='col'>".$cmp_name." Type</th>
+                                                  <th scope='col'>Notes</th>
+                                                  </tr>";
                                               while($row_child_table = $result_child_table->fetch_assoc()) {
                                                 $cmp_name = $row_child_table["cmp_name"];
                                                 $cmp_id = $row_child_table["cmp_id"];
                                                 $cmp_version = $row_child_table["cmp_version"];
                                                 $cmp_status = $row_child_table["cmp_status"];
+                                                $cmp_type = $row_child_table["cmp_type"];
                                                 $notes = $row_child_table["notes"];
                                                 $ct_id = $c_id."-".$ct;
-                                                echo "<tr data-tt-id = '".$ct_id."' data-tt-parent-id='".$c_id."' id = 'child_table'>";
-                                                echo "<td id = 'child_table'>".$cmp_name."</td>";
-                                                echo "<td id = 'child_table'>".$cmp_id."</td>";
-                                                echo "<td id = 'child_table'>".$cmp_version."</td>";
-                                                echo "<td id = 'child_table'>".$cmp_status."</td>";
-                                                echo "<td id = 'child_table'>".$notes."</td>";
+                                                echo "<tr data-tt-id = '".$ct_id."' data-tt-parent-id='".$c_id."' class='h3'>";
+                                                echo "<td> <button type='button' class='btn btn-warning' id = 'child'>".$cmp_id."</button></td>";
+                                                echo "<td>".$cmp_version."</td>";
+                                                echo "<td>".$cmp_status."</td>";
+                                                echo "<td>".$cmp_type."</td>";
+                                                echo "<td>".$notes."</td>";
                                                 echo "</tr>";
                                                 $ct++;
                                                 
                                               } 
                                                               // output data of child
-                $sql_gchild = "SELECT distinct request_date from sbom 
+                $sql_gchild = "SELECT distinct request_id from sbom 
                 where app_name = '".$app_name."' 
                 and app_id = '".$app_id."' 
                 and app_version = '".$app_version."'
@@ -126,11 +145,13 @@
                 
                 if ($result_gchild->num_rows > 0) {
                   // output data of child
+                  $gc_id=$ct_id."-".$gc;
+                   echo "<tr data-tt-id = '".$gc_id."' data-tt-parent-id='".$ct_id."' id = 'grandchild'> <th>".$cmp_name." Request ID</th></tr>";
                   while($row_gchild = $result_gchild->fetch_assoc()) {
-                    $request_date= $row_gchild["request_date"];
-                    $gc_id=$request_date."-".$ct_id."-".$gc;
+                    $request_id= $row_gchild["request_id"];
+                    $gc_id=$ct_id."-".$gc;
                     echo "<tr data-tt-id = '".$gc_id."' data-tt-parent-id='".$ct_id."'>";
-                    echo "<td id = 'grandchild'>Request Date ".$request_date."</td>";
+                    echo "<td><button type='button' class='btn btn-danger' id = 'grandchild'>".$request_id."</td>";
                     echo "</tr>";
                     $gc++;
                     //find child table data
@@ -143,22 +164,27 @@
                                     and cmp_id = '".$cmp_id."' 
                                     and cmp_version = '".$cmp_version."'
                                     and cmp_status = '".$cmp_status."'
-                                    and request_date = '".$request_date."' 
+                                    and request_id = '".$request_id."' 
                                     ; ";
                                     $result_gchild_table= $db->query($sql_gchild_table);
                                     
                                     if ($result_gchild_table->num_rows > 0) {
                                       // output data of child table
+                                      $gct_id = $gc_id."-".$gct;
+                                      echo "<tr data-tt-id = '".$gct_id."' data-tt-parent-id='".$gc_id."' id = 'grandchild'>
+                                      <th scope='col'>".$request_id." Date</th>
+                                      <th scope='col'>".$request_id." Step</th>
+                                      <th scope='col'>".$request_id." Status</th>
+                                      </tr>";
                                       while($row_gchild_table = $result_gchild_table->fetch_assoc()) {
                                         $request_step = $row_gchild_table["request_step"];
                                         $request_status = $row_gchild_table["request_status"];
-                                        $request_id = $row_gchild_table["request_id"];
+                                        $request_date= $row_gchild_table["request_date"];
                                         $gct_id = $gc_id."-".$gct;
-                                        echo "<tr data-tt-id = '".$gct_id."' data-tt-parent-id='".$gc_id."' id = 'grandchild_table'>";
-                                        echo "<td id = 'grandchild_table'>Request Date ".$request_date."</td>";
-                                        echo "<td id = 'grandchild_table'>".$request_id."</td>";
-                                        echo "<td id = 'grandchild_table'>".$request_step."</td>";
-                                        echo "<td id = 'grandchild_table'>".$request_status."</td>";
+                                        echo "<tr data-tt-id = '".$gct_id."' data-tt-parent-id='".$gc_id."' class='h3'>";
+                                        echo "<td>".$request_date."</td>";
+                                        echo "<td>".$request_step."</td>";
+                                        echo "<td>".$request_status."</td>";
                                         echo "</tr>";
                                         $gct++;
                                       } 
@@ -191,6 +217,7 @@
   </div>
 </div>
 <?php include("./footer.php"); ?>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 <script>
   //Params for the treetable
   let sbom_params = {
