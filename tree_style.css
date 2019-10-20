@@ -6,7 +6,7 @@
     transition: 0.35s;
     text-decoration: none;
   }
-  #parent {
+  #grandchild {
     background-color:green;
     border: .2rem solid green;
     color: white;
@@ -17,14 +17,6 @@
     cursor: pointer;
   }
 
-  #parent_table {
-    border: .2rem solid green;
-    font-size: 14px;
-    margin: 4px;
-    transition: 0.35s;
-    text-decoration: none;
-    cursor: pointer;
-  }
 
   #child {
     background-color:yellow;
@@ -37,16 +29,8 @@
     cursor: pointer;
   }
 
-  #child_table {
-    border: .2rem solid yellow;
-    font-size: 14px;
-    margin: 4px;
-    transition: 0.35s;
-    text-decoration: none;
-    cursor: pointer;
-  }
 
-  #grandchild {
+  #parent {
     background-color:red;
     border: .2rem solid red;
     color: white;
@@ -54,14 +38,7 @@
     margin: 4px;
     transition: 0.35s;
     text-decoration: none;
-    /*cursor: pointer;*/
+    cursor: pointer;
   }
 
-  #grandchild_table {
-    border: .2rem solid red;
-    font-size: 14px;
-    margin: 4px;
-    transition: 0.35s;
-    text-decoration: none;
-  }
   

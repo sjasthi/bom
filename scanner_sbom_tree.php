@@ -46,7 +46,7 @@
                 $app_name = $row_parent["app_name"];
                 $p_id = $p;
                 echo "<tr data-tt-id = '".$p_id."' id = '".$app_name."' class = 'parent'>
-                      <td > <button type='button' class='btn btn-success' id = 'parent' > ".$app_name."</button></td>
+                      <td > <button type='button' class='btn btn-danger' id = 'parent' > ".$app_name."</button></td>
                       <td/>
                       <td/>
                       <td/>
@@ -168,7 +168,7 @@
                               $request_id= $row_gchild["request_id"];
                               $gc_id=$ct_id."-".$gc;
                               echo "<tr data-tt-id = '".$gc_id."' data-tt-parent-id='".$ct_id."' id = '".$app_name."-".$cmp_name."-".$request_id."' class = 'grandchild'> 
-                                    <td><button type='button' class='btn btn-danger' id = 'grandchild'>".$request_id."</td> 
+                                    <td><button type='button' class='btn btn-success' id = 'grandchild'>".$request_id."</td> 
                                     <td/>
                                     <td/>
                                     <td/>
