@@ -195,8 +195,9 @@
                 </div>           
                 
             </div> 
+           <h3> <?php echo "value = " . $cmpStatusSelection; ?> </h3>
         </div>
-        <?php echo "value = " . $cmpStatusSelection; ?>
+        
 
     </body>
 
