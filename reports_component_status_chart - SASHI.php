@@ -195,7 +195,14 @@
                 </div>           
                 
             </div> 
-           <h3> <?php echo "value = " . $cmpStatusSelection; ?> </h3>
+           <h3> <?php if ($cmpStatusCookie) {
+               echo "value = " . $cmpStatusSelection;
+               //Add CMP Status Table filtered on cmp_status = $cmpStatusSelection;
+           } else{
+               echo "No Value Selected";
+               //Add CMP Status Table without filter;
+           }
+            ?> </h3>
         </div>
         
 
