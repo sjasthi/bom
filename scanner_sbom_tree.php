@@ -46,7 +46,7 @@
                 $app_name = $row_parent["app_name"];
                 $p_id = $p;
                 echo "<tr data-tt-id = '".$p_id."' id = '".$app_name."' class = 'parent'>
-                      <td > <button type='button' class='btn btn-danger' id = 'parent' > ".$app_name."</button></td>
+                      <td > <button type='button' class='btn btn-danger' id = 'parent'> ".$app_name."</button></td>
                       <td/>
                       <td/>
                       <td/>
