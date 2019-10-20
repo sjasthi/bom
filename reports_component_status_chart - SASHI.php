@@ -58,20 +58,22 @@
                 var chart = new google.visualization.PieChart(document.getElementById('piechart'));
 
                 google.visualization.events.addListener(chart, 'select', selectHandler);
-
-
                 
                 function selectHandler(){
                     var selectedItem = chart.getSelection()[0];
-                   
-                        
                     if (selectedItem) {
-                    var valueFromPieChartSelection = data.getValue(selectedItem.row, 0);   
-                    
-                    
+                    var $cmpStatusSelection = data.getValue(selectedItem.row, 0);   
+                    document.cookie = escape('cmp_status_cookie') + '=' + escape($cmpStatusSelection); 
+                    location.reload();
                     }    
-                    <?php                       
-                        $valueFromPieChartSelection = "<script>valueFromPieChartSelection</script>". " Sashi Amatya";                      
+                    <?php     
+                    if(isset($_COOKIE['cmp_status_cookie'])){
+                        $cmpStatusSelection = $_COOKIE['cmp_status_cookie'];    
+                        $cmpStatusCookie=true;
+                    } else{
+                        $cmpStatusSelection = null;
+                        $cmpStatusCookie=false;
+                    }  
                     ?>                 
                 }
                 chart.draw(data, options);
@@ -80,15 +82,15 @@
         
 
 
-        <!-- Google bar chart
-        -->
+        <!-- Google bar chart -->
+        
         <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
         <script type="text/javascript">
             google.charts.load('current', {packages: ['corechart', 'bar']});
             google.charts.setOnLoadCallback(drawChart);
 
             function drawChart() {
-                var data = google.visualization.arrayToDataTable([
+                var data2 = google.visualization.arrayToDataTable([
                     ['Component Status', 'Counts'],
                
                     <?php
@@ -108,7 +110,7 @@
 
                 ]);
 
-                var options = {
+                var options2 = {
                     title: 'Component Report',
                     width: 900,
                     height: 500,
@@ -122,11 +124,33 @@
                     bars: 'horizontal'
                 };
 
-                var chart = new google.visualization.BarChart(document.getElementById('barchart'));
-                chart.draw(data, options);
+                var chart2 = new google.visualization.BarChart(document.getElementById('barchart'));
+                google.visualization.events.addListener(chart2, 'select', selectHandler);
+                chart2.draw(data2, options2);
+                function selectHandler(){
+                    var selectedItem = chart2.getSelection()[0];
+                   
+                        
+                    if (selectedItem) {
+                    var cmpStatusSelection = data2.getValue(selectedItem.row, 0);   
+                    document.cookie = escape('cmp_status_cookie') + '=' + escape(cmpStatusSelection); 
+                    location.reload();
+                    
+                    }    
+                    <?php     
+                    if(isset($_COOKIE['cmp_status_cookie'])){
+                        $cmpStatusSelection = $_COOKIE['cmp_status_cookie'];    
+                        $cmpStatusCookie=true;
+                    } else{
+                        $cmpStatusSelection = null;
+                        $cmpStatusCookie=false;
+                    }                 
+                                         
+                    ?>                 
+                }
             }
         </script>
-    
+    -->
     </head>
 
     <body>
@@ -151,17 +175,12 @@
                 <div id="collapse-pie-chart" class="panel-collapse collapse">
                     <div class="panel-body">
                         <div id="piechart" style="width: 900px; height: 500px;"></div>
-
-                        <?php      
-                                           
-                        echo "value = " . $valueFromPieChartSelection;
-                         ?>
-                   
-                    </div>
+                        </div>
                 </div>
                 </div>
 
-                <div class="panel panel-default">
+                
+                    <div class="panel panel-default">
                 <div class="panel-heading">
                     <h4 class="panel-title">
                     <a data-toggle="collapse" data-parent="#accordion" href="#collapse-bar-chart">Bar Chart</a>
@@ -170,12 +189,14 @@
                 <div id="collapse-bar-chart" class="panel-collapse collapse">
                     <div class="panel-body">
                         <div id="barchart" style="width: 900px; height: 500px;"></div>
+                       
                     </div>
                 </div>
-                </div>               
+                </div>           
                 
             </div> 
         </div>
+        <?php echo "value = " . $cmpStatusSelection; ?>
 
     </body>
 
