@@ -144,7 +144,7 @@
                             $ct++;
                           } 
                           // output data of child
-                          $sql_gchild = "SELECT distinct request_id from sbom  
+                          $sql_gchild = "SELECT request_id, request_step, request_status, DATE_FORMAT(request_date, \"%m/%d/%y\") as request_date from sbom  
                                           where app_name = '".$app_name."'  
                                           and app_id = '".$app_id."' 
                                           and app_version = '".$app_version."' 
@@ -159,88 +159,53 @@
                             $gc_id=$ct_id."-".$gc;
                             echo "<tr data-tt-id = '".$gc_id."' data-tt-parent-id='".$ct_id."' id = 'grandchild' class = 'grandchild'> 
                                   <th>".$cmp_name." Request ID</th>
-                                  <th/>
-                                  <th/>
-                                  <th/>
+                                  <th scope='col'>Request Date</th> 
+                                    <th scope='col'>Step</th>
+                                    <th scope='col'>Status</th>
                                   <th/>
                                   </tr>";
                             while($row_gchild = $result_gchild->fetch_assoc()) {
                               $request_id= $row_gchild["request_id"];
+                              $request_date= $row_gchild["request_date"];
+                              $request_step= $row_gchild["request_step"];
+                              $request_status= $row_gchild["request_status"];
                               $gc_id=$ct_id."-".$gc;
                               echo "<tr data-tt-id = '".$gc_id."' data-tt-parent-id='".$ct_id."' id = '".$app_name."-".$cmp_name."-".$request_id."' class = 'grandchild'> 
-                                    <td><button type='button' class='btn btn-success' id = 'grandchild'>".$request_id."</td> 
-                                    <td/>
-                                    <td/>
-                                    <td/>
+                                    <td class = 'h4'>".$request_id."</td> 
+                                    <td class = 'h4'>".$request_date."</td> 
+                                    <td class = 'h4'>".$request_step."</td>
+                                    <td class = 'h4'>".$request_status."</td>
                                     <td/>
                                     </tr>";
                               $gc++;
-                              //find child table data
-                              $sql_gchild_table = "SELECT request_id, request_step, request_status, DATE_FORMAT(request_date, \"%m/%d/%y\") as request_date from sbom 
-                                                    where app_name = '".$app_name."' 
-                                                    and app_id = '".$app_id."' 
-                                                    and app_version = '".$app_version."' 
-                                                    and app_status = '".$app_status."' 
-                                                    and cmp_name = '".$cmp_name."' 
-                                                    and cmp_id = '".$cmp_id."' 
-                                                    and cmp_version = '".$cmp_version."' 
-                                                    and cmp_status = '".$cmp_status."' 
-                                                    and request_id = '".$request_id."' ; ";
-                              $result_gchild_table= $db->query($sql_gchild_table);
-                              if ($result_gchild_table->num_rows > 0) {
-                                      // output data of grandchild table
-                                      $gct_id = $gc_id."-".$gct;
-                                      echo "<tr data-tt-id = '".$gct_id."' data-tt-parent-id='".$gc_id."' id = 'grandchild' class = 'grandchild'> 
-                                            <th scope='col'>".$request_id." Date</th> 
-                                            <th scope='col'>".$request_id." Step</th>
-                                            <th scope='col'>".$request_id." Status</th>
-                                            <th/>
-                                            <th/>
-                                            </tr>";
-                                      while($row_gchild_table = $result_gchild_table->fetch_assoc()) {
-                                        $request_step = $row_gchild_table["request_step"];
-                                        $request_status = $row_gchild_table["request_status"];
-                                        $request_date= $row_gchild_table["request_date"];
-                                        $gct_id = $gc_id."-".$gct;
-                                        echo "<tr data-tt-id = '".$gct_id."' data-tt-parent-id='".$gc_id."' class='grandchild' id = '".$app_name."-".$cmp_name."-".$request_id."'> 
-                                              <td class = 'h4'>".$request_date."</td> 
-                                              <td class = 'h4'>".$request_step."</td>
-                                              <td class = 'h4'>".$request_status."</td>
-                                              <td/>
-                                              <td/>
-                                              </tr>";
-                                        $gct++;
-                                      } 
-                                      $result_gchild_table -> close();
-                                    }
-                                  } 
-                                  $result_gchild -> close();
-                                }
-                              }
-                              $result_child_table -> close();
-                            }
-                          } 
-                          $result_child -> close();
+                            } 
+                            $result_gchild -> close();
+                          }
                         }
-                      } 
-                      $result_parent_table -> close();
+                        $result_child_table -> close();
+                      }
                     } 
-                    $result_parent->close();
+                    $result_child -> close();
                   }
-                  else{
-                    echo "<tr data-tt-id = 'No Results'> <td>No Results Found</td><td></td><td></td><td></td><td></td> </tr>";
-                  }
-                  ?>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-            <?php include("./footer.php"); ?>
-            <script>
-              //Params for the treetable
-              let sbom_params = {
-                expandable: true,
-                clickableNodeNames: true
-                };
-                $("#bom_treetable").treetable(sbom_params);
-                </script>
+                } 
+                $result_parent_table -> close();
+              } 
+              $result_parent->close();
+            }
+            else{
+              echo "<tr data-tt-id = 'No Results'> <td>No Results Found</td><td></td><td></td><td></td><td></td> </tr>";
+            }
+            ?>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <?php include("./footer.php"); ?>
+      <script>
+        //Params for the treetable
+        let sbom_params = {
+          expandable: true,
+          clickableNodeNames: true
+          };
+          $("#bom_treetable").treetable(sbom_params);
+          </script>
