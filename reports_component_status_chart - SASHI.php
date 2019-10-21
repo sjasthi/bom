@@ -133,7 +133,10 @@
                         
                     if (selectedItem) {
                     var cmpStatusSelection = data2.getValue(selectedItem.row, 0);   
-                    document.cookie = escape('cmp_status_cookie') + '=' + escape(cmpStatusSelection); 
+                    var date = new Date();
+                    date.setTime(date.getTime()+(2*60*60*1000));
+                    var expires = "; expires="+date.toGMTString();
+                    document.cookie = escape('cmp_status_cookie') + '=' + escape(cmpStatusSelection) + expires + "; path=/"; 
                     location.reload();
                     
                     }    
