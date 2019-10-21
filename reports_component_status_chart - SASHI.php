@@ -191,7 +191,7 @@
                 </div>
             </div>
         </div>
-    </div> 
+        </div>    
 
 <table id="info" cellpadding="0" cellspacing="0" border="0"
             class="datatable table table-striped table-bordered datatable-style table-hover"
@@ -225,6 +225,7 @@ if ($cmpStatusCookie) {
     echo "<h3> Components that are " . $cmpStatusSelection.".</h3>";
     $sql = "SELECT * from sbom where cmp_status = '".$cmpStatusSelection."';";
 } else{
+    echo "<h3>All Components</h3>";
     $sql = "SELECT * from sbom;";
 }
 $result = $db->query($sql);
@@ -287,10 +288,9 @@ $result = $db->query($sql);
     } );
 
 </script>
-        </div>
-        
 
-    </body>
+</div>
+</body>
 
 </html>
         
