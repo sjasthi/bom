@@ -165,44 +165,128 @@
 
         <br>
         <div class="container">
-            <div class="panel-group" id="accordion">
-                <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h4 class="panel-title">
+        <div class="panel-group" id="accordion">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
                     <a data-toggle="collapse" data-parent="#accordion" href="#collapse-pie-chart">Pie Chart</a>
-                    </h4>
+                </h4>
+            </div>
+            <div id="collapse-pie-chart" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <div id="piechart" style="width: 900px; height: 500px;"></div>
                 </div>
-                <div id="collapse-pie-chart" class="panel-collapse collapse">
-                    <div class="panel-body">
-                        <div id="piechart" style="width: 900px; height: 500px;"></div>
-                        </div>
-                </div>
-                </div>
-
-                
-                    <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h4 class="panel-title">
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
                     <a data-toggle="collapse" data-parent="#accordion" href="#collapse-bar-chart">Bar Chart</a>
-                    </h4>
+                </h4>
+            </div>
+            <div id="collapse-bar-chart" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <div id="barchart" style="width: 900px; height: 500px;"></div>
+
                 </div>
-                <div id="collapse-bar-chart" class="panel-collapse collapse">
-                    <div class="panel-body">
-                        <div id="barchart" style="width: 900px; height: 500px;"></div>
-                       
-                    </div>
-                </div>
-                </div>           
-                
-            </div> 
-           <h3> <?php if ($cmpStatusCookie) {
-               echo "value = " . $cmpStatusSelection;
-               //Add CMP Status Table filtered on cmp_status = $cmpStatusSelection;
-           } else{
-               echo "No Value Selected";
-               //Add CMP Status Table without filter;
-           }
-            ?> </h3>
+            </div>
+        </div>
+    </div> 
+
+<table id="info" cellpadding="0" cellspacing="0" border="0"
+            class="datatable table table-striped table-bordered datatable-style table-hover"
+            width="100%" style="width: 100px;">
+              <thead>
+                <tr id="table-first-row">
+                <th>CMP ID</th>
+                        <th>CMP Name</th>
+                        <th>CMP Version</th>
+                        <th>CMP Type</th>
+                        <th>CMP Status</th>
+                        <th>Notes</th>
+                </tr>
+              </thead>
+
+              <tfoot>
+                <tr>
+                    <th>CMP ID</th>
+                    <th>CMP Name</th>
+                    <th>CMP Version</th>
+                    <th>CMP Type</th>
+                    <th>CMP Status</th>
+                    <th>Notes</th>
+                </tr>
+              </tfoot>
+
+              <tbody>
+
+              <?php
+if ($cmpStatusCookie) {
+    echo "<h3> Components that are " . $cmpStatusSelection.".</h3>";
+    $sql = "SELECT * from sbom where cmp_status = '".$cmpStatusSelection."';";
+} else{
+    $sql = "SELECT * from sbom;";
+}
+$result = $db->query($sql);
+
+                if ($result->num_rows > 0) {
+                    // output data of each row
+                    while($row = $result->fetch_assoc()) {
+                        echo '<tr>
+                                <td>'.$row["cmp_id"].' </span> </td>
+                                <td>'.$row["cmp_name"].'</td>
+                                <td>'.$row["cmp_version"].'</td>
+                                <td>'.$row["cmp_type"].' </span> </td>
+                                <td>'.$row["cmp_status"].' </span> </td>
+                                <td>'.$row["notes"].' </span> </td>
+                            </tr>';
+                    }//end while
+                }//end if
+                else {
+                    echo "0 results";
+                }//end else
+
+                 $result->close();
+                ?>
+
+              </tbody>
+        </table>
+
+
+        <script type="text/javascript" language="javascript">
+    $(document).ready( function () {
+        
+        $('#info').DataTable( {
+            dom: 'lfrtBip',
+            buttons: [
+                'copy', 'excel', 'csv', 'pdf'
+            ] }
+        );
+
+        $('#info thead tr').clone(true).appendTo( '#info thead' );
+        $('#info thead tr:eq(1) th').each( function (i) {
+            var title = $(this).text();
+            $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+    
+            $( 'input', this ).on( 'keyup change', function () {
+                if ( table.column(i).search() !== this.value ) {
+                    table
+                        .column(i)
+                        .search( this.value )
+                        .draw();
+                }
+            } );
+        } );
+    
+        var table = $('#info').DataTable( {
+            orderCellsTop: true,
+            fixedHeader: true,
+            retrieve: true
+        } );
+        
+    } );
+
+</script>
         </div>
         
 
