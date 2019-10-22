@@ -7,9 +7,9 @@
     text-decoration: none;
   }
   #grandchild {
-    background-color:green;
-    border: .2rem solid green;
-    color: white;
+    background-color:#66cc66;
+    border: .2rem solid #66cc66;
+    color: black;
     font-size: 16px;
     margin: 4px;
     transition: 0.35s;
@@ -18,8 +18,8 @@
 
 
   #child {
-    background-color:yellow;
-    border: .2rem solid yellow;
+    background-color:#ffff66;
+    border: .2rem solid #ffff66;
     color: black;
     font-size: 16px;
     margin: 4px;
@@ -29,9 +29,9 @@
 
 
   #parent {
-    background-color:red;
-    border: .2rem solid red;
-    color: white;
+    background-color:#ff6666;
+    border: .2rem solid #ff6666;
+    color: black;
     font-size: 16px;
     margin: 4px;
     transition: 0.35s;
