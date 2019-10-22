@@ -18,194 +18,118 @@
    <div class="container" id="container">
      <h3 style = "color: #01B0F1;">Scanner --> BOM Tree</h3>
      <div class="table-responsive">
-       <div class="h2">
+       <div class="h4">
          <a href="#" onclick="$('#bom_treetable').treetable('expandAll'); return false;">Expand All</a>
          <a href="#" onclick="$('#bom_treetable').treetable('collapseAll'); return false;">Collapse All</a>
         </div>
-        <table id = "bom_treetable" class = "table table-striped table-hover">
-          <thead id = 'parent'>
-            <th >Application Name</th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
+        <table id = "bom_treetable" class = "table table-hover">
+          <thead class = 'h4'>
+            <th >Name</th>
+            <th>Version</th>
+            <th>Status</th>
+            <th>Type</th>
+            <th>Notes</th>
           </thead>
           <tbody>
             <?php
             //finds parent data
-            $sql_parent = "SELECT DISTINCT app_name from sbom order by app_name;";
+            $sql_parent = "SELECT DISTINCT app_name, app_id, app_version, app_status from sbom order by app_name;";
             $result_parent = $db->query($sql_parent);
             $p=1;
-            $pt=1;
             $c=1;
-            $ct=1;
             $gc=1;
-            $gct=1;
             if ($result_parent->num_rows > 0) {
               while($row_parent = $result_parent->fetch_assoc()) {
                 $app_name = $row_parent["app_name"];
+                $app_id = $row_parent["app_id"];
+                $app_version = $row_parent["app_version"];
+                $app_status = $row_parent["app_status"];
                 $p_id = $p;
-                echo "<tr data-tt-id = '".$p_id."' id = '".$app_name."' class = 'parent'>
-                      <td > <button type='button' class='btn btn-danger' id = 'parent'> ".$app_name."</button></td>
-                      <td/>
-                      <td/>
+                echo "<tr data-tt-id = '".$p_id."' id = '".$app_name."-".$app_id."' class = 'parent'>
+                      <td > <button type='button' id = 'parent'> ".$app_name."
+                      <br/>Application ID: ".$app_id."</button></td> 
+                      <td >".$app_version."</td>
+                      <td>".$app_status."</td>
                       <td/>
                       <td/>
                       </tr>";
                 $p++;
-                //Finds parent table data
-                $sql_parent_table = "SELECT DISTINCT app_name, app_id, app_version, app_status from sbom where app_name = '".$app_name."' order by app_name;";
-                $result_parent_table = $db->query($sql_parent_table);
-                if ($result_parent_table->num_rows > 0) {
-                  $pt_id=$p_id."-".$pt;
-                  echo "<tr data-tt-id = '".$pt_id."'  data-tt-parent-id='".$p_id."' id = 'parent' class = 'parent'> 
-                          <th scope='col'>".$app_name." ID</th> 
-                          <th scope='col'>".$app_name." Version</th> 
-                          <th scope='col'>".$app_name." Status</th>
-                          <th/>
-                          <th/>
-                        </tr>";
-                  while($row_parent_table = $result_parent_table->fetch_assoc()) {
-                    $app_name = $row_parent_table["app_name"];
-                    $app_id = $row_parent_table["app_id"];
-                    $app_version = $row_parent_table["app_version"];
-                    $app_status = $row_parent_table["app_status"];
-                    $pt_id=$p_id."-".$pt;
-                    echo "<tr data-tt-id = '".$pt_id."'  data-tt-parent-id='".$p_id."' class='parent' id = '".$app_name."'> 
-                          <td> <button type='button' class='btn btn-success' id = 'parent' >".$app_id."</button></td> 
-                          <td class = 'h4'>".$app_version."</td>
-                          <td class = 'h4'>".$app_status."</td>
-                          <td/>
-                          <td/>
-                          </tr>";
-                    $pt++;
-                    // output data of child
-                    $sql_child = "SELECT distinct cmp_name from sbom 
+                // output data of child
+                  $sql_child = "SELECT cmp_name, cmp_id, cmp_type, cmp_version, cmp_status, notes from sbom 
                                   where app_name = '".$app_name."' 
                                   and app_id = '".$app_id."' 
                                   and app_version = '".$app_version."' 
-                                  and app_status = '".$app_status."' 
-                                  order by cmp_name;";
-                    $result_child = $db->query($sql_child);
-                    if ($result_child->num_rows > 0) {
-                      // output data of child
-                      $c_id=$pt_id."-".$c;
-                      echo "<tr data-tt-id = '".$c_id."' data-tt-parent-id='".$pt_id."'  id = 'child' class = 'child'> 
-                            <th>".$app_name." Component Name</th>
-                            <th/>
-                            <th/>
-                            <th/>
-                            <th/>
+                                  and app_status = '".$app_status."' ; ";
+                  $result_child = $db->query($sql_child);
+                  if ($result_child->num_rows > 0) {
+                    // output data of child
+                    while($row_child = $result_child->fetch_assoc()) {
+                      $cmp_name = $row_child["cmp_name"];
+                      $cmp_id = $row_child["cmp_id"];
+                      $cmp_version = $row_child["cmp_version"];
+                      $cmp_status = $row_child["cmp_status"];
+                      $cmp_type = $row_child["cmp_type"];
+                      $notes = $row_child["notes"];
+                      $c_id=$p_id."-".$c;
+                      echo "<tr data-tt-id = '".$c_id."' data-tt-parent-id='".$p_id."' id = '".$cmp_name."-".$cmp_id."' class = 'child'>
+                        <td > &nbsp; &nbsp; &nbsp; &nbsp; <button type='button'  id = 'child'> ".$cmp_name."
+                         <br/>Component ID: ".$cmp_id."</button></td>
+                            <td >".$cmp_version."</td> 
+                            <td >".$cmp_status."</td> 
+                            <td >".$cmp_type."</td> 
+                            <td >".$notes."</td> 
                             </tr>";
-                      while($row_child = $result_child->fetch_assoc()) {
-                        $cmp_name = $row_child["cmp_name"];
-                        $c_id=$pt_id."-".$c;
-                        echo "<tr data-tt-id = '".$c_id."' data-tt-parent-id='".$pt_id."' id = '".$app_name."-".$cmp_name."' class = 'child'>
-                              <td> <button type='button' class='btn btn-warning' id = 'child' >".$cmp_name."</button></td>
-                              <td/>
-                              <td/>
-                              <td/>
-                              <td/>
-                              </tr>";
-                        $c++;
-                        //find child table data
-                        $sql_child_table = "SELECT cmp_name, cmp_id, cmp_type, cmp_version, cmp_status, notes from sbom 
-                                            where app_name = '".$app_name."' 
-                                            and app_id = '".$app_id."' 
-                                            and app_version = '".$app_version."' 
-                                            and app_status = '".$app_status."' 
-                                            and cmp_name = '".$cmp_name."'; ";
-                        $result_child_table= $db->query($sql_child_table);
-                        if ($result_child_table->num_rows > 0) {
-                          // output data of child table
-                          $ct_id = $c_id."-".$ct;
-                          echo "<tr data-tt-id = '".$ct_id."' data-tt-parent-id='".$c_id."' id = 'child' class = 'child'> 
-                                <th scope='col'>".$cmp_name." ID</th> 
-                                <th scope='col'>".$cmp_name." Version</th> 
-                                <th scope='col'>".$cmp_name." Status</th> 
-                                <th scope='col'>".$cmp_name." Type</th> 
-                                <th scope='col'>Notes</th>
-                                </tr>";
-                          while($row_child_table = $result_child_table->fetch_assoc()) {
-                            $cmp_name = $row_child_table["cmp_name"];
-                            $cmp_id = $row_child_table["cmp_id"];
-                            $cmp_version = $row_child_table["cmp_version"];
-                            $cmp_status = $row_child_table["cmp_status"];
-                            $cmp_type = $row_child_table["cmp_type"];
-                            $notes = $row_child_table["notes"];
-                            $ct_id = $c_id."-".$ct;
-                            echo "<tr data-tt-id = '".$ct_id."' data-tt-parent-id='".$c_id."' class = 'child' id = '".$app_name."-".$cmp_name."'> 
-                                  <td> <button type='button' class='btn btn-warning' id = 'child'>".$cmp_id."</button></td>
-                                  <td class = 'h4'>".$cmp_version."</td> 
-                                  <td class = 'h4'>".$cmp_status."</td> 
-                                  <td class = 'h4'>".$cmp_type."</td> 
-                                  <td class = 'h4'>".$notes."</td> 
+                      $c++;
+                      // output data of child
+                        $sql_gchild = "SELECT request_id, request_step, request_status, DATE_FORMAT(request_date, \"%m/%d/%y\") as request_date from sbom  
+                                        where app_name = '".$app_name."'  
+                                        and app_id = '".$app_id."' 
+                                        and app_version = '".$app_version."' 
+                                        and app_status = '".$app_status."' 
+                                        and cmp_name = '".$cmp_name."' 
+                                        and cmp_id = '".$cmp_id."' 
+                                        and cmp_version = '".$cmp_version."' 
+                                        and cmp_status = '".$cmp_status."';";
+                        $result_gchild = $db->query($sql_gchild);
+                        if ($result_gchild->num_rows > 0) {
+                          // output data of grandchild
+                          while($row_gchild = $result_gchild->fetch_assoc()) {
+                            $request_id= $row_gchild["request_id"];
+                            $request_date= $row_gchild["request_date"];
+                            $request_step= $row_gchild["request_step"];
+                            $request_status= $row_gchild["request_status"];
+                            $gc_id=$c_id."-".$gc;
+                            echo "<tr data-tt-id = '".$gc_id."' data-tt-parent-id='".$c_id."' id = '".$request_id."' class = 'grandchild'> 
+                                  <td > &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;<button id = 'grandchild' style = 'cursor: none;'>Request ID: ".$request_id."</button></td> 
+                                 <td >".$request_step."</td>
+                                  <td >".$request_status."</td>
+                                  <td/>
+                                  <td>Request Date: ".$request_date."</td>
                                   </tr>";
-                            $ct++;
+                            $gc++;
                           } 
-                          // output data of child
-                          $sql_gchild = "SELECT request_id, request_step, request_status, DATE_FORMAT(request_date, \"%m/%d/%y\") as request_date from sbom  
-                                          where app_name = '".$app_name."'  
-                                          and app_id = '".$app_id."' 
-                                          and app_version = '".$app_version."' 
-                                          and app_status = '".$app_status."' 
-                                          and cmp_name = '".$cmp_name."' 
-                                          and cmp_id = '".$cmp_id."' 
-                                          and cmp_version = '".$cmp_version."' 
-                                          and cmp_status = '".$cmp_status."';";
-                          $result_gchild = $db->query($sql_gchild);
-                          if ($result_gchild->num_rows > 0) {
-                            // output data of grandchild
-                            $gc_id=$ct_id."-".$gc;
-                            echo "<tr data-tt-id = '".$gc_id."' data-tt-parent-id='".$ct_id."' id = 'grandchild' class = 'grandchild'> 
-                                  <th>".$cmp_name." Request ID</th>
-                                  <th scope='col'>Request Date</th> 
-                                    <th scope='col'>Step</th>
-                                    <th scope='col'>Status</th>
-                                  <th/>
-                                  </tr>";
-                            while($row_gchild = $result_gchild->fetch_assoc()) {
-                              $request_id= $row_gchild["request_id"];
-                              $request_date= $row_gchild["request_date"];
-                              $request_step= $row_gchild["request_step"];
-                              $request_status= $row_gchild["request_status"];
-                              $gc_id=$ct_id."-".$gc;
-                              echo "<tr data-tt-id = '".$gc_id."' data-tt-parent-id='".$ct_id."' id = '".$app_name."-".$cmp_name."-".$request_id."' class = 'grandchild'> 
-                                    <td class = 'h4'>".$request_id."</td> 
-                                    <td class = 'h4'>".$request_date."</td> 
-                                    <td class = 'h4'>".$request_step."</td>
-                                    <td class = 'h4'>".$request_status."</td>
-                                    <td/>
-                                    </tr>";
-                              $gc++;
-                            } 
-                            $result_gchild -> close();
-                          }
-                        }
-                        $result_child_table -> close();
-                      }
-                    } 
-                    $result_child -> close();
+                          $result_gchild -> close();
+                    }
                   }
-                } 
-                $result_parent_table -> close();
+                  $result_child -> close();
+                }
               } 
-              $result_parent->close();
-            }
-            else{
-              echo "<tr data-tt-id = 'No Results'> <td>No Results Found</td><td></td><td></td><td></td><td></td> </tr>";
-            }
-            ?>
-            </tbody>
-          </table>
-        </div>
+            $result_parent->close();
+          }
+          else{
+            echo "<tr data-tt-id = 'No Results'> <td>No Results Found</td><td></td><td></td><td></td><td></td> </tr>";
+          }
+          ?>
+          </tbody>
+        </table>
       </div>
-      <?php include("./footer.php"); ?>
-      <script>
-        //Params for the treetable
-        let sbom_params = {
-          expandable: true,
-          clickableNodeNames: true
-          };
-          $("#bom_treetable").treetable(sbom_params);
-          </script>
+    </div>
+    <?php include("./footer.php"); ?>
+    <script>
+      //Params for the treetable
+      let sbom_params = {
+        expandable: true,
+        clickableNodeNames: true
+        };
+        $("#bom_treetable").treetable(sbom_params);
+        </script>
