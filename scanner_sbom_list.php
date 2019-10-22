@@ -36,27 +36,6 @@
                         <th>Notes</th>
                 </tr>
               </thead>
-
-              <tfoot>
-                <tr>
-                        <th>Row ID</th>
-                        <th>App ID</th>
-                        <th>App Name</th>
-                        <th>App Version</th>
-                        <th>CMP ID</th>
-                        <th>CMP Name</th>
-                        <th>CMP Version</th>
-                        <th>CMP Type</th>
-                        <th>App Status</th>
-                        <th>CMP Status</th>
-                        <th>Request ID</th>
-                        <th>Request Date</th>
-                        <th>Request Status</th>
-                        <th>Request Step</th> 
-                        <th>Notes</th>
-                </tr>
-              </tfoot>
-
               <tbody>
 
               <?php
@@ -94,6 +73,25 @@ $result = $db->query($sql);
                 ?>
 
               </tbody>
+              <tfoot>
+                <tr>
+                        <th>Row ID</th>
+                        <th>App ID</th>
+                        <th>App Name</th>
+                        <th>App Version</th>
+                        <th>CMP ID</th>
+                        <th>CMP Name</th>
+                        <th>CMP Version</th>
+                        <th>CMP Type</th>
+                        <th>App Status</th>
+                        <th>CMP Status</th>
+                        <th>Request ID</th>
+                        <th>Request Date</th>
+                        <th>Request Status</th>
+                        <th>Request Step</th> 
+                        <th>Notes</th>
+                </tr>
+              </tfoot>
         </table>
 
 
