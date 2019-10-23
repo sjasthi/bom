@@ -25,8 +25,15 @@
                     <li class="active"><a href="#"
                             onclick="$('#bom_treetable').treetable('collapseAll'); return false;"><span
                                 class="glyphicon glyphicon-chevron-up"></span>Collapse All</a></li>
-                                <!--Place Holder for future iteration
-                    <form class="navbar-form navbar-left" action="/action_page.php">
+                                <!--Place Holder for future iteration-->
+                    <li><a href="#">Show <span class="glyphicon glyphicon-tint" style='color:#ff6666;'> </span>Red</a>
+                    </li>
+                    <li><a href="#">Show <span class="glyphicon glyphicon-tint" style='color:#ff6666;'></span>Red and
+                            <span class="glyphicon glyphicon-tint" style='color:#ffd966;'></span>Yellow</a></li>
+                    <li><a href="#">Remove Color</a></li>
+                    <li><a href="#">Restore Color</a></li>
+                    
+                   <form class="navbar-form navbar-left" action="/action_page.php">
                         <div class="input-group">
                             <input type="text" class="form-control" placeholder="Where Used">
                             <div class="input-group-btn">
@@ -36,14 +43,6 @@
                             </div>
                         </div>
                     </form>
-                    
-                    <li><a href="#">Show <span class="glyphicon glyphicon-tint" style='color:#ff6666;'> </span>Red</a>
-                    </li>
-                    <li><a href="#">Show <span class="glyphicon glyphicon-tint" style='color:#ff6666;'></span>Red and
-                            <span class="glyphicon glyphicon-tint" style='color:#ffd966;'></span>Yellow</a></li>
-                    <li><a href="#">Remove Color</a></li>
-                    <li><a href="#">Restore Color</a></li>
-                    -->
 
                 </ul>
             </div>
