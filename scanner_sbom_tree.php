@@ -17,10 +17,24 @@
 <div class="right-content">
    <div class="container" id="container">
      <h3 style = "color: #01B0F1;">Scanner --> BOM Tree</h3>
+     <nav class="navbar">
+  <div class="container-fluid">
+    <ul class="nav navbar-nav" style = 'font-size: 18px;'>
+      <li ><a href="#" onclick="$('#bom_treetable').treetable('expandAll'); return false;"><span class="glyphicon glyphicon-chevron-down"></span>Expand All</a></li>
+      <li class="active"><a href="#" onclick="$('#bom_treetable').treetable('collapseAll'); return false;"><span class="glyphicon glyphicon-chevron-up"></span>Collapse All</a></li>
+      <!--Place Holder for future iteration
+      <li><a href="#" >Show <span class="glyphicon glyphicon-tint" style = 'color:#ff6666;'></span>Red</a></li>
+      <li><a href="#" >Show <span class="glyphicon glyphicon-tint" style = 'color:#ff6666;'></span>Red and <span class="glyphicon glyphicon-tint" style = 'color:#ffff66;'></span>Yellow</a></li>
+      <li ><a href="#" >Remove Color</a></li>
+      <li ><a href="#" >Restore Color</a></li>
+      -->
+    </ul>
+  </div>
+</nav>
      <div class="table-responsive">
        <div class="h4">
-         <a href="#" onclick="$('#bom_treetable').treetable('expandAll'); return false;">Expand All</a>
-         <a href="#" onclick="$('#bom_treetable').treetable('collapseAll'); return false;">Collapse All</a>
+         
+         
         </div>
         <table id = "bom_treetable" class = "table table-hover">
           <thead class = 'h4'>
@@ -100,7 +114,7 @@
                             $request_status= $row_gchild["request_status"];
                             $gc_id=$c_id."-".$gc;
                             echo "<tr data-tt-id = '".$gc_id."' data-tt-parent-id='".$c_id."' id = '".$request_id."' class = 'grandchild'> 
-                                  <td > &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;<button id = 'grandchild' style = 'cursor: none;'>Request ID: ".$request_id."</button></td> 
+                                  <td > &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;<button id = 'grandchild' style = 'cursor: none;'>Request ID: ".$request_id."</button></td> 
                                  <td >".$request_step."</td>
                                   <td >".$request_status."</td>
                                   <td/>

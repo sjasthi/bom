@@ -20,22 +20,31 @@
 
   #child {
     background-color:#ffff66;
-    border: .2rem solid #ffff66;
     color: black;
     font-size: 16px;
-    margin: 4px;
-    transition: 0.35s;
     text-decoration: none;
   }
 
 
   #parent {
     background-color:#ff6666;
-    border: .2rem solid #ff6666;
     color: black;
     font-size: 16px;
-    margin: 4px;
-    transition: 0.35s;
+    text-decoration: none;
+  }
+
+  #bw_child {
+    background-color:rgb(133, 133, 133);
+    color: black;
+    font-size: 16px;
+    text-decoration: none;
+  }
+
+
+  #bw_parent {
+    background-color:rgb(67, 67, 67);
+    color: black;
+    font-size: 16px;
     text-decoration: none;
   }
 
