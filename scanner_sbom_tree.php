@@ -25,6 +25,7 @@
                     <li class="active"><a href="#"
                             onclick="$('#bom_treetable').treetable('collapseAll'); return false;"><span
                                 class="glyphicon glyphicon-chevron-up"></span>Collapse All</a></li>
+                                <!--Place Holder for future iteration
                     <form class="navbar-form navbar-left" action="/action_page.php">
                         <div class="input-group">
                             <input type="text" class="form-control" placeholder="Where Used">
@@ -35,7 +36,7 @@
                             </div>
                         </div>
                     </form>
-                    <!--Place Holder for future iteration
+                    
                     <li><a href="#">Show <span class="glyphicon glyphicon-tint" style='color:#ff6666;'> </span>Red</a>
                     </li>
                     <li><a href="#">Show <span class="glyphicon glyphicon-tint" style='color:#ff6666;'></span>Red and
@@ -76,10 +77,10 @@
                 $app_status = $row_parent["app_status"];
                 $p_id = $p;
                 echo "<tr data-tt-id = '".$p_id."' id = '".$app_name."-".$app_id."' class = 'parent'>
-                      <td > <button type='button' id = 'parent'> ".$app_name."
+                      <td class='text-capitalize'> <button type='button' id = 'parent'> ".$app_name."
                       <br/>Application ID: ".$app_id."</button></td> 
                       <td >".$app_version."</td>
-                      <td>".$app_status."</td>
+                      <td class='text-capitalize'>".$app_status."</td>
                       <td/>
                       <td/>
                       </tr>";
@@ -102,12 +103,12 @@
                       $notes = $row_child["notes"];
                       $c_id=$p_id."-".$c;
                       echo "<tr data-tt-id = '".$c_id."' data-tt-parent-id='".$p_id."' id = '".$cmp_name."-".$cmp_id."' class = 'child'>
-                        <td > &nbsp; &nbsp; &nbsp; &nbsp; <button type='button'  id = 'child'> ".$cmp_name."
+                        <td class='text-capitalize'> &nbsp; &nbsp; &nbsp; &nbsp; <button type='button'  id = 'child'> ".$cmp_name."
                          <br/>Component ID: ".$cmp_id."</button></td>
                             <td >".$cmp_version."</td> 
-                            <td >".$cmp_status."</td> 
-                            <td >".$cmp_type."</td> 
-                            <td >".$notes."</td> 
+                            <td class='text-capitalize'>".$cmp_status."</td> 
+                            <td class='text-capitalize'>".$cmp_type."</td> 
+                            <td class='text-capitalize'>".$notes."</td> 
                             </tr>";
                       $c++;
                       // output data of child
@@ -131,8 +132,8 @@
                             $gc_id=$c_id."-".$gc;
                             echo "<tr data-tt-id = '".$gc_id."' data-tt-parent-id='".$c_id."' id = '".$request_id."' class = 'grandchild'> 
                                   <td > &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;<button id = 'grandchild' style = 'cursor: none;'>Request ID: ".$request_id."</button></td> 
-                                 <td >".$request_step."</td>
-                                  <td >".$request_status."</td>
+                                 <td class='text-capitalize'>".$request_step."</td>
+                                  <td class='text-capitalize'>".$request_status."</td>
                                   <td/>
                                   <td>Request Date: ".$request_date."</td>
                                   </tr>";
