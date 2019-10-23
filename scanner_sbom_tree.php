@@ -15,22 +15,38 @@
 -->
 
 <div class="right-content">
-   <div class="container" id="container">
-     <h3 style = "color: #01B0F1;">Scanner --> BOM Tree</h3>
-     <nav class="navbar">
-  <div class="container-fluid">
-    <ul class="nav navbar-nav" style = 'font-size: 18px;'>
-      <li ><a href="#" onclick="$('#bom_treetable').treetable('expandAll'); return false;"><span class="glyphicon glyphicon-chevron-down"></span>Expand All</a></li>
-      <li class="active"><a href="#" onclick="$('#bom_treetable').treetable('collapseAll'); return false;"><span class="glyphicon glyphicon-chevron-up"></span>Collapse All</a></li>
-      <!--Place Holder for future iteration
-      <li><a href="#" >Show <span class="glyphicon glyphicon-tint" style = 'color:#ff6666;'></span>Red</a></li>
-      <li><a href="#" >Show <span class="glyphicon glyphicon-tint" style = 'color:#ff6666;'></span>Red and <span class="glyphicon glyphicon-tint" style = 'color:#ffff66;'></span>Yellow</a></li>
-      <li ><a href="#" >Remove Color</a></li>
-      <li ><a href="#" >Restore Color</a></li>
-      -->
-    </ul>
-  </div>
-</nav>
+    <div class="container" id="container">
+        <h3 style="color: #01B0F1;">Scanner --> BOM Tree</h3>
+        <nav class="navbar">
+            <div class="container-fluid">
+                <ul class="nav navbar-nav" style='font-size: 18px;'>
+                    <li><a href="#" onclick="$('#bom_treetable').treetable('expandAll'); return false;"><span
+                                class="glyphicon glyphicon-chevron-down"></span>Expand All</a></li>
+                    <li class="active"><a href="#"
+                            onclick="$('#bom_treetable').treetable('collapseAll'); return false;"><span
+                                class="glyphicon glyphicon-chevron-up"></span>Collapse All</a></li>
+                    <form class="navbar-form navbar-left" action="/action_page.php">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Where Used">
+                            <div class="input-group-btn">
+                                <button class="btn btn-default" type="submit">
+                                    <i class="glyphicon glyphicon-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                    <!--Place Holder for future iteration
+                    <li><a href="#">Show <span class="glyphicon glyphicon-tint" style='color:#ff6666;'> </span>Red</a>
+                    </li>
+                    <li><a href="#">Show <span class="glyphicon glyphicon-tint" style='color:#ff6666;'></span>Red and
+                            <span class="glyphicon glyphicon-tint" style='color:#ffd966;'></span>Yellow</a></li>
+                    <li><a href="#">Remove Color</a></li>
+                    <li><a href="#">Restore Color</a></li>
+                    -->
+
+                </ul>
+            </div>
+        </nav>
      <div class="table-responsive">
        <div class="h4">
          
