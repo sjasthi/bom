@@ -145,8 +145,6 @@
                 </tr>
             </table>            
         </div>
-
-        <h3> &nbsp; &nbsp; &nbsp; &nbsp; File for this page: reports_<span style="color:red">application</span>_status_chart.php</h3>
     </body>
 
 </html>
