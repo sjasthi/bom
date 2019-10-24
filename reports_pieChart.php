@@ -100,19 +100,19 @@
                 var selectedItem = chart.getSelection()[0];
                 if (selectedItem) {
                     var $statusSelection = data.getValue(selectedItem.row, 0);
-                    var $statusType = queryArray[0][0].toLowerCase().replace(/ /g, '');
+                    var $reportType = queryArray[0][0].toLowerCase().replace(/ /g, '');
                     document.cookie = encodeURI('status_cookie') + '=' + encodeURI($statusSelection);
-                    document.cookie = encodeURI('status_type') + '=' + encodeURI($statusType);
+                    document.cookie = encodeURI('report_type') + '=' + encodeURI($reportType);
                     location.reload();
                 }    
                 <?php     
                 if(isset($_COOKIE['status_cookie'])){
                     $statusSelection = $_COOKIE['status_cookie'];
-                    $statusType = $_COOKIE['status_type'];
+                    $reportType = $_COOKIE['report_type'];
                     $statusCookie=true;
                 } else{
                     $statusSelection = null;
-                    $statusType = null;
+                    $reportType = null;
                     $statusCookie = false;
                 }  
                 ?>                 
