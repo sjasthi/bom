@@ -8,11 +8,11 @@
 
 <!--Imports-->
 <link rel="stylesheet" href="tree_style.css" />
-<!--
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-treetable/3.2.0/css/jquery.treetable.css" />
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-treetable/3.2.0/css/jquery.treetable.theme.default.css" />
--->
+
 
 <div class="right-content">
     <div class="container" id="container">
@@ -26,12 +26,12 @@
                             onclick="$('#bom_treetable').treetable('collapseAll'); return false;"><span
                                 class="glyphicon glyphicon-chevron-up"></span>Collapse All</a></li>
                                 <!--Place Holder for future iteration-->
-                    <li><a href="#">Show <span class="glyphicon glyphicon-tint" style='color:#ff6666;'> </span>Red</a>
+                    <li><a href="#" onclick="$('#bom_treetable').treetable('collapseAll'); $('.child').toggle(); $('.grandchild').toggle();">Show <span class="glyphicon glyphicon-tint" style='color:#ff6666;'> </span>Red</a>
                     </li>
-                    <li><a href="#">Show <span class="glyphicon glyphicon-tint" style='color:#ff6666;'></span>Red and
+                    <li><a href="#" onclick="$('#bom_treetable').treetable('expandAll'); $('.grandchild').toggle();">Show <span class="glyphicon glyphicon-tint" style='color:#ff6666;'></span>Red and
                             <span class="glyphicon glyphicon-tint" style='color:#ffd966;'></span>Yellow</a></li>
-                    <li><a href="#">Remove Color</a></li>
-                    <li><a href="#">Restore Color</a></li>
+                    <li><a href="#">Color</a></li>
+                    <li><a href="#">No Color</a></li>
                     
                    <form class="navbar-form navbar-left" action="/action_page.php">
                         <div class="input-group">
@@ -51,7 +51,7 @@
        <div class="h4">
          
          
-        </div>
+       
         <table id = "bom_treetable" class = "table table-hover">
           <thead class = 'h4'>
             <th >Name</th>
@@ -75,7 +75,7 @@
                 $app_version = $row_parent["app_version"];
                 $app_status = $row_parent["app_status"];
                 $p_id = $p;
-                echo "<tr data-tt-id = '".$p_id."' id = '".$app_name."-".$app_id."' class = 'parent'>
+                echo "<tr data-tt-id = '".$p_id."' class = 'parent'>
                       <td class='text-capitalize'> <button type='button' id = 'parent'> ".$app_name."
                       <br/>Application ID: ".$app_id."</button></td> 
                       <td >".$app_version."</td>
@@ -101,7 +101,7 @@
                       $cmp_type = $row_child["cmp_type"];
                       $notes = $row_child["notes"];
                       $c_id=$p_id."-".$c;
-                      echo "<tr data-tt-id = '".$c_id."' data-tt-parent-id='".$p_id."' id = '".$cmp_name."-".$cmp_id."' class = 'child'>
+                      echo "<tr data-tt-id = '".$c_id."' data-tt-parent-id='".$p_id."' class = 'child'>
                         <td class='text-capitalize'> &nbsp; &nbsp; &nbsp; &nbsp; <button type='button'  id = 'child'> ".$cmp_name."
                          <br/>Component ID: ".$cmp_id."</button></td>
                             <td >".$cmp_version."</td> 
@@ -129,7 +129,7 @@
                             $request_step= $row_gchild["request_step"];
                             $request_status= $row_gchild["request_status"];
                             $gc_id=$c_id."-".$gc;
-                            echo "<tr data-tt-id = '".$gc_id."' data-tt-parent-id='".$c_id."' id = '".$request_id."' class = 'grandchild'> 
+                            echo "<tr data-tt-id = '".$gc_id."' data-tt-parent-id='".$c_id."' class = 'grandchild'> 
                                   <td > &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;<button id = 'grandchild' style = 'cursor: none;'>Request ID: ".$request_id."</button></td> 
                                  <td class='text-capitalize'>".$request_step."</td>
                                   <td class='text-capitalize'>".$request_status."</td>
@@ -152,6 +152,7 @@
           ?>
           </tbody>
         </table>
+        </div>
       </div>
     </div>
     <?php include("./footer.php"); ?>
