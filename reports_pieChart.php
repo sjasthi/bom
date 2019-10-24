@@ -17,80 +17,106 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
 
         <script type="text/javascript">
+        
+        function createPieChart(pieChart){
+            let name = pieChart[0];
+            let columnTitle = pieChart[1];
 
-        let queryArray_ApplicationReport = [['Application Status', 'Count', {role:'annotation'}]];
-        let queryArray_ComponentReport = [['Component Status', 'Count', {role:'annotation'}]];
-        let queryArray_RequestReport = [['Request Status', 'Count', {role:'annotation'}]];
-        let queryArray_RequestStepReport = [['Request Step', 'Count', {role:'annotation'}]];
+            let queryArray = [[columnTitle, 'Count', {role:'annotation'}]];
+            
+            switch(name){
+                case 'Application':
+                    <?php
+                    $query = $db->query("SELECT app_status, COUNT(app_status) AS occurrences FROM sbom GROUP BY app_status;");
+                    while($query_row = $query->fetch_assoc()) {
+                        echo 'queryArray.push(["'.$query_row["app_status"].'", '.$query_row["occurrences"].', "'.$query_row["app_status"].'"]);';
+                    }
+                    ?>
+                    break;
+                case 'Component':
+                    <?php
+                    $query = $db->query("SELECT cmp_status, COUNT(cmp_status) AS occurrences FROM sbom GROUP BY cmp_status;");
+                    while($query_row = $query->fetch_assoc()) {
+                        echo 'queryArray.push(["'.$query_row["cmp_status"].'", '.$query_row["occurrences"].', "'.$query_row["cmp_status"].'"]);';
+                    }
+                    ?>
+                    break;
+                case 'Request':
+                    <?php
+                    $query = $db->query("SELECT request_status, COUNT(request_status) AS occurrences FROM sbom GROUP BY request_status;");
+                    while($query_row = $query->fetch_assoc()) {
+                        echo 'queryArray.push(["'.$query_row["request_status"].'", '.$query_row["occurrences"].', "'.$query_row["request_status"].'"]);';
+                    }
+                    ?>
+                    break;
+                case 'Request Step':
+                    <?php
+                    $query = $db->query("SELECT request_step, COUNT(request_step) AS occurrences FROM sbom GROUP BY request_step;");
+                    while($query_row = $query->fetch_assoc()) {
+                        echo 'queryArray.push(["'.$query_row["request_step"].'", '.$query_row["occurrences"].', "'.$query_row["request_step"].'"]);';
+                    }
+                    ?>
+                    break;
+            }
 
-        <?php
-        $query_ApplicationReport = $db->query("SELECT app_status, COUNT(app_status) AS occurrences FROM sbom GROUP BY app_status;");
-        $query_ComponentReport = $db->query("SELECT cmp_status, COUNT(cmp_status) AS occurrences FROM sbom GROUP BY cmp_status;");
-        $query_RequestReport = $db->query("SELECT request_status, COUNT(request_status) AS occurrences FROM sbom GROUP BY request_status;");
-        $query_RequestStepReport = $db->query("SELECT request_step, COUNT(request_step) AS occurrences FROM sbom GROUP BY request_step;");
+            return queryArray;
+        }
 
-        while($query_row = $query_ApplicationReport->fetch_assoc()) {
-            echo 'queryArray_ApplicationReport.push(["'.$query_row["app_status"].'", '.$query_row["occurrences"].', "'.$query_row["app_status"].'"]);';
-        }        
-        while($query_row = $query_ComponentReport->fetch_assoc()) {
-            echo 'queryArray_ComponentReport.push(["'.$query_row["cmp_status"].'", '.$query_row["occurrences"].', "'.$query_row["cmp_status"].'"]);';
+        let pieCharts = [['Application', 'Application Status'], ['Component', 'Component Status'], ['Request', 'Request Status'], ['Request Step', 'Request Step']];
+
+        for(let i = 0; i < pieCharts.length; i++){
+            pieCharts[i] = createPieChart(pieCharts[i]);
         }
-        while($query_row = $query_RequestReport->fetch_assoc()) {
-            echo 'queryArray_RequestReport.push(["'.$query_row["request_status"].'", '.$query_row["occurrences"].', "'.$query_row["request_status"].'"]);';
-        }
-        while($query_row = $query_RequestStepReport->fetch_assoc()) {
-            echo 'queryArray_RequestStepReport.push(["'.$query_row["request_step"].'", '.$query_row["occurrences"].', "'.$query_row["request_step"].'"]);';
-        }
-        ?>
         </script>
 
         <!-- Google Pie Chart API Code -->
         <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
         <script type="text/javascript">
         google.charts.load('current', {'packages':['corechart']});
-        google.charts.setOnLoadCallback(drawPieChart);
+        google.charts.setOnLoadCallback(drawPieCharts);
 
-        function drawPieChart() {
-            var data_ApplicationReport = google.visualization.arrayToDataTable(queryArray_ApplicationReport);
-            var data_ComponentReport = google.visualization.arrayToDataTable(queryArray_ComponentReport);
-            var data_RequestReport = google.visualization.arrayToDataTable(queryArray_RequestReport);
-            var data_RequestStepReport = google.visualization.arrayToDataTable(queryArray_RequestStepReport);
+        function drawPieCharts() {
+            pieCharts.forEach(queryArray => drawPieChart(queryArray));
+        }
 
-            var options_ApplicationReport = {
-            title: 'Application Report',
-            width: 500,
-            height: 500,
+        function drawPieChart(queryArray){
+            var data = google.visualization.arrayToDataTable(queryArray);
+
+            let title = queryArray[0][0] + ' Report';
+
+            var options = {
+                title: title,
+                width: 500,
+                height: 500,
             };
 
-            var options_ComponentReport = {
-            title: 'Component Report',
-            width: 500,
-            height: 500,
-            };
+            var chart = new google.visualization.PieChart(document.getElementById(title.replace(/ /g, '')));
 
-            var options_RequestReport = {
-            title: 'Request Report',
-            width: 500,
-            height: 500,
-            };
+            google.visualization.events.addListener(chart, 'select', selectHandler);
 
-            var options_RequesStepReport = {
-            title: 'Request Step Report',
-            width: 500,
-            height: 500,
-            };
+            chart.draw(data, options);
 
-
-            var chart_application_report = new google.visualization.PieChart(document.getElementById('pie_chart_application_report'));
-            var chart_component_report = new google.visualization.PieChart(document.getElementById('pie_chart_component_report'));
-            var chart_request_report = new google.visualization.PieChart(document.getElementById('pie_chart_request_report'));
-            var chart_requestStep_report = new google.visualization.PieChart(document.getElementById('pie_chart_request_step_report'));
-
-
-            chart_application_report.draw(data_ApplicationReport, options_ApplicationReport);
-            chart_component_report.draw(data_ComponentReport,options_ComponentReport);
-            chart_request_report.draw(data_RequestReport,options_RequestReport);
-            chart_requestStep_report.draw(data_RequestStepReport,options_RequesStepReport);
+            function selectHandler(){
+                var selectedItem = chart.getSelection()[0];
+                if (selectedItem) {
+                    var $statusSelection = data.getValue(selectedItem.row, 0);
+                    var $statusType = queryArray[0][0].toLowerCase().replace(/ /g, '');
+                    document.cookie = encodeURI('status_cookie') + '=' + encodeURI($statusSelection);
+                    document.cookie = encodeURI('status_type') + '=' + encodeURI($statusType);
+                    location.reload();
+                }    
+                <?php     
+                if(isset($_COOKIE['status_cookie'])){
+                    $statusSelection = $_COOKIE['status_cookie'];
+                    $statusType = $_COOKIE['status_type'];
+                    $statusCookie=true;
+                } else{
+                    $statusSelection = null;
+                    $statusType = null;
+                    $statusCookie = false;
+                }  
+                ?>                 
+            }
         }
 
         
@@ -110,12 +136,12 @@
         <div class="container">
             <table>
                 <tr>
-                    <td><div style=" width:400px; height:400px; disply:inline-block;" id="pie_chart_application_report" style="width: 900px; height: 500px;"></div></td>
-                    <td><div style="width:400px; height:400px; disply:inline-block;" id="pie_chart_component_report" style="width: 900px; height: 500px;"></div></td>
+                    <td><div style=" width:400px; height:400px; disply:inline-block;" id="ApplicationStatusReport" style="width: 900px; height: 500px;"></div></td>
+                    <td><div style="width:400px; height:400px; disply:inline-block;" id="ComponentStatusReport" style="width: 900px; height: 500px;"></div></td>
                 </tr>
                 <tr>
-                    <td><div style=" width:400px; height:400px; disply:inline-block;" id="pie_chart_request_report" style="width: 900px; height: 500px;"></div></td>                   
-                    <td><div style=" width:400px; height:400px; disply:inline-block;" id="pie_chart_request_step_report" style="width: 900px; height: 500px;"></div></td>
+                    <td><div style=" width:400px; height:400px; disply:inline-block;" id="RequestStatusReport" style="width: 900px; height: 500px;"></div></td>                   
+                    <td><div style=" width:400px; height:400px; disply:inline-block;" id="RequestStepReport" style="width: 900px; height: 500px;"></div></td>
                 </tr>
             </table>            
         </div>
