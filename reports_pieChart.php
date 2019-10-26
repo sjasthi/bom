@@ -6,7 +6,7 @@
 
     include("./nav.php");
     global $db;
-   
+    
 ?>
 <html>
 
@@ -146,7 +146,274 @@
                     <td><div style=" width:400px; height:400px; disply:inline-block;" id="RequestStatusReport" style="width: 900px; height: 500px;"></div></td>                   
                     <td><div style=" width:400px; height:400px; disply:inline-block;" id="RequestStepReport" style="width: 900px; height: 500px;"></div></td>
                 </tr>
-            </table>            
+            </table><br><br><br><br><br><br>
+        <?php
+        error_reporting(E_ERROR | E_WARNING | E_PARSE);    
+        if ($_COOKIE['app_status_cookie']!= null) {
+            $appStatusSelection = $_COOKIE['app_status_cookie'];
+            $sql = "SELECT * from sbom where app_status = '".$appStatusSelection."';";
+            setcookie("app_status_cookie", "", time()-3600);
+            echo "<table id='info' cellpadding='0' cellspacing='0' border='0'
+            class='datatable table table-striped table-bordered datatable-style table-hover'
+            width='100px' style='width: 75px;'>
+                    <thead>
+                        <tr id='table-first-row'>
+                            <th>App ID</th>
+                            <th>App Name</th>
+                            <th>App Version</th>
+                            <th>App Status</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+
+                    <tfoot>
+                        <tr>
+                            <th>App ID</th>
+                            <th>App Name</th>
+                            <th>App Version</th>
+                            <th>App Status</th>
+                            <th>Notes</th>
+                        </tr>
+                    </tfoot>
+
+                    <tbody>";
+                    $result = $db->query($sql);
+
+                        if ($result->num_rows > 0) {
+                            // output data of each row
+                            while($row = $result->fetch_assoc()) {
+                                echo '<tr>
+                                        <td>'.$row["app_id"].' </span> </td>
+                                        <td>'.$row["app_name"].'</td>
+                                        <td>'.$row["app_version"].'</td>
+                                        <td>'.$row["app_status"].' </span> </td>
+                                        <td>'.$row["notes"].' </span> </td>
+                                    </tr>';
+                                
+                            }//end while
+                        }//end if
+                        else {
+                            echo "0 results";
+                        }//end else
+
+                        $result->close();
+                        echo "</tbody>
+                        </table>";
+            }elseif($_COOKIE['cmp_status_cookie']!= null) {
+                $cmpStatusSelection = $_COOKIE['cmp_status_cookie'];
+                $sql = "SELECT * from sbom where cmp_status = '".$cmpStatusSelection."';";
+                setcookie("cmp_status_cookie", "", time()-3600);
+                echo "<table id='info' cellpadding='0' cellspacing='0' border='0'
+                class='datatable table table-striped table-bordered datatable-style table-hover'
+                width='100%' style='width: 50px;'>
+                        <thead>
+                            <tr id='table-first-row'>
+                                    <th>App Name</th>
+                                    
+                                    <th>CMP Name</th>
+                                    <th>CMP Version</th>
+                                    <th>CMP Type</th>
+                                    <th>CMP Status</th>
+                                    <th>Notes</th>
+                            </tr>
+                        </thead>
+
+                        <tfoot>
+                            <tr>
+                                <th>App Name</th>
+                                
+                                <th>CMP Name</th>
+                                <th>CMP Version</th>
+                                <th>CMP Type</th>
+                                <th>CMP Status</th>
+                                <th>Notes</th>
+                            </tr>
+                        </tfoot>
+
+                        <tbody>";
+                        $result = $db->query($sql);
+
+                            if ($result->num_rows > 0) {
+                                // output data of each row
+                                while($row = $result->fetch_assoc()) {
+                                    echo '<tr>
+                                            <td>'.$row["app_name"].' </span> </td>
+                                            
+                                            <td>'.$row["cmp_name"].'</td>
+                                            <td>'.$row["cmp_version"].'</td>
+                                            <td>'.$row["cmp_type"].' </span> </td>
+                                            <td>'.$row["cmp_status"].' </span> </td>
+                                            <td>'.$row["notes"].' </span> </td>
+                                        </tr>';
+                                    
+                                }//end while
+                            }//end if
+                            else {
+                                echo "0 results";
+                            }//end else
+
+                            $result->close();
+                            echo "</tbody>
+                            </table>";
+        }elseif ($_COOKIE['request_status_cookie']!= null) {
+            $requestType = $_COOKIE['request_status_cookie'];
+            $sql = "SELECT * from sbom where request_status = '".$requestType."';";
+            setcookie("request_status_cookie", "", time()-3600);
+            echo "<table id='info' cellpadding='0' cellspacing='0' border='0'
+            class='datatable table table-striped table-bordered datatable-style table-hover'
+            width='100%' style='width: 75px;'>
+                    <thead>
+                        <tr id='table-first-row'>
+                            <th>App Name</th>
+                            <th>CMP Name</th>
+                           
+                            <th>Request ID</th>
+                            <th>Request Date</th>
+                            <th>Request Status</th>
+                            <th>Request Step</th>
+                            
+                        </tr>
+                    </thead>
+
+                    <tfoot>
+                        <tr>
+                            <th>App Name</th>
+                            <th>CMP Name</th>
+                          
+                            <th>Request ID</th>
+                            <th>Request Date</th>
+                            <th>Request Status</th>
+                            <th>Request Step</th>
+                            
+                        </tr>
+                    </tfoot>
+
+                    <tbody>";
+                    $result = $db->query($sql);
+
+                        if ($result->num_rows > 0) {
+                            // output data of each row
+                            while($row = $result->fetch_assoc()) {
+                                echo '<tr>
+                                        <td>'.$row["app_name"].' </span> </td>
+                                        <td>'.$row["cmp_name"].' </span> </td>
+                                      
+                                        <td>'.$row["request_id"].' </span> </td>
+                                        <td>'.$row["request_date"].' </span> </td>
+                                        <td>'.$row["request_status"].' </span> </td>
+                                        <td>'.$row["request_step"].' </span> </td>
+                                        
+                                    </tr>';
+                                
+                            }//end while
+                        }//end if
+                        else {
+                            echo "0 results";
+                        }//end else
+
+                        $result->close();
+                        echo "</tbody>
+                        </table>";
+        }elseif ($_COOKIE['request_step_cookie']!= null) {
+            $requestStep = $_COOKIE['request_step_cookie'];
+            $sql = "SELECT * from sbom where request_step = '".$requestStep."';";
+            setcookie("request_step_cookie", "", time()-3600);
+            echo "<table id='info' cellpadding='0' cellspacing='0' border='0'
+            class='datatable table table-striped table-bordered datatable-style table-hover'
+             style='width:100%;'>
+                    <thead>
+                        <tr id='table-first-row'>
+                            <th>App Name</th>
+                            <th>CMP Name</th>
+                            
+                            <th>Request ID</th>
+                            <th>Request Date</th>
+                            <th>Request Status</th>
+                            <th>Request Step</th>
+                            
+                        </tr>
+                    </thead>
+
+                    <tfoot>
+                        <tr>
+                            <th>App Name</th>
+                            <th>CMP Name</th>
+                            
+                            <th>Request ID</th>
+                            <th>Request Date</th>
+                            <th>Request Status</th>
+                            <th>Request Step</th>
+                            
+                        </tr>
+                    </tfoot>
+
+                    <tbody>";
+                    $result = $db->query($sql);
+
+                        if ($result->num_rows > 0) {
+                            // output data of each row
+                            while($row = $result->fetch_assoc()) {
+                                echo '<tr>
+                                        <td>'.$row["app_name"].' </span> </td>
+                                        <td>'.$row["cmp_name"].' </span> </td>
+                                        
+                                        <td>'.$row["request_id"].' </span> </td>
+                                        <td>'.$row["request_date"].' </span> </td>
+                                        <td>'.$row["request_status"].' </span> </td>
+                                        <td>'.$row["request_step"].' </span> </td>
+                                        
+                                    </tr>';
+                                
+                            }//end while
+                        }//end if
+                        else {
+                            echo "0 results";
+                        }//end else
+
+                        $result->close();
+                        echo "</tbody>
+                        </table>";
+        }
+        ?>
+
+                    </tbody>
+                </table>
+
+
+                <script type="text/javascript" language="javascript">
+            $(document).ready( function () {
+                
+                $('#info').DataTable( {
+                    dom: 'lfrtBip',
+                    buttons: [
+                        'copy', 'excel', 'csv', 'pdf'
+                    ] }
+                );
+
+                $('#info thead tr').clone(true).appendTo( '#info thead' );
+                $('#info thead tr:eq(1) th').each( function (i) {
+                    var title = $(this).text();
+                    $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+            
+                    $( 'input', this ).on( 'keyup change', function () {
+                        if ( table.column(i).search() !== this.value ) {
+                            table
+                                .column(i)
+                                .search( this.value )
+                                .draw();
+                        }
+                    } );
+                } );
+            
+                var table = $('#info').DataTable( {
+                    orderCellsTop: true,
+                    fixedHeader: true,
+                    retrieve: true
+                } );
+                
+            } );
+
+        </script>                  
         </div>
     </body>
 
