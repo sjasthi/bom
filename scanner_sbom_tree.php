@@ -103,7 +103,7 @@
                       $notes = $row_child["notes"];
                       $c_id=$p_id."-".$c;
                       echo "
-                      <tr data-tt-id = '".$c_id."' data-tt-parent-id='".$p_id."' >
+                      <tr data-tt-id = '".$c_id."' data-tt-parent-id='".$p_id."' class = 'component' >
                         <td class='text-capitalize'> &nbsp; &nbsp; &nbsp; &nbsp; <button type='button'  class = 'child'> <span class = 'cmp_name'>".$cmp_name."</span>
                          <span class = 'id_br' ><br/> ID: ".$cmp_id."</span></button></td>
                             <td >".$cmp_version."</td> 
@@ -165,44 +165,57 @@
         clickableNodeNames: true
         };
         $("#bom_treetable").treetable(sbom_params);
-        /*
-        function whereUsed() {
-        // Declare variables
-        var input, filter, table, tbody, tr, td, i, r, txtValue;
-        input = document.getElementById("input");
-        filter = input.value.toUpperCase();
-        table = document.getElementById("bom_treetable");
-        tr = table.getElementsByTagName("tr");
-
-        // Loop through all table rows, and hide those who don't match the search query
-
-          for (r = 0; r < tr.length; r++) {
-            td = tr[r].getElementsByTagName("td")[0];
-            if (td) {
-              txtValue = td.textContent || td.innerText;
-              if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                tr[r].parentElement.style.display = "";
-                tr[r].style.display = "";
-                
-              } else {
-                tr[r].style.display = "none";
-              }
+        //input search for where used
+        $(document).ready(function() {
+          $('#input').on('keyup', function() {
+            var input = $(this).val().toLowerCase();
+            var searchArray, searchName, searchID;
+            //checks for ; , / to split the values into an array
+            if (input.includes(';')) {
+              searchArray = input.split(';', 2);
+              searchName = searchArray[0];
+              searchID = searchArray[1];
             }
-          }
-        
-      }
-*/
-      $(document).ready(function(){
-        $('#input').on('keyup',function(){
-          var searchTerm = $(this).val().toLowerCase();
-          $('#bom_treetable tbody').each(function(){
-            var lineStr = $(this).text().toLowerCase();
-            if(lineStr.indexOf(searchTerm) === -1){
-                $(this).hide();
-            }else{
-                $(this).show();
+            if (input.includes(',')) {
+              searchArray = input.split(',', 2);
+              searchName = searchArray[0];
+              searchID = searchArray[1];
+            } 
+            if (input.includes('/')) {
+              searchArray = input.split('/', 2);
+              searchName = searchArray[0];
+              searchID = searchArray[1];
+            } 
+            if (input.includes(' ')) {
+              searchArray = input.split(' ', 2);
+              searchName = searchArray[0];
+              searchID = searchArray[1];
+            } 
+            else {
+              searchName = input;
+              searchID = null;
             }
+            // only searches for name if searchID is null
+            if (searchID == null) {
+              $('#bom_treetable tbody').each(function() {
+                var parentStr = $(this).text().toLowerCase();
+                if (parentStr.indexOf(searchName) === -1) {
+                  $(this).hide();
+                } else {
+                  $(this).show();
+                }
+              });
+            } else {
+              $('#bom_treetable tbody').each(function() {
+                var parentStr = $(this).text().toLowerCase();
+                if (parentStr.indexOf(searchName) === -1) {
+                  $(this).hide();
+                } else {
+                  $(this).show();
+                }
+              });
+            }
+
+          });
         });
-    });
-});
       </script>

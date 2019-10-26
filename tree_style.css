@@ -47,10 +47,10 @@
 
 
   #bw_parent {
-    background-color:rgb(67, 67, 67);
     color: black;
     font-size: 16px;
     text-decoration: none;
+    border: transparent;
   }
 
   
