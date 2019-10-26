@@ -98,28 +98,31 @@
 
             function selectHandler(){
                 var selectedItem = chart.getSelection()[0];
+
                 if (selectedItem) {
-                    var $statusSelection = data.getValue(selectedItem.row, 0);
-                    var $reportType = queryArray[0][0].toLowerCase().replace(/ /g, '');
-                    document.cookie = encodeURI('status_cookie') + '=' + encodeURI($statusSelection);
-                    document.cookie = encodeURI('report_type') + '=' + encodeURI($reportType);
+                    var statusSelection = data.getValue(selectedItem.row, 0);
+                    var reportName = queryArray[0][0].toLowerCase().replace(/ /g, '');
+
+                    document.cookie = encodeURI("app_status_cookie=");
+                    document.cookie = encodeURI("cmp_status_cookie=");
+                    document.cookie = encodeURI("request_status_cookie=");
+                    document.cookie = encodeURI("request_step_cookie=");
+
+                    switch(reportName){
+                        case "applicationstatus":
+                            document.cookie = encodeURI("app_status_cookie=" + statusSelection); break;
+                        case "componentstatus":
+                            document.cookie = encodeURI("cmp_status_cookie=" + statusSelection); break;
+                        case "requeststatus":
+                            document.cookie = encodeURI("request_status_cookie=" + statusSelection); break;
+                        case "requeststep":
+                            document.cookie = encodeURI("request_step_cookie=" + statusSelection); break;
+                    }
+
                     location.reload();
-                }    
-                <?php     
-                if(isset($_COOKIE['status_cookie'])){
-                    $statusSelection = $_COOKIE['status_cookie'];
-                    $reportType = $_COOKIE['report_type'];
-                    $statusCookie=true;
-                } else{
-                    $statusSelection = null;
-                    $reportType = null;
-                    $statusCookie = false;
-                }  
-                ?>                 
+                }               
             }
         }
-
-        
         </script>
         <!-- End Google Pie Chart API Code -->
 
