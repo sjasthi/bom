@@ -78,8 +78,8 @@
                 $p_id = $p;
                 echo "<div id = 'parent'>
                       <tr data-tt-id = '".$p_id."' >
-                      <td class='text-capitalize'> <button type='button' class = 'parent' > ".$app_name."
-                      <br/>Application ID: ".$app_id."</button></td> 
+                      <td class='text-capitalize'> <button type='button' class = 'parent' > <span id = 'app_name' >".$app_name."</span>
+                      <span id = 'app_id'><br/>ID: ".$app_id."</span></button></td> 
                       <td >".$app_version."</td>
                       <td class='text-capitalize'>".$app_status."</td>
                       <td/>
@@ -105,8 +105,8 @@
                       $c_id=$p_id."-".$c;
                       echo "<div id = 'child'>
                       <tr data-tt-id = '".$c_id."' data-tt-parent-id='".$p_id."' >
-                        <td class='text-capitalize'> &nbsp; &nbsp; &nbsp; &nbsp; <button type='button'  class = 'child'> ".$cmp_name."
-                         <br/>Component ID: ".$cmp_id."</button></td>
+                        <td class='text-capitalize'> &nbsp; &nbsp; &nbsp; &nbsp; <button type='button'  class = 'child'> <span id = 'cmp_name'>".$cmp_name."</span>
+                         <span id = 'cmp_id'><br/>ID: ".$cmp_id."</span></button></td>
                             <td >".$cmp_version."</td> 
                             <td class='text-capitalize'>".$cmp_status."</td> 
                             <td class='text-capitalize'>".$cmp_type."</td> 
@@ -134,7 +134,7 @@
                             $gc_id=$c_id."-".$gc;
                             echo "<div id = 'grandchild'>
                                   <tr data-tt-id = '".$gc_id."' data-tt-parent-id='".$c_id."' > 
-                                  <td > &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;<button class = 'grandchild' style = 'cursor: none;'>Request ID: ".$request_id."</button></td> 
+                                  <td > &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;<button class = 'grandchild' style = 'cursor: none;'>Request ID: <span id = 'request_id'><br/>".$request_id."</span></button></td> 
                                  <td class='text-capitalize'>".$request_step."</td>
                                   <td class='text-capitalize'>".$request_status."</td>
                                   <td/>
@@ -170,18 +170,17 @@
         clickableNodeNames: true
         };
         $("#bom_treetable").treetable(sbom_params);
-
-        $("#input").keyup(function () {
-    var value = this.value.toLowerCase().trim();
-
-    $("table tr").each(function (index) {
-        if (!index) return;
-        $(this).find("td").each(function () {
-            var id = $(this).text().toLowerCase().trim();
-            var not_found = (id.indexOf(value) == -1);
-            $(this).closest('tr').toggle(!not_found);
-            return not_found;
-        });
-    });
-});
-        </script>
+        
+        $('#input').keyup(function () {
+          var value = this.value.toLowerCase().trim();
+          $('tr').each(function (index) {
+            if (!index) return;
+            $(this).find('td').each(function () {
+              var id = $(this).text().toLowerCase().trim();
+              var not_found = (id.indexOf(value) == -1);
+              $(this).closest('tr').toggle(!not_found);
+              return not_found;
+              });
+              });
+              });
+      </script>
