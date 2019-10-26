@@ -36,9 +36,9 @@
                     -->
                    
                         <div class="input-group">
-                            <input type="text" id="input" class="form-control" placeholder="Where Used">
+                            <input type="text" id="input" class="form-control" placeholder="Where Used" >
                             <div class="input-group-btn">
-                                <button class="btn btn-default" type="submit">
+                                <button class="btn btn-default" type="submit" onclick="whereUsed();">
                                     <i class="glyphicon glyphicon-search"></i>
                                 </button>
                             </div>
@@ -61,8 +61,7 @@
             <th>Type</th>
             <th>Notes</th>
           </thead>
-          <tbody>
-            <?php
+          <?php
             //finds parent data
             $sql_parent = "SELECT DISTINCT app_name, app_id, app_version, app_status from sbom order by app_name;";
             $result_parent = $db->query($sql_parent);
@@ -76,10 +75,10 @@
                 $app_version = $row_parent["app_version"];
                 $app_status = $row_parent["app_status"];
                 $p_id = $p;
-                echo "<div id = 'parent'>
+                echo "<tbody class= 'application' id = '".$app_id."'>
                       <tr data-tt-id = '".$p_id."' >
-                      <td class='text-capitalize'> <button type='button' class = 'parent' > <span id = 'app_name' >".$app_name."</span>
-                      <span id = 'app_id'><br/>ID: ".$app_id."</span></button></td> 
+                      <td class='text-capitalize'> <button type='button' class = 'parent' > <span class = 'app_name' >".$app_name."</span>
+                      <span class = 'id_br' ><br/>ID: ".$app_id."</span></button></td> 
                       <td >".$app_version."</td>
                       <td class='text-capitalize'>".$app_status."</td>
                       <td/>
@@ -103,10 +102,10 @@
                       $cmp_type = $row_child["cmp_type"];
                       $notes = $row_child["notes"];
                       $c_id=$p_id."-".$c;
-                      echo "<div id = 'child'>
+                      echo "
                       <tr data-tt-id = '".$c_id."' data-tt-parent-id='".$p_id."' >
-                        <td class='text-capitalize'> &nbsp; &nbsp; &nbsp; &nbsp; <button type='button'  class = 'child'> <span id = 'cmp_name'>".$cmp_name."</span>
-                         <span id = 'cmp_id'><br/>ID: ".$cmp_id."</span></button></td>
+                        <td class='text-capitalize'> &nbsp; &nbsp; &nbsp; &nbsp; <button type='button'  class = 'child'> <span class = 'cmp_name'>".$cmp_name."</span>
+                         <span class = 'id_br' ><br/> ID: ".$cmp_id."</span></button></td>
                             <td >".$cmp_version."</td> 
                             <td class='text-capitalize'>".$cmp_status."</td> 
                             <td class='text-capitalize'>".$cmp_type."</td> 
@@ -132,24 +131,21 @@
                             $request_step= $row_gchild["request_step"];
                             $request_status= $row_gchild["request_status"];
                             $gc_id=$c_id."-".$gc;
-                            echo "<div id = 'grandchild'>
+                            echo "
                                   <tr data-tt-id = '".$gc_id."' data-tt-parent-id='".$c_id."' > 
-                                  <td > &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;<button class = 'grandchild' style = 'cursor: none;'>Request ID: <span id = 'request_id'><br/>".$request_id."</span></button></td> 
+                                  <td > &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;<button class = 'grandchild'>Request ID: <span class = 'id_br' id = '".$request_id."'><br/> ".$request_id."</span></button></td> 
                                  <td class='text-capitalize'>".$request_step."</td>
                                   <td class='text-capitalize'>".$request_status."</td>
                                   <td/>
                                   <td>Request Date: ".$request_date."</td>
-                                  </tr>
-                                  </div>
-                                  </div>
-                                  </div>";
+                                  </tr>";
                             $gc++;
                           } 
                           $result_gchild -> close();
                     }
                   }
                   $result_child -> close();
-                }
+                } echo "</tbody>";
               } 
             $result_parent->close();
           }
@@ -157,7 +153,6 @@
             echo "<tr data-tt-id = 'No Results'> <td>No Results Found</td><td></td><td></td><td></td><td></td> </tr>";
           }
           ?>
-          </tbody>
         </table>
         </div>
       </div>
@@ -170,17 +165,44 @@
         clickableNodeNames: true
         };
         $("#bom_treetable").treetable(sbom_params);
+        /*
+        function whereUsed() {
+        // Declare variables
+        var input, filter, table, tbody, tr, td, i, r, txtValue;
+        input = document.getElementById("input");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("bom_treetable");
+        tr = table.getElementsByTagName("tr");
+
+        // Loop through all table rows, and hide those who don't match the search query
+
+          for (r = 0; r < tr.length; r++) {
+            td = tr[r].getElementsByTagName("td")[0];
+            if (td) {
+              txtValue = td.textContent || td.innerText;
+              if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                tr[r].parentElement.style.display = "";
+                tr[r].style.display = "";
+                
+              } else {
+                tr[r].style.display = "none";
+              }
+            }
+          }
         
-        $('#input').keyup(function () {
-          var value = this.value.toLowerCase().trim();
-          $('tr').each(function (index) {
-            if (!index) return;
-            $(this).find('td').each(function () {
-              var id = $(this).text().toLowerCase().trim();
-              var not_found = (id.indexOf(value) == -1);
-              $(this).closest('tr').toggle(!not_found);
-              return not_found;
-              });
-              });
-              });
+      }
+*/
+      $(document).ready(function(){
+        $('#input').on('keyup',function(){
+          var searchTerm = $(this).val().toLowerCase();
+          $('#bom_treetable tbody').each(function(){
+            var lineStr = $(this).text().toLowerCase();
+            if(lineStr.indexOf(searchTerm) === -1){
+                $(this).hide();
+            }else{
+                $(this).show();
+            }
+        });
+    });
+});
       </script>
