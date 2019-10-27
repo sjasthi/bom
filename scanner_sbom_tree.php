@@ -195,27 +195,15 @@
               searchName = input;
               searchID = null;
             }
-            // only searches for name if searchID is null
-            if (searchID == null) {
-              $('#bom_treetable tbody').each(function() {
-                var parentStr = $(this).text().toLowerCase();
-                if (parentStr.indexOf(searchName) === -1) {
-                  $(this).hide();
-                } else {
-                  $(this).show();
+            var cmp_name, cmp_id;
+            $('#bom_treetable tbody').each(function() {
+              var parentStr = $(this).text().toLowerCase();
+              if (parentStr.indexOf(searchName) === -1) {
+                $(this).hide();
+              } else {
+                 $(this).show();
                 }
               });
-            } else {
-              $('#bom_treetable tbody').each(function() {
-                var parentStr = $(this).text().toLowerCase();
-                if (parentStr.indexOf(searchName) === -1) {
-                  $(this).hide();
-                } else {
-                  $(this).show();
-                }
-              });
-            }
-
           });
         });
       </script>
