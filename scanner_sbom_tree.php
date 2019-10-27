@@ -8,11 +8,11 @@
 
 <!--Imports-->
 <link rel="stylesheet" href="tree_style.css" />
-<!--
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-treetable/3.2.0/css/jquery.treetable.css" />
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-treetable/3.2.0/css/jquery.treetable.theme.default.css" />
--->
+
 
 <div class="right-content">
     <div class="container" id="container">
@@ -25,34 +25,14 @@
                     <li class="active"><a href="#"
                             onclick="$('#bom_treetable').treetable('collapseAll'); return false;"><span
                                 class="glyphicon glyphicon-chevron-up"></span>Collapse All</a></li>
-                                <!--Place Holder for future iteration
-                    <form class="navbar-form navbar-left" action="/action_page.php">
-                        <div class="input-group">
-                            <input type="text" class="form-control" placeholder="Where Used">
-                            <div class="input-group-btn">
-                                <button class="btn btn-default" type="submit">
-                                    <i class="glyphicon glyphicon-search"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                    
-                    <li><a href="#">Show <span class="glyphicon glyphicon-tint" style='color:#ff6666;'> </span>Red</a>
-                    </li>
-                    <li><a href="#">Show <span class="glyphicon glyphicon-tint" style='color:#ff6666;'></span>Red and
-                            <span class="glyphicon glyphicon-tint" style='color:#ffd966;'></span>Yellow</a></li>
-                    <li><a href="#">Remove Color</a></li>
-                    <li><a href="#">Restore Color</a></li>
-                    -->
-
-                </ul>
+                              </ul>
             </div>
         </nav>
      <div class="table-responsive">
        <div class="h4">
          
          
-        </div>
+       
         <table id = "bom_treetable" class = "table table-hover">
           <thead class = 'h4'>
             <th >Name</th>
@@ -61,8 +41,7 @@
             <th>Type</th>
             <th>Notes</th>
           </thead>
-          <tbody>
-            <?php
+          <?php
             //finds parent data
             $sql_parent = "SELECT DISTINCT app_name, app_id, app_version, app_status from sbom order by app_name;";
             $result_parent = $db->query($sql_parent);
@@ -76,9 +55,10 @@
                 $app_version = $row_parent["app_version"];
                 $app_status = $row_parent["app_status"];
                 $p_id = $p;
-                echo "<tr data-tt-id = '".$p_id."' id = '".$app_name."-".$app_id."' class = 'parent'>
-                      <td class='text-capitalize'> <button type='button' id = 'parent'> ".$app_name."
-                      <br/>Application ID: ".$app_id."</button></td> 
+                echo "<tbody class= 'application' id = '".$app_id."'>
+                      <tr data-tt-id = '".$p_id."' >
+                      <td class='text-capitalize'> <button type='button' class = 'parent' > <span class = 'app_name' >".$app_name."</span>
+                      <span class = 'id_br' ><br/>ID: ".$app_id."</span></button></td> 
                       <td >".$app_version."</td>
                       <td class='text-capitalize'>".$app_status."</td>
                       <td/>
@@ -102,9 +82,10 @@
                       $cmp_type = $row_child["cmp_type"];
                       $notes = $row_child["notes"];
                       $c_id=$p_id."-".$c;
-                      echo "<tr data-tt-id = '".$c_id."' data-tt-parent-id='".$p_id."' id = '".$cmp_name."-".$cmp_id."' class = 'child'>
-                        <td class='text-capitalize'> &nbsp; &nbsp; &nbsp; &nbsp; <button type='button'  id = 'child'> ".$cmp_name."
-                         <br/>Component ID: ".$cmp_id."</button></td>
+                      echo "
+                      <tr data-tt-id = '".$c_id."' data-tt-parent-id='".$p_id."' class = 'component' >
+                        <td class='text-capitalize'> &nbsp; &nbsp; &nbsp; &nbsp; <button type='button'  class = 'child'> <span class = 'cmp_name'>".$cmp_name."</span>
+                         <span class = 'id_br' ><br/> ID: ".$cmp_id."</span></button></td>
                             <td >".$cmp_version."</td> 
                             <td class='text-capitalize'>".$cmp_status."</td> 
                             <td class='text-capitalize'>".$cmp_type."</td> 
@@ -130,8 +111,9 @@
                             $request_step= $row_gchild["request_step"];
                             $request_status= $row_gchild["request_status"];
                             $gc_id=$c_id."-".$gc;
-                            echo "<tr data-tt-id = '".$gc_id."' data-tt-parent-id='".$c_id."' id = '".$request_id."' class = 'grandchild'> 
-                                  <td > &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;<button id = 'grandchild' style = 'cursor: none;'>Request ID: ".$request_id."</button></td> 
+                            echo "
+                                  <tr data-tt-id = '".$gc_id."' data-tt-parent-id='".$c_id."' > 
+                                  <td > &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;<button class = 'grandchild'>Request ID: <span class = 'id_br' id = '".$request_id."'><br/> ".$request_id."</span></button></td> 
                                  <td class='text-capitalize'>".$request_step."</td>
                                   <td class='text-capitalize'>".$request_status."</td>
                                   <td/>
@@ -143,7 +125,7 @@
                     }
                   }
                   $result_child -> close();
-                }
+                } echo "</tbody>";
               } 
             $result_parent->close();
           }
@@ -151,8 +133,8 @@
             echo "<tr data-tt-id = 'No Results'> <td>No Results Found</td><td></td><td></td><td></td><td></td> </tr>";
           }
           ?>
-          </tbody>
         </table>
+        </div>
       </div>
     </div>
     <?php include("./footer.php"); ?>
@@ -163,4 +145,5 @@
         clickableNodeNames: true
         };
         $("#bom_treetable").treetable(sbom_params);
-        </script>
+        
+      </script>
