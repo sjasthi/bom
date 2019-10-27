@@ -32,9 +32,9 @@
                     </li>
                     <li><a href="#" onclick="$('#bom_treetable').treetable('expandAll'); $('.grandchild').toggle();">Show <span class="glyphicon glyphicon-tint" style='color:#ff6666;'></span>Red and
                             <span class="glyphicon glyphicon-tint" style='color:#ffd966;'></span>Yellow</a></li>
-                    
+
                     -->
-                   
+
                         <div class="input-group">
                             <input type="text" id="input" class="form-control" placeholder="Where Used" >
                             <div class="input-group-btn">
@@ -43,16 +43,16 @@
                                 </button>
                             </div>
                         </div>
-                   
+
 
                 </ul>
             </div>
         </nav>
      <div class="table-responsive">
        <div class="h4">
-         
-         
-       
+
+
+
         <table id = "bom_treetable" class = "table table-hover">
           <thead class = 'h4'>
             <th >Name</th>
@@ -78,7 +78,7 @@
                 echo "<tbody class= 'application' id = '".$app_id."'>
                       <tr data-tt-id = '".$p_id."' >
                       <td class='text-capitalize'> <button type='button' class = 'parent' > <span class = 'app_name' >".$app_name."</span>
-                      <span class = 'id_br' ><br/>ID: ".$app_id."</span></button></td> 
+                      <span class = 'id_br' ><br/>ID: ".$app_id."</span></button></td>
                       <td >".$app_version."</td>
                       <td class='text-capitalize'>".$app_status."</td>
                       <td/>
@@ -86,10 +86,10 @@
                       </tr>";
                 $p++;
                 // output data of child
-                  $sql_child = "SELECT cmp_name, cmp_id, cmp_type, cmp_version, cmp_status, notes from sbom 
-                                  where app_name = '".$app_name."' 
-                                  and app_id = '".$app_id."' 
-                                  and app_version = '".$app_version."' 
+                  $sql_child = "SELECT cmp_name, cmp_id, cmp_type, cmp_version, cmp_status, notes from sbom
+                                  where app_name = '".$app_name."'
+                                  and app_id = '".$app_id."'
+                                  and app_version = '".$app_version."'
                                   and app_status = '".$app_status."' ; ";
                   $result_child = $db->query($sql_child);
                   if ($result_child->num_rows > 0) {
@@ -106,21 +106,21 @@
                       <tr data-tt-id = '".$c_id."' data-tt-parent-id='".$p_id."' class = 'component' >
                         <td class='text-capitalize'> &nbsp; &nbsp; &nbsp; &nbsp; <button type='button'  class = 'child'> <span class = 'cmp_name'>".$cmp_name."</span>
                          <span class = 'id_br' ><br/> ID: ".$cmp_id."</span></button></td>
-                            <td >".$cmp_version."</td> 
-                            <td class='text-capitalize'>".$cmp_status."</td> 
-                            <td class='text-capitalize'>".$cmp_type."</td> 
-                            <td class='text-capitalize'>".$notes."</td> 
+                            <td >".$cmp_version."</td>
+                            <td class='text-capitalize'>".$cmp_status."</td>
+                            <td class='text-capitalize'>".$cmp_type."</td>
+                            <td class='text-capitalize'>".$notes."</td>
                             </tr>";
                       $c++;
                       // output data of child
-                        $sql_gchild = "SELECT request_id, request_step, request_status, DATE_FORMAT(request_date, \"%m/%d/%y\") as request_date from sbom  
-                                        where app_name = '".$app_name."'  
-                                        and app_id = '".$app_id."' 
-                                        and app_version = '".$app_version."' 
-                                        and app_status = '".$app_status."' 
-                                        and cmp_name = '".$cmp_name."' 
-                                        and cmp_id = '".$cmp_id."' 
-                                        and cmp_version = '".$cmp_version."' 
+                        $sql_gchild = "SELECT request_id, request_step, request_status, DATE_FORMAT(request_date, \"%m/%d/%y\") as request_date from sbom
+                                        where app_name = '".$app_name."'
+                                        and app_id = '".$app_id."'
+                                        and app_version = '".$app_version."'
+                                        and app_status = '".$app_status."'
+                                        and cmp_name = '".$cmp_name."'
+                                        and cmp_id = '".$cmp_id."'
+                                        and cmp_version = '".$cmp_version."'
                                         and cmp_status = '".$cmp_status."';";
                         $result_gchild = $db->query($sql_gchild);
                         if ($result_gchild->num_rows > 0) {
@@ -132,21 +132,21 @@
                             $request_status= $row_gchild["request_status"];
                             $gc_id=$c_id."-".$gc;
                             echo "
-                                  <tr data-tt-id = '".$gc_id."' data-tt-parent-id='".$c_id."' > 
-                                  <td > &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;<button class = 'grandchild'>Request ID: <span class = 'id_br' id = '".$request_id."'><br/> ".$request_id."</span></button></td> 
+                                  <tr data-tt-id = '".$gc_id."' data-tt-parent-id='".$c_id."' >
+                                  <td > &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;<button class = 'grandchild'>Request ID: <span class = 'id_br' id = '".$request_id."'><br/> ".$request_id."</span></button></td>
                                  <td class='text-capitalize'>".$request_step."</td>
                                   <td class='text-capitalize'>".$request_status."</td>
                                   <td/>
                                   <td>Request Date: ".$request_date."</td>
                                   </tr>";
                             $gc++;
-                          } 
+                          }
                           $result_gchild -> close();
                     }
                   }
                   $result_child -> close();
                 } echo "</tbody>";
-              } 
+              }
             $result_parent->close();
           }
           else{
@@ -180,17 +180,17 @@
               searchArray = input.split(',', 2);
               searchName = searchArray[0];
               searchID = searchArray[1];
-            } 
+            }
             if (input.includes('/')) {
               searchArray = input.split('/', 2);
               searchName = searchArray[0];
               searchID = searchArray[1];
-            } 
+            }
             if (input.includes(' ')) {
               searchArray = input.split(' ', 2);
               searchName = searchArray[0];
               searchID = searchArray[1];
-            } 
+            }
             else {
               searchName = input;
               searchID = null;
