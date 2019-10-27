@@ -158,7 +158,8 @@
         $(document).ready(function(){
           $("#color_noColor").click(function(){
             $("#no_color").toggle(function(){
-              
+              $("button").toggleClass();
+              $("br").toggle();
             });
           });
         });
