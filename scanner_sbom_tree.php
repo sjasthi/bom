@@ -177,6 +177,11 @@
               searchName = searchArray[0];
               searchID = searchArray[1];
             }
+            if (input.includes('/')) {
+              searchArray = input.split('/', 2);
+              searchName = searchArray[0];
+              searchID = searchArray[1];
+            }
             else {
               $('#bom_treetable tbody').each(function() {
               var parentStr = $(this).text().toLowerCase();
