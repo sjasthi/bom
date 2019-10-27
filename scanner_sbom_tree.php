@@ -25,42 +25,30 @@
                     <li class="active"><a href="#"
                             onclick="$('#bom_treetable').treetable('collapseAll'); return false;"><span
                                 class="glyphicon glyphicon-chevron-up"></span>Collapse All</a></li>
-                                <!--Place Holder for future iteration
-                                <li><a href="#">Color</a></li>
-                    <li><a href="#">No Color</a></li>
-                    <li><a href="#" onclick="$('#bom_treetable').treetable('collapseAll'); $('.child').toggle(); $('.grandchild').toggle();">Show <span class="glyphicon glyphicon-tint" style='color:#ff6666;'> </span>Red</a>
-                    </li>
-                    <li><a href="#" onclick="$('#bom_treetable').treetable('expandAll'); $('.grandchild').toggle();">Show <span class="glyphicon glyphicon-tint" style='color:#ff6666;'></span>Red and
-                            <span class="glyphicon glyphicon-tint" style='color:#ffd966;'></span>Yellow</a></li>
-
-                    -->
-
-                        <div class="input-group">
-                            <input type="text" id="input" class="form-control" placeholder="Where Used" >
-                            <div class="input-group-btn">
-                                <button class="btn btn-default" type="submit" onclick="whereUsed();">
+                                <li><a href="#" id='color_noColor'><span id = 'no_color'>No </span>Color</a></li>
+                                <li><a href="#" id ="showRed">Show <span class="glyphicon glyphicon-tint" style='color:#ff6666;'> </span>Red</a></li>
+                                <li><a href="#" id = "showRedYellow"> Show <span class="glyphicon glyphicon-tint" style='color:#ff6666;'></span>Red and <span class="glyphicon glyphicon-tint" style='color:#ffd966;'></span>Yellow</a></li>
+                                <div class="input-group">
+                                  <input type="text" id="input" class="form-control" placeholder="Where Used" >
+                                  <div class="input-group-btn">
+                                    <button class="btn btn-default" type="submit" onclick="whereUsed();">
                                     <i class="glyphicon glyphicon-search"></i>
-                                </button>
-                            </div>
-                        </div>
-
-
-                </ul>
-            </div>
-        </nav>
-     <div class="table-responsive">
-       <div class="h4">
-
-
-
-        <table id = "bom_treetable" class = "table table-hover">
-          <thead class = 'h4'>
-            <th >Name</th>
-            <th>Version</th>
-            <th>Status</th>
-            <th>Type</th>
-            <th>Notes</th>
-          </thead>
+                                  </button>
+                                </div>
+                              </div>
+                            </ul>
+                          </div>
+                        </nav>
+                        <div class="table-responsive">
+                          <div class="h4">
+                            <table id = "bom_treetable" class = "table table-hover">
+                              <thead class = 'h4'>
+                                <th >Name</th>
+                                <th>Version</th>
+                                <th>Status</th>
+                                <th>Type</th>
+                                <th>Notes</th>
+                              </thead>
           <?php
             //finds parent data
             $sql_parent = "SELECT DISTINCT app_name, app_id, app_version, app_status from sbom order by app_name;";
@@ -165,6 +153,14 @@
         clickableNodeNames: true
         };
         $("#bom_treetable").treetable(sbom_params);
+        //Function for Color/No Color Button
+        $(document).ready(function(){
+          $("#color_noColor").click(function(){
+            $("#no_color").toggle(function(){
+              
+            });
+          });
+        });
         //input search for where used
         $(document).ready(function() {
           $('#input').on('keyup', function() {
@@ -181,29 +177,21 @@
               searchName = searchArray[0];
               searchID = searchArray[1];
             }
-            if (input.includes('/')) {
-              searchArray = input.split('/', 2);
-              searchName = searchArray[0];
-              searchID = searchArray[1];
-            }
-            if (input.includes(' ')) {
-              searchArray = input.split(' ', 2);
-              searchName = searchArray[0];
-              searchID = searchArray[1];
-            }
             else {
-              searchName = input;
-              searchID = null;
-            }
-            var cmp_name, cmp_id;
-            $('#bom_treetable tbody').each(function() {
+              $('#bom_treetable tbody').each(function() {
               var parentStr = $(this).text().toLowerCase();
-              if (parentStr.indexOf(searchName) === -1) {
+              if (parentStr.indexOf(input) === -1) {
                 $(this).hide();
               } else {
                  $(this).show();
                 }
               });
+            }
+            console.log(input);
+            console.log(searchName);
+            console.log(searchID);
+            var cmp_name, cmp_id;
+            
           });
         });
       </script>
