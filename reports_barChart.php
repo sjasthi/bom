@@ -2,7 +2,7 @@
 
     $nav_selected = "REPORTS"; 
     $left_buttons = "YES"; 
-    $left_selected = "REPORTSPIECHART"; 
+    $left_selected = "REPORTSBARCHART"; 
 
     include("./nav.php");
     global $db;
