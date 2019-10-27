@@ -1,44 +1,31 @@
+.grandchild {
 
-  .grandchild {
-    background-color:#66cc66;
-    border: .2rem solid #66cc66;
-    color: black;
-    font-size: 16px;
-    margin: 4px;
-    transition: 0.35s;
-    text-decoration: none;
-    cursor: none;
-  }
-
-
-  .child {
-    background-color:#ffff66;
-    color: black;
-    font-size: 16px;
-    text-decoration: none;
-  }
+  color: black;
+  font-size: 16px;
+  background: #66cc66;
+  border-radius: 30px;
+  padding: 15px;
+  text-align: center;
+  cursor: none;
+}
 
 
-  .parent {
-    background-color:#ff6666;
-    color: black;
-    font-size: 16px;
-    text-decoration: none;
-  }
-
-  .bw_child {
-    background-color:rgb(133, 133, 133);
-    color: black;
-    font-size: 16px;
-    text-decoration: none;
-  }
+.child {
+  color: black;
+  font-size: 16px;
+  background: #ffff66;
+  border-radius: 30px;
+  padding: 15px;
+  text-align: left;
+}
 
 
-  .bw_parent {
-    background-color:rgb(67, 67, 67);
-    color: black;
-    font-size: 16px;
-    text-decoration: none;
-  }
-
-  
+.parent {
+  color: black;
+  font-size: 16px;
+  background: #ff6666;
+  border-radius: 30px;
+  padding: 15px;
+  text-align: left;
+ 
+}
