@@ -183,20 +183,21 @@
               searchName = searchArray[0];
               searchID = searchArray[1];
             }
-            else {
-              $('#bom_treetable tbody').each(function() {
-              var parentStr = $(this).text().toLowerCase();
-              if (parentStr.indexOf(input) === -1) {
-                $(this).hide();
-              } else {
-                 $(this).show();
-                }
-              });
+            if (searchID == null) {
+              searchName = input;
             }
             console.log(input);
             console.log(searchName);
             console.log(searchID);
             var cmp_name, cmp_id;
+            $('#bom_treetable tbody').each(function() {
+              var parentStr = $(this).text().toLowerCase();
+              if (parentStr.indexOf(searchName) === -1) {
+                $(this).hide();
+              } else {
+                 $(this).show();
+                }
+              });
             
           });
         });
