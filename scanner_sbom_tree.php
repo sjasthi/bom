@@ -28,7 +28,7 @@
                                 <li><a href="#" id='color_noColor'><span id = 'no_color'>No </span>Color</a></li>
                                 <li><a href="#" id ="showRed">Show <span class="glyphicon glyphicon-tint" style='color:#ff6666;'> </span>Red</a></li>
                                 <li><a href="#" id = "showRedYellow"> Show <span class="glyphicon glyphicon-tint" style='color:#ff6666;'></span>Red and <span class="glyphicon glyphicon-tint" style='color:#ffd966;'></span>Yellow</a></li>
-                                <div class="input-group">
+                                <li><div class="input-group">
                                   <input type="text" id="input" class="form-control" placeholder="Where Used" >
                                   <div class="input-group-btn">
                                     <button class="btn btn-default" type="submit" onclick="whereUsed();">
@@ -36,6 +36,7 @@
                                   </button>
                                 </div>
                               </div>
+                            </li>
                             </ul>
                           </div>
                         </nav>
