@@ -166,15 +166,7 @@
                         </tr>
                     </thead>
 
-                    <tfoot>
-                        <tr>
-                            <th>App ID</th>
-                            <th>App Name</th>
-                            <th>App Version</th>
-                            <th>App Status</th>
-                            <th>Notes</th>
-                        </tr>
-                    </tfoot>
+                    
 
                     <tbody>";
                     $result = $db->query($sql);
@@ -198,6 +190,15 @@
 
                         $result->close();
                         echo "</tbody>
+                        <tfoot>
+                        <tr>
+                            <th>App ID</th>
+                            <th>App Name</th>
+                            <th>App Version</th>
+                            <th>App Status</th>
+                            <th>Notes</th>
+                        </tr>
+                    </tfoot>
                         </table>";
             }elseif($_COOKIE['cmp_status_cookie']!= null) {
                 $cmpStatusSelection = $_COOKIE['cmp_status_cookie'];
@@ -217,19 +218,6 @@
                                     <th>Notes</th>
                             </tr>
                         </thead>
-
-                        <tfoot>
-                            <tr>
-                                <th>App Name</th>
-                                
-                                <th>CMP Name</th>
-                                <th>CMP Version</th>
-                                <th>CMP Type</th>
-                                <th>CMP Status</th>
-                                <th>Notes</th>
-                            </tr>
-                        </tfoot>
-
                         <tbody>";
                         $result = $db->query($sql);
 
@@ -253,7 +241,18 @@
                             }//end else
 
                             $result->close();
-                            echo "</tbody>
+                            echo "
+                        </tbody><tfoot>
+                        <tr>
+                        <th>App Name</th>
+                                    
+                        <th>CMP Name</th>
+                        <th>CMP Version</th>
+                        <th>CMP Type</th>
+                        <th>CMP Status</th>
+                        <th>Notes</th>
+                        </tr>
+                    </tfoot>
                             </table>";
         }elseif ($_COOKIE['request_status_cookie']!= null) {
             $requestType = $_COOKIE['request_status_cookie'];
@@ -274,19 +273,6 @@
                             
                         </tr>
                     </thead>
-
-                    <tfoot>
-                        <tr>
-                            <th>App Name</th>
-                            <th>CMP Name</th>
-                          
-                            <th>Request ID</th>
-                            <th>Request Date</th>
-                            <th>Request Status</th>
-                            <th>Request Step</th>
-                            
-                        </tr>
-                    </tfoot>
 
                     <tbody>";
                     $result = $db->query($sql);
@@ -312,7 +298,18 @@
                         }//end else
 
                         $result->close();
-                        echo "</tbody>
+                        echo "</tbody><tfoot>
+                        <tr>
+                        <th>App Name</th>
+                        <th>CMP Name</th>
+                       
+                        <th>Request ID</th>
+                        <th>Request Date</th>
+                        <th>Request Status</th>
+                        <th>Request Step</th>
+                        
+                        </tr>
+                    </tfoot>
                         </table>";
         }elseif ($_COOKIE['request_step_cookie']!= null) {
             $requestStep = $_COOKIE['request_step_cookie'];
@@ -333,20 +330,6 @@
                             
                         </tr>
                     </thead>
-
-                    <tfoot>
-                        <tr>
-                            <th>App Name</th>
-                            <th>CMP Name</th>
-                            
-                            <th>Request ID</th>
-                            <th>Request Date</th>
-                            <th>Request Status</th>
-                            <th>Request Step</th>
-                            
-                        </tr>
-                    </tfoot>
-
                     <tbody>";
                     $result = $db->query($sql);
 
@@ -371,7 +354,17 @@
                         }//end else
 
                         $result->close();
-                        echo "</tbody>
+                        echo "</tbody><tfoot>
+                        <tr>
+                        <th>App Name</th>
+                        <th>CMP Name</th>
+                        
+                        <th>Request ID</th>
+                        <th>Request Date</th>
+                        <th>Request Status</th>
+                        <th>Request Step</th>
+                                                </tr>
+                    </tfoot>
                         </table>";
         }
         ?>
