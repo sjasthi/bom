@@ -190,9 +190,13 @@
             var cmp_name, cmp_id;
             $('#bom_treetable tbody').each(function() {
               var parentStr = $(this).text().toLowerCase();
-              if (parentStr.indexOf(searchName) === -1) {
+              if (searchID != null && parentStr.indexOf(searchID) === -1 && parentStr.indexOf(searchName) === -1) {
                 $(this).hide();
-              } else {
+              } 
+              if (searchID == null && parentStr.indexOf(searchName) === -1) {
+                $(this).hide();
+              } 
+              else {
                  $(this).show();
                 }
               });
