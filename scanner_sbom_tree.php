@@ -66,7 +66,7 @@
                 $p_id = $p;
                 echo "<tbody class= 'application' id = '".$app_id."'>
                       <tr data-tt-id = '".$p_id."' >
-                      <td class='text-capitalize'> <button type='button' class = 'parent' > <span class = 'app_name' >".$app_name."</span>
+                      <td class='text-capitalize'> <button type='button' class = 'btn parent' > <span class = 'app_name' >".$app_name."</span>
                       <span class = 'id_br' ><br/>ID: ".$app_id."</span></button></td>
                       <td >".$app_version."</td>
                       <td class='text-capitalize'>".$app_status."</td>
@@ -93,7 +93,7 @@
                       $c_id=$p_id."-".$c;
                       echo "
                       <tr data-tt-id = '".$c_id."' data-tt-parent-id='".$p_id."' class = 'component' >
-                        <td class='text-capitalize'> &nbsp; &nbsp; &nbsp; &nbsp; <button type='button'  class = 'child'> <span class = 'cmp_name'>".$cmp_name."</span>
+                        <td class='text-capitalize'> &nbsp; &nbsp; &nbsp; &nbsp; <button type='button'  class = 'btn child'> <span class = 'cmp_name'>".$cmp_name."</span>
                          <span class = 'id_br' ><br/> ID: ".$cmp_id."</span></button></td>
                             <td >".$cmp_version."</td>
                             <td class='text-capitalize'>".$cmp_status."</td>
@@ -122,7 +122,7 @@
                             $gc_id=$c_id."-".$gc;
                             echo "
                                   <tr data-tt-id = '".$gc_id."' data-tt-parent-id='".$c_id."' >
-                                  <td > &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;<button class = 'grandchild'>Request ID: <span class = 'id_br' id = '".$request_id."'><br/> ".$request_id."</span></button></td>
+                                  <td > &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;<button class = 'btn  grandchild'>Request ID: <span class = 'id_br' id = '".$request_id."'><br/> ".$request_id."</span></button></td>
                                  <td class='text-capitalize'>".$request_step."</td>
                                   <td class='text-capitalize'>".$request_status."</td>
                                   <td/>
@@ -190,7 +190,7 @@
             var cmp_name, cmp_id;
             $('#bom_treetable tbody').each(function() {
               var parentStr = $(this).text().toLowerCase();
-              if (searchID != null && parentStr.indexOf(searchID) === -1 && parentStr.indexOf(searchName) === -1) {
+              if (searchID != null && parentStr.indexOf(searchName) === -1 && parentStr.indexOf(searchID) === -1) {
                 $(this).hide();
               } 
               if (searchID == null && parentStr.indexOf(searchName) === -1) {
