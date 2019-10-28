@@ -157,10 +157,7 @@
         //Function for Color/No Color Button
         $(document).ready(function(){
           $("#color_noColor").click(function(){
-            $("#no_color").toggle(function(){
-              $("button").toggleClass();
-              $("br").toggle();
-            });
+            $("#no_color").toggle();
           });
         });
         //input search for where used
