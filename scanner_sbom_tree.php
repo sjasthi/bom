@@ -29,9 +29,9 @@
                                 <li><a href="#" id ="showRed">Show <span class="glyphicon glyphicon-tint" style='color:#ff6666;'> </span>Red</a></li>
                                 <li><a href="#" id = "showRedYellow"> Show <span class="glyphicon glyphicon-tint" style='color:#ff6666;'></span>Red and <span class="glyphicon glyphicon-tint" style='color:#ffd966;'></span>Yellow</a></li>
                                 <li><div class="input-group">
-                                  <input type="text" id="input" class="form-control" placeholder="Where Used" >
+                                  <input type="text" id="input" class="form-control" placeholder="Search..." >
                                   <div class="input-group-btn">
-                                    <button class="btn btn-default" type="submit" onclick="whereUsed();">
+                                    <button class="btn btn-default" type="submit"> <!--Makes the user feel better, otherwise no use.-->
                                     <i class="glyphicon glyphicon-search"></i>
                                   </button>
                                 </div>
@@ -152,55 +152,73 @@
       let sbom_params = {
         expandable: true,
         clickableNodeNames: true
-        };
-        $("#bom_treetable").treetable(sbom_params);
-        //Function for Color/No Color Button
-        $(document).ready(function(){
-          $("#color_noColor").click(function(){
-            $("#no_color").toggle();
-          });
+      };
+
+      $("#bom_treetable").treetable(sbom_params);
+
+      //Function for Color/No Color Button
+      $(document).ready(function(){
+        $("#color_noColor").click(function(){
+          $("#no_color").toggle();
         });
+      });
+
+      
+      $(document).ready(function() {
         //input search for where used
-        $(document).ready(function() {
-          $('#input').on('keyup', function() {
-            var input = $(this).val().toLowerCase();
-            var searchArray, searchName, searchID;
-            //checks for ; , / to split the values into an array
-            if (input.includes(';')) {
-              searchArray = input.split(';', 2);
-              searchName = searchArray[0];
-              searchID = searchArray[1];
+        $('#input').on('keyup', function() {
+          let input = $(this).val().toLowerCase();
+          let cmp_nameInput = '', cmp_idInput = '';
+
+          //Checks to see if the search terms are delineated, if yes, split input into cmp_nameInput and cmp_idInput
+          //Feel free to add more delimiters to this array exxcept backslash ( \ ). I'm nearly 100% sure it'll break something, somewhere.
+          let delimiterArray = [';', ':', ',', '|', '/', ' '];
+
+          let usingDelimiter = delimiterArray.some(function(delimiter){
+            if(input.includes(delimiter)){
+              [cmp_nameInput, cmp_idInput] = input.split(delimiter, 2);
+              return true;
             }
-            if (input.includes(',')) {
-              searchArray = input.split(',', 2);
-              searchName = searchArray[0];
-              searchID = searchArray[1];
+          });
+          
+          //if we're not using a delimiter, assume input is only for component name 
+          if(!usingDelimiter){cmp_nameInput = input;}
+
+          //Loops over each application
+          $('#bom_treetable tbody').each(function() {
+
+            let nameMatch = false, idMatch = false;
+
+            //Check if any component name in the current application matches cmp_nameInput
+            $(this).find(".component .cmp_name").each(function(){
+              if($(this).text().toLowerCase().includes(cmp_nameInput)){
+                nameMatch = true;
+              }
+            });
+
+            //Check if any component id in the current application matches cmp_idInput
+            $(this).find(".component").each(function(){
+              if($(this).find("td:eq(1)").text().toLowerCase().includes(cmp_idInput)){
+                idMatch = true;
+              }
+            });
+
+            // 1: if (both search terms are used) and (both search terms aren't found)
+            // 2: if (cmp_name is used) and (cmp_name isn't found)
+            // 3: if (cmp_id is used) and (cmp_id isn't found)
+            // 4: else ( search successful :) )
+            if((cmp_nameInput != '' && cmp_idInput != '') && (!nameMatch || !idMatch)){
+              $(this).hide();
+            }else if((cmp_nameInput != '') && (!nameMatch)){
+              $(this).hide();
+            }else if((cmp_idInput != '') && (!idMatch)){
+              $(this).hide();
+            }else{
+              $(this).show();
             }
-            if (input.includes('/')) {
-              searchArray = input.split('/', 2);
-              searchName = searchArray[0];
-              searchID = searchArray[1];
-            }
-            if (searchID == null) {
-              searchName = input;
-            }
-            console.log(input);
-            console.log(searchName);
-            console.log(searchID);
-            var cmp_name, cmp_id;
-            $('#bom_treetable tbody').each(function() {
-              var parentStr = $(this).text().toLowerCase();
-              if (searchID != null && parentStr.indexOf(searchName) === -1 && parentStr.indexOf(searchID) === -1) {
-                $(this).hide();
-              } 
-              if (searchID == null && parentStr.indexOf(searchName) === -1) {
-                $(this).hide();
-              } 
-              else {
-                 $(this).show();
-                }
-              });
-            
+
           });
         });
-      </script>
+      });
+    </script>
+`
