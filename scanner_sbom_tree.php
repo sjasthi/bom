@@ -155,7 +155,13 @@
         indent: 50
       };
 
-      $("#bom_treetable").treetable(sbom_params);
+      $("#bom_treetable").treetable(sbom_params).DataTable( 
+        { 
+          searching: false, 
+          ordering:  false, 
+          "info": false
+        });
+
 
       //Function for Color/No Color Button
       $(document).ready(function(){
@@ -163,7 +169,7 @@
           $("#no_color").toggle();
         });
       });
-
+      
       
       $(document).ready(function() {
         //input search for where used
