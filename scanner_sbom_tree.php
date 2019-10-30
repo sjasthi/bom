@@ -94,7 +94,7 @@
                       echo "
                       <tr data-tt-id = '".$c_id."' data-tt-parent-id='".$p_id."' class = 'component' >
                         <td class='text-capitalize'> &nbsp; &nbsp; &nbsp; &nbsp; <button type='button'  class = 'btn child'> <span class = 'cmp_name'>".$cmp_name."</span>
-                         <span class = 'id_br' ><br/> ID: ".$cmp_id."</span></button></td>
+                         <span class = 'cmp_id' ><br/> ID: ".$cmp_id."</span></button></td>
                             <td >".$cmp_version."</td>
                             <td class='text-capitalize'>".$cmp_status."</td>
                             <td class='text-capitalize'>".$cmp_type."</td>
@@ -197,8 +197,8 @@
             });
 
             //Check if any component id in the current application matches cmp_idInput
-            $(this).find(".component").each(function(){
-              if($(this).find("td:eq(1)").text().toLowerCase().includes(cmp_idInput)){
+            $(this).find(".component .cmp_id").each(function(){
+              if($(this).text().toLowerCase().includes(cmp_idInput)){
                 idMatch = true;
               }
             });
