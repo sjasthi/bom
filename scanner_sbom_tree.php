@@ -29,7 +29,7 @@
                                 <li><a href="#" id ="showRed">Show <span class="glyphicon glyphicon-tint" style='color:#ff6666;'> </span>Red</a></li>
                                 <li><a href="#" id = "showRedYellow"> Show <span class="glyphicon glyphicon-tint" style='color:#ff6666;'></span>Red and <span class="glyphicon glyphicon-tint" style='color:#ffd966;'></span>Yellow</a></li>
                                 <li><div class="input-group">
-                                  <input type="text" id="input" class="form-control" placeholder="Search..." >
+                                  <input type="text" id="input" class="form-control" placeholder="Where Used" >
                                   <div class="input-group-btn">
                                     <button class="btn btn-default" type="submit"> <!--Makes the user feel better, otherwise no use.-->
                                     <i class="glyphicon glyphicon-search"></i>
