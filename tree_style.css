@@ -29,9 +29,8 @@
   text-align: left;
 
 }
-.bw {
+.bw_parent, .bw_child, .bw_grandchild {
   color: black;
-  font-size: 16px;
   background: transparent;
 
 }

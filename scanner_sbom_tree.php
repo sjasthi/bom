@@ -66,8 +66,8 @@
                 $p_id = $p;
                 echo "<tbody class= 'application' id = '".$app_id."'>
                       <tr data-tt-id = '".$p_id."' >
-                      <td class='text-capitalize'> <button type='button' class = 'btn parent' > <span class = 'app_name' >".$app_name."</span>
-                      <span class = 'id_br' ><br/>ID: ".$app_id."</span></button></td>
+                      <td class='text-capitalize'> <div class = 'btn parent' ><span class = 'app_name' >".$app_name."</span>
+                      <span class = 'app_id'>ID: ".$app_id."</span> &nbsp; &nbsp;</div></td>
                       <td >".$app_version."</td>
                       <td class='text-capitalize'>".$app_status."</td>
                       <td/>
@@ -93,8 +93,8 @@
                       $c_id=$p_id."-".$c;
                       echo "
                       <tr data-tt-id = '".$c_id."' data-tt-parent-id='".$p_id."' class = 'component' >
-                        <td class='text-capitalize'> &nbsp; &nbsp; &nbsp; &nbsp; <button type='button'  class = 'btn child'> <span class = 'cmp_name'>".$cmp_name."</span>
-                         <span class = 'cmp_id' ><br/> ID: ".$cmp_id."</span></button></td>
+                        <td class='text-capitalize'> <div class = 'btn child'> <span class = 'cmp_name'>".$cmp_name."</span>
+                         <span class = 'cmp_id' >ID: ".$cmp_id."</span>&nbsp; &nbsp; </div></td>
                             <td >".$cmp_version."</td>
                             <td class='text-capitalize'>".$cmp_status."</td>
                             <td class='text-capitalize'>".$cmp_type."</td>
@@ -122,7 +122,7 @@
                             $gc_id=$c_id."-".$gc;
                             echo "
                                   <tr data-tt-id = '".$gc_id."' data-tt-parent-id='".$c_id."' >
-                                  <td > &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;<button class = 'btn  grandchild'>Request ID: <span class = 'id_br' id = '".$request_id."'><br/> ".$request_id."</span></button></td>
+                                  <td > <div class = 'btn  grandchild'>Request ID: <span class = 'request_id'>".$request_id."</span>&nbsp;&nbsp;</div></td>
                                  <td class='text-capitalize'>".$request_step."</td>
                                   <td class='text-capitalize'>".$request_status."</td>
                                   <td/>
@@ -151,7 +151,8 @@
       //Params for the treetable
       let sbom_params = {
         expandable: true,
-        clickableNodeNames: true
+        clickableNodeNames: true,
+        indent: 50
       };
 
       $("#bom_treetable").treetable(sbom_params);
