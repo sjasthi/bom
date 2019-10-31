@@ -52,7 +52,10 @@
                               </thead>
           <?php
             //finds parent data
-            $sql_parent = "SELECT DISTINCT app_name, app_id, app_version, app_status from sbom  order by app_name;";
+            //$sql_parent = "SELECT DISTINCT app_name, app_id, app_version, app_status from sbom  order by app_name;";
+            $sql_parent = "SELECT DISTINCT app_name, app_id, app_version, app_status, '' as notes, 'parent' as class, concat(app_name,concat(' ', app_id)) as application from sbom  
+            union SELECT DISTINCT cmp_name as app_name, cmp_id as app_id, cmp_version as app_version, cmp_status as app_status, notes,   'child' as class, concat(app_name,concat(' ', app_id)) as application 
+            from sbom order by application, class desc, app_name;";
             $result_parent = $db->query($sql_parent);
             $p=1;
             $c=1;
@@ -62,24 +65,40 @@
                 $app_name = $row_parent["app_name"];
                 $app_id = $row_parent["app_id"];
                 $app_version = $row_parent["app_version"];
+                $class = $row_parent["class"];
                 $app_status = $row_parent["app_status"];
+                $notes = $row_parent["notes"];
                 $p_id = $p;
                 echo "<tbody class= 'application' id = '".$app_id."'>
                       <tr data-tt-id = '".$p_id."' >
-                      <td class='text-capitalize'> <div class = 'btn parent' ><span class = 'app_name' >".$app_name."</span>
+                      <td class='text-capitalize'> <div class = 'btn ".$class."' ><span class = 'app_name' >".$app_name."</span>
                       <span class = 'app_id'>ID: ".$app_id."</span> &nbsp; &nbsp;</div></td>
                       <td >".$app_version."</td>
                       <td class='text-capitalize'>".$app_status."</td>
                       <td/>
-                      <td/>
+                      <td >".$notes."</td>
                       </tr>";
                 $p++;
                 // output data of child
-                  $sql_child = "SELECT cmp_name, cmp_id, cmp_type, cmp_version, cmp_status, notes from sbom
+                  $sql_child = "SELECT cmp_name, cmp_id, cmp_type, cmp_version, cmp_status, notes, 'child' as class, concat(cmp_name, concat(' ', cmp_id)) as cmp from sbom 
+                  where app_name = '".$app_name."'
+                                  and app_id = '".$app_id."'
+                                  and app_version = '".$app_version."'
+                                  and app_status = '".$app_status."' 
+                  union
+                  SELECT 'Request ' as cmp_name, request_id as cmp_id, '' as cmp_type, request_step as cmp_version, request_status as cmp_status, 
+                  concat('Request Date: ', DATE_FORMAT(request_date, \"%m/%d/%y\") ) as notes, 'grandchild' as class, concat(cmp_name, concat(' ', cmp_id)) as cmp 
+                  from sbom 
+                  where cmp_name = '".$app_name."'
+                                  and cmp_id = '".$app_id."'
+                                  and cmp_version = '".$app_version."'
+                                  and cmp_status = '".$app_status."' 
+                                  order by cmp, class, cmp_name;";
+                  /*$sql_child = "SELECT cmp_name, cmp_id, cmp_type, cmp_version, cmp_status, notes from sbom
                                   where app_name = '".$app_name."'
                                   and app_id = '".$app_id."'
                                   and app_version = '".$app_version."'
-                                  and app_status = '".$app_status."' ; ";
+                                  and app_status = '".$app_status."' ; ";*/
                   $result_child = $db->query($sql_child);
                   if ($result_child->num_rows > 0) {
                     // output data of child
@@ -90,10 +109,11 @@
                       $cmp_status = $row_child["cmp_status"];
                       $cmp_type = $row_child["cmp_type"];
                       $notes = $row_child["notes"];
+                      $c_class = $row_child["class"];
                       $c_id=$p_id."-".$c;
                       echo "
                       <tr data-tt-id = '".$c_id."' data-tt-parent-id='".$p_id."' class = 'component' >
-                        <td class='text-capitalize'> <div class = 'btn child'> <span class = 'cmp_name'>".$cmp_name."</span>
+                        <td class='text-capitalize'> <div class = 'btn ".$c_class."'> <span class = 'cmp_name'>".$cmp_name."</span>
                          <span class = 'cmp_id' >ID: ".$cmp_id."</span>&nbsp; &nbsp; </div></td>
                             <td class = 'cmp_version'>".$cmp_version."</td>
                             <td class='text-capitalize'>".$cmp_status."</td>
@@ -159,7 +179,7 @@
         { 
           searching: false, 
           ordering:  false, 
-          "info": false,
+          //"info": false,
           "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]
         });
 
