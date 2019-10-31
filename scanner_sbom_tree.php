@@ -52,7 +52,7 @@
                               </thead>
           <?php
             //finds parent data
-            $sql_parent = "SELECT DISTINCT app_name, app_id, app_version, app_status from sbom order by app_name;";
+            $sql_parent = "SELECT DISTINCT app_name, app_id, app_version, app_status from sbom  order by app_name;";
             $result_parent = $db->query($sql_parent);
             $p=1;
             $c=1;
@@ -95,7 +95,7 @@
                       <tr data-tt-id = '".$c_id."' data-tt-parent-id='".$p_id."' class = 'component' >
                         <td class='text-capitalize'> <div class = 'btn child'> <span class = 'cmp_name'>".$cmp_name."</span>
                          <span class = 'cmp_id' >ID: ".$cmp_id."</span>&nbsp; &nbsp; </div></td>
-                            <td >".$cmp_version."</td>
+                            <td class = 'cmp_version'>".$cmp_version."</td>
                             <td class='text-capitalize'>".$cmp_status."</td>
                             <td class='text-capitalize'>".$cmp_type."</td>
                             <td class='text-capitalize'>".$notes."</td>
@@ -159,7 +159,8 @@
         { 
           searching: false, 
           ordering:  false, 
-          "info": false
+          "info": false,
+          "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]
         });
 
 
