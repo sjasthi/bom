@@ -51,7 +51,7 @@
                                 <th>Notes</th>
                               </thead>
           <?php
-            $getYellow = true;
+            $getYellow = false;
             //finds parent data
             if($getYellow){
             $sql_parent = "SELECT DISTINCT app_name, app_id, app_version, app_status, '' as notes, 'parent' as class, concat(app_name,concat(' ', app_id)) as application from sbom  
