@@ -26,8 +26,8 @@
                             onclick="$('#bom_treetable').treetable('collapseAll'); return false;"><span
                                 class="glyphicon glyphicon-chevron-up"></span>Collapse All</a></li>
                                 <li><a href="#" id='color_noColor'><span id = 'no_color'>No </span>Color</a></li>
-                                <li><a href="#" id ="showRed">Show <span class="glyphicon glyphicon-tint" style='color:#ff6666;'> </span>Red</a></li>
-                                <li><a href="#" id = "showRedYellow"> Show <span class="glyphicon glyphicon-tint" style='color:#ff6666;'></span>Red and <span class="glyphicon glyphicon-tint" style='color:#ffd966;'></span>Yellow</a></li>
+                                <li><a href="http://localhost/bom/scanner_sbom_tree.php?show=red" id ="showRed" >Show <span class="glyphicon glyphicon-tint" style='color:#ff6666;'> </span>Red</a></li>
+                                <li><a href="http://localhost/bom/scanner_sbom_tree.php?show=yellow" id = "showRedYellow" > Show <span class="glyphicon glyphicon-tint" style='color:#ff6666;'></span>Red and <span class="glyphicon glyphicon-tint" style='color:#ffd966;'></span>Yellow</a></li>
                                 <li><div class="input-group">
                                   <input type="text" id="input" class="form-control" placeholder="Where Used" >
                                   <div class="input-group-btn">
@@ -53,9 +53,9 @@
           <?php
             $getYellow = false;
             //finds parent data
-            if($getYellow){
-            $sql_parent = "SELECT DISTINCT app_name, app_id, app_version, app_status, '' as notes, 'parent' as class, concat(app_name,concat(' ', app_id)) as application from sbom  
-            union SELECT DISTINCT cmp_name as app_name, cmp_id as app_id, cmp_version as app_version, cmp_status as app_status, notes,   'child' as class, concat(app_name,concat(' ', app_id)) as application 
+            if(($_GET['show']) == "yellow"){
+            $sql_parent = "SELECT DISTINCT app_name, app_id, app_version, app_status, '' as notes, 'parent' as class, concat(app_name,concat(' ', app_id)) as application from sbom
+            union SELECT DISTINCT cmp_name as app_name, cmp_id as app_id, cmp_version as app_version, cmp_status as app_status, notes,   'child' as class, concat(app_name,concat(' ', app_id)) as application
             from sbom order by application, class desc, app_name;";
             } else{
               $sql_parent = "SELECT DISTINCT app_name, app_id, app_version, app_status, '' as notes, 'parent' as class from sbom  order by app_name;";
@@ -84,23 +84,23 @@
                       </tr>";
                 $p++;
                 // output data of child
-                if ($getYellow){
-                  $sql_child = "SELECT row_id, cmp_name, cmp_id, cmp_type, cmp_version, cmp_status, notes, 'child' as class, concat(cmp_name, concat(' ', cmp_id)) as cmp, 'a' as val from sbom 
+                if(($_GET['show']) == "yellow"){
+                  $sql_child = "SELECT row_id, cmp_name, cmp_id, cmp_type, cmp_version, cmp_status, notes, 'child' as class, concat(cmp_name, concat(' ', cmp_id)) as cmp, 'a' as val from sbom
                   where app_name = '".$app_name."'
                                   and app_id = '".$app_id."'
                                   and app_version = '".$app_version."'
-                                  and app_status = '".$app_status."' 
+                                  and app_status = '".$app_status."'
                   union
-                  SELECT row_id, 'Request ' as cmp_name, request_id as cmp_id, '' as cmp_type, request_step as cmp_version, request_status as cmp_status, 
-                  concat('Request Date: ', DATE_FORMAT(request_date, \"%m/%d/%y\") ) as notes, 'grandchild' as class, concat(cmp_name, concat(' ', cmp_id)) as cmp, 'z' as val 
-                  from sbom 
+                  SELECT row_id, 'Request ' as cmp_name, request_id as cmp_id, '' as cmp_type, request_step as cmp_version, request_status as cmp_status,
+                  concat('Request Date: ', DATE_FORMAT(request_date, \"%m/%d/%y\") ) as notes, 'grandchild' as class, concat(cmp_name, concat(' ', cmp_id)) as cmp, 'z' as val
+                  from sbom
                   where cmp_name = '".$app_name."'
                                   and cmp_id = '".$app_id."'
                                   and cmp_version = '".$app_version."'
-                                  and cmp_status = '".$app_status."' 
+                                  and cmp_status = '".$app_status."'
                                   order by val, cmp, class, cmp_name;";
               }
-                  else{              
+                  else{
                   $sql_child = "SELECT row_id, cmp_name, cmp_id, cmp_type, cmp_version, cmp_status, notes, 'child' as class from sbom
                                   where app_name = '".$app_name."'
                                   and app_id = '".$app_id."'
@@ -146,7 +146,7 @@
                         if ($result_gchild->num_rows > 0 ) {
                           // output data of grandchild
                           while($row_gchild = $result_gchild->fetch_assoc()) {
-                            
+
                             $request_id= $row_gchild["request_id"];
                             $request_date= $row_gchild["request_date"];
                             $request_step= $row_gchild["request_step"];
@@ -161,7 +161,7 @@
                                   <td>Request Date: ".$request_date."</td>
                                   </tr>";
                             $gc++;
-                            
+
                           }
                           $result_gchild -> close();
                     }
@@ -188,10 +188,10 @@
         indent: 50
       };
 
-      $("#bom_treetable").treetable(sbom_params).DataTable( 
-        { 
-          searching: false, 
-          ordering:  false, 
+      $("#bom_treetable").treetable(sbom_params).DataTable(
+        {
+          searching: false,
+          ordering:  false,
           "info": false,
           "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]
         });
@@ -203,8 +203,8 @@
           $("#no_color").toggle();
         });
       });
-      
-      
+
+
       $(document).ready(function() {
         //input search for where used
         $('#input').on('keyup', function() {
@@ -221,8 +221,8 @@
               return true;
             }
           });
-          
-          //if we're not using a delimiter, assume input is only for component name 
+
+          //if we're not using a delimiter, assume input is only for component name
           if(!usingDelimiter){cmp_nameInput = input;}
 
           //Loops over each application
