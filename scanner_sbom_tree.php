@@ -200,7 +200,8 @@
           searching: false,
           ordering:  false,
           "info": false,
-          "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]
+          "scrollY": "600px",
+          "paging": false
         });
 
 
