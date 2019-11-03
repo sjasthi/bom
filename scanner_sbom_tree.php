@@ -26,8 +26,8 @@
                             onclick="$('#bom_treetable').treetable('collapseAll'); return false;"><span
                                 class="glyphicon glyphicon-chevron-up"></span>Collapse All</a></li>
                                 <li><a href="#" id='color_noColor'><span id = 'no_color'>No </span>Color</a></li>
-                                <li><a href="http://localhost/bom/scanner_sbom_tree.php?show=red" id ="showRed" >Show <span class="glyphicon glyphicon-tint" style='color:#ff6666;'> </span>Red</a></li>
-                                <li><a href="http://localhost/bom/scanner_sbom_tree.php?show=yellow" id = "showRedYellow" > Show <span class="glyphicon glyphicon-tint" style='color:#ff6666;'></span>Red and <span class="glyphicon glyphicon-tint" style='color:#ffd966;'></span>Yellow</a></li>
+                                <li><a href="?show=red" id ="showRed" >Show <span class="glyphicon glyphicon-tint" style='color:#ff6666;'> </span>Red</a></li>
+                                <li><a href="?show=yellow" id = "showRedYellow" > Show <span class="glyphicon glyphicon-tint" style='color:#ff6666;'></span>Red and <span class="glyphicon glyphicon-tint" style='color:#ffd966;'></span>Yellow</a></li>
                                 <li><div class="input-group">
                                   <input type="text" id="input" class="form-control" placeholder="Where Used" >
                                   <div class="input-group-btn">
@@ -53,7 +53,14 @@
           <?php
             $getYellow = false;
             //finds parent data
-            if(($_GET['show']) == "yellow"){
+            if (isset($_GET['show'])){
+              if(($_GET['show']) == "yellow"){
+                $getYellow = true;
+              }
+            } else {
+              $getYellow = false;
+            }
+            if($getYellow){
             $sql_parent = "SELECT DISTINCT app_name, app_id, app_version, app_status, '' as notes, 'parent' as class, concat(app_name,concat(' ', app_id)) as application from sbom
             union SELECT DISTINCT cmp_name as app_name, cmp_id as app_id, cmp_version as app_version, cmp_status as app_status, notes,   'child' as class, concat(app_name,concat(' ', app_id)) as application
             from sbom order by application, class desc, app_name;";
@@ -84,7 +91,7 @@
                       </tr>";
                 $p++;
                 // output data of child
-                if(($_GET['show']) == "yellow"){
+                if($getYellow){
                   $sql_child = "SELECT row_id, cmp_name, cmp_id, cmp_type, cmp_version, cmp_status, notes, 'child' as class, concat(cmp_name, concat(' ', cmp_id)) as cmp, 'a' as val from sbom
                   where app_name = '".$app_name."'
                                   and app_id = '".$app_id."'
