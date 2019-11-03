@@ -200,8 +200,8 @@
           searching: false,
           ordering:  false,
           "info": false,
+          "paging": false,
           "scrollY": "600px",
-          "paging": false
         });
 
 
