@@ -254,7 +254,7 @@
 
           //Checks to see if the search terms are delineated, if yes, split input into cmp_nameInput and cmp_idInput
           //Feel free to add more delimiters to this array exxcept backslash ( \ ). I'm nearly 100% sure it'll break something, somewhere.
-          let delimiterArray = [';', ':', ',', '|', '/', ' '];
+          let delimiterArray = [';', ':', ',', '|', '/'];
 
           let usingDelimiter = delimiterArray.some(function(delimiter){
             if(input.includes(delimiter)){
