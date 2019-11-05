@@ -25,7 +25,7 @@
                     <li class="active"><a href="#"
                             onclick="$('#bom_treetable').treetable('collapseAll'); return false;"><span
                                 class="glyphicon glyphicon-chevron-up"></span>Collapse All</a></li>
-                                <li><a href="#colorNoColor" id='color_noColor'><span class = 'no_color'>No </span>Color</a></li>
+                                <li><a href="#" id='color_noColor'><span id = 'no_color'>No </span>Color</a></li>
                                 <li><a href="?show=red" id ="showRed" >Show <span class="glyphicon glyphicon-tint" style='color:#ff6666;'> </span>Red</a></li>
                                 <li><a href="?show=yellow" id = "showRedYellow" > Show <span class="glyphicon glyphicon-tint" style='color:#ff6666;'></span>Red and <span class="glyphicon glyphicon-tint" style='color:#ffd966;'></span>Yellow</a></li>
                                 <li><div class="input-group">
@@ -200,49 +200,15 @@
           searching: false,
           ordering:  false,
           "info": false,
-          "paging": false,
-          "scrollY": "600px",
+          "paging": false
         });
 
 
       //Function for Color/No Color Button
       $(document).ready(function(){
         $("#color_noColor").click(function(){
-          //$("#no_color").toggle();
-
-          //Sashi Code starts from here
-
-            //If No color is selected
-            if(jQuery(this).find('.no_color').is(':visible')){
-              jQuery(this).find('.no_color').hide();
-              //alert('No Color');
-              $("div").addClass("bw_parent");            
-            } 
-
-            // If color coding is selected
-            else{  
-              jQuery(this).find('.no_color').show();
-              //alert('color');
-              
-                $("div").each(function(){
-                  //alert("hi");
-                  if($(this).is("#sashiTestParent")){                    
-                    //alert("parent");
-                    this.style.color = "red";
-                  }
-                  else if($(this).is("#sashiTestChild")){
-                    //alert("child");
-                    this.style.color = "yellow";
-                  }
-                  else if($(this).is("#sashiTestGrandChild")){
-                    //alert("GrandChild");
-                    this.style.color = "green"; 
-                  }     
-                });
-            }          
-            
-            
-          //Sashi Code ends here
+          $("#no_color").toggle();
+          $("div").toggleClass("bw_parent");          
         });
       });
 
