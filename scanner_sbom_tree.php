@@ -200,8 +200,7 @@
           searching: false,
           ordering:  false,
           "info": false,
-          "paging": false,
-          "scrollY": "600px",
+          "paging": false
         });
 
 
@@ -270,38 +269,38 @@
           //Loops over each application
           $('#bom_treetable tbody').each(function() {
 
-            let nameMatch = false, idMatch = false;
-
+            let sucessfulMatch = false;
             //Check if any component name in the current application matches cmp_nameInput
-            $(this).find(".component .cmp_name").each(function(){
-              if($(this).text().toLowerCase().includes(cmp_nameInput)){
+            $(this).find(".component").each(function(){
+              let nameMatch = false, idMatch = false;
+
+              if($(this).find(".cmp_name").text().toLowerCase().includes(cmp_nameInput)){
                 nameMatch = true;
               }
-            });
 
-            //Check if any component id in the current application matches cmp_idInput
-            $(this).find(".component .cmp_id").each(function(){
-              if($(this).text().toLowerCase().includes(cmp_idInput)){
+              if($(this).find(".cmp_id").text().toLowerCase().includes(cmp_idInput)){
                 idMatch = true;
               }
+              
+              //Outer: if there was a sucessful match, don't bother searching more
+              // 1: if (both search terms are used) and (both search terms aren't found)
+              // 2: if (cmp_name is used) and (cmp_name isn't found)
+              // 3: if (cmp_id is used) and (cmp_id isn't found)
+              // 4: else, search successful, mark flag so we don't overwrite the show()
+              if(!sucessfulMatch){
+                if((cmp_nameInput != '' && cmp_idInput != '') && (!nameMatch || !idMatch)){
+                  $(this).parent().hide();
+                }else if((cmp_nameInput != '') && (!nameMatch)){
+                  $(this).parent().hide();
+                }else if((cmp_idInput != '') && (!idMatch)){
+                  $(this).parent().hide();
+                }else{
+                  $(this).parent().show();
+                  sucessfulMatch = true;
+                }
+              }
             });
-
-            // 1: if (both search terms are used) and (both search terms aren't found)
-            // 2: if (cmp_name is used) and (cmp_name isn't found)
-            // 3: if (cmp_id is used) and (cmp_id isn't found)
-            // 4: else ( search successful :) )
-            if((cmp_nameInput != '' && cmp_idInput != '') && (!nameMatch || !idMatch)){
-              $(this).hide();
-            }else if((cmp_nameInput != '') && (!nameMatch)){
-              $(this).hide();
-            }else if((cmp_idInput != '') && (!idMatch)){
-              $(this).hide();
-            }else{
-              $(this).show();
-            }
-
           });
         });
       });
     </script>
-`
