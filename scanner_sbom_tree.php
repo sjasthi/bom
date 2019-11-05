@@ -25,7 +25,7 @@
                     <li class="active"><a href="#"
                             onclick="$('#bom_treetable').treetable('collapseAll'); return false;"><span
                                 class="glyphicon glyphicon-chevron-up"></span>Collapse All</a></li>
-                                <li><a href="#" id='color_noColor'><span id = 'no_color'>No </span>Color</a></li>
+                                <li><a href="#colorNoColor" id='color_noColor'><span class = 'no_color'>No </span>Color</a></li>
                                 <li><a href="?show=red" id ="showRed" >Show <span class="glyphicon glyphicon-tint" style='color:#ff6666;'> </span>Red</a></li>
                                 <li><a href="?show=yellow" id = "showRedYellow" > Show <span class="glyphicon glyphicon-tint" style='color:#ff6666;'></span>Red and <span class="glyphicon glyphicon-tint" style='color:#ffd966;'></span>Yellow</a></li>
                                 <li><div class="input-group">
@@ -82,7 +82,7 @@
                 $p_id = $p;
                 echo "<tbody class= 'application' id = '".$app_id."'>
                       <tr data-tt-id = '".$p_id."' >
-                      <td class='text-capitalize'> <div class = 'btn ".$class."' ><span class = 'app_name' >".$app_name."</span>
+                      <td class='text-capitalize'> <div id='sashiTestParent' class = 'btn ".$class."' ><span class = 'app_name' >".$app_name."</span>
                       <span class = 'app_id'>ID: ".$app_id."</span> &nbsp; &nbsp;</div></td>
                       <td >".$app_version."</td>
                       <td class='text-capitalize'>".$app_status."</td>
@@ -129,7 +129,7 @@
                       $c_id=$p_id."-".$c;
                       echo "
                       <tr data-tt-id = '".$c_id."' data-tt-parent-id='".$p_id."' class = 'component' >
-                        <td class='text-capitalize'> <div class = 'btn ".$c_class."'> <span class = 'cmp_name'>".$cmp_name."</span>
+                        <td class='text-capitalize'> <div id='sashiTestChild' class = 'btn ".$c_class."'> <span class = 'cmp_name'>".$cmp_name."</span>
                          <span class = 'cmp_id' >ID: ".$cmp_id."</span>&nbsp; &nbsp; </div></td>
                             <td class = 'cmp_version'>".$cmp_version."</td>
                             <td class='text-capitalize'>".$cmp_status."</td>
@@ -161,7 +161,7 @@
                             $gc_id=$c_id."-".$gc;
                             echo "
                                   <tr data-tt-id = '".$gc_id."' data-tt-parent-id='".$c_id."' >
-                                  <td > <div class = 'btn  grandchild'>Request ID: <span class = 'request_id'>".$request_id."</span>&nbsp;&nbsp;</div></td>
+                                  <td > <div id='sashiTestGrandChild' class = 'btn  grandchild'>Request ID: <span class = 'request_id'>".$request_id."</span>&nbsp;&nbsp;</div></td>
                                  <td class='text-capitalize'>".$request_step."</td>
                                   <td class='text-capitalize'>".$request_status."</td>
                                   <td/>
@@ -208,7 +208,41 @@
       //Function for Color/No Color Button
       $(document).ready(function(){
         $("#color_noColor").click(function(){
-          $("#no_color").toggle();
+          //$("#no_color").toggle();
+
+          //Sashi Code starts from here
+
+            //If No color is selected
+            if(jQuery(this).find('.no_color').is(':visible')){
+              jQuery(this).find('.no_color').hide();
+              //alert('No Color');
+              $("div").addClass("bw_parent");            
+            } 
+
+            // If color coding is selected
+            else{  
+              jQuery(this).find('.no_color').show();
+              //alert('color');
+              
+                $("div").each(function(){
+                  //alert("hi");
+                  if($(this).is("#sashiTestParent")){                    
+                    //alert("parent");
+                    this.style.color = "red";
+                  }
+                  else if($(this).is("#sashiTestChild")){
+                    //alert("child");
+                    this.style.color = "yellow";
+                  }
+                  else if($(this).is("#sashiTestGrandChild")){
+                    //alert("GrandChild");
+                    this.style.color = "green"; 
+                  }     
+                });
+            }          
+            
+            
+          //Sashi Code ends here
         });
       });
 
