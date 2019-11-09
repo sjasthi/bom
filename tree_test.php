@@ -41,11 +41,99 @@
                             </ul>
                           </div>
                         </nav>
-                        <div class="table-responsive">
-                          <div class="h4">
-                            <table id = "bom_treetable" class = "table table-hover">
 
-        </table>
+
+
+
+      <div class="table-responsive">
+          <div class="h4">
+          <table id = "bom_treetable" class = "table table-hover">";
+        <?php
+        $sql = "SELECT DISTINCT 
+                app_name as name, 
+                app_id as id, 
+                app_version as version, 
+                app_status as status, 
+                '' as type, 
+                '' as notes,  
+                'parent' as class, 
+                'application' as row_class, 
+                'app_name' as name_type, 
+                'app_id' as id_type,
+                concat(app_id,concat('.',app_name)) as row_id,
+                null as parent_id,
+                concat(app_id,concat('.',Concat(app_name,'_a'))) as row_order
+                from sbom
+                union
+                SELECT DISTINCT 
+                cmp_name as name, 
+                cmp_id as id, 
+                cmp_version as version, 
+                cmp_status as status, 
+                cmp_type as type, 
+                notes as notes, 
+                'child' as class,  
+                'component' as row_class,  
+                'cmp_name' as name_type, 
+                'cmp_id' as id_type,
+                concat(app_id,concat('.',concat(app_name,concat('.',concat(cmp_id,concat('.',cmp_name)))))) as row_id,
+                concat(app_id,concat('.',app_name)) as parent_id,
+                concat(app_id,concat('.',Concat(app_name,concat('_b_',concat(cmp_id,concat('.',concat(cmp_name,'_a'))))))) as row_order
+                from sbom
+                union
+                SELECT DISTINCT 
+                'Request ' as name, 
+                request_id as id, 
+                request_step as version, 
+                request_status as status, 
+                '' as type, 
+                concat('Request Date: ', DATE_FORMAT(request_date, \"%m/%d/%y\")) as notes, 
+                'grandchild' as class,  
+                'request' as row_class,  
+                'request' as name_type, 
+                'request_id' as id_type,
+                request_id as row_id,
+                concat(app_id,concat('.',concat(app_name,concat('.',concat(cmp_id,concat('.',cmp_name)))))) as parent_id,
+                concat(app_id,concat('.',Concat(app_name,concat('_b_',concat(cmp_id,concat('.',concat(cmp_name,concat('_b_',request_id)))))))) as row_order
+                from sbom
+                order by row_order
+                ";
+        $result = $db->query($sql);
+
+        if ($result->num_rows > 0) {
+          
+            
+          while($row = $result->fetch_assoc()) {
+                      $name = $row["name"];
+                      $id = $row["id"];
+                      $name_type = $row["name_type"];
+                      $id_type = $row["id_type"];
+                      $version = $row["version"];
+                      $status = $row["status"];
+                      $type = $row["type"];
+                      $notes = $row["notes"];
+                      $row_id = $row["row_id"];
+                      $parent_id = $row["parent_id"];
+                      $class = $row["class"];
+                      $row_class = $row["row_class"];
+
+            echo "<tr data-tt-id = '".urlencode($row_id)."' ";
+            if($parent_id != null) { echo "data-tt-parent-id= '".urlencode($parent_id)."'"; }
+            echo " class= '".$row_class."'>
+                      <td ><div class = 'btn ".$class."'><span class = '".$name_type."' >".$name."</span>
+                      <span class = '".$id_type."''>ID: ".$id."</span> &nbsp; &nbsp;</div></td>
+                      <td >".$version."</td>
+                      <td class='text-capitalize'>".$status."</td>
+                      <td class='text-capitalize'>".$type."</td>
+                      <td class='text-capitalize'>".$notes."</td>
+                      </tr>";
+          }
+        }else {
+          echo "0 results";
+        }
+        echo "</table>";
+        $result->close();
+        ?>  
         </div>
       </div>
     </div>
@@ -58,94 +146,24 @@
         indent: 50
       };
 
-      //$("#bom_treetable").treetable(sbom_params);
-      let sbomArray = [];
-        <?php
-        $sql = "SELECT DISTINCT 
-                app_name as name, 
-                app_id as id, 
-                app_version as version, 
-                app_status as status, 
-                '' as type, 
-                '' as notes,  
-                'parent' as class, 
-                'app_name' as name_type, 
-                'app_id' as id_type,
-                concat(app_id,concat('.',app_name)) as row_id,
-                null as parent_id
-                from sbom
-                union
-                SELECT DISTINCT 
-                cmp_name as name, 
-                cmp_id as id, 
-                cmp_version as version, 
-                cmp_status as status, 
-                cmp_type as type, 
-                notes as notes, 
-                'child' as class,  
-                'cmp_name' as name_type, 
-                'cmp_id' as id_type,
-                concat(app_id,concat('.',concat(app_name,concat('.',concat(cmp_id,concat('.',cmp_name)))))) as row_id,
-                concat(app_id,concat('.',app_name)) as parent_id
-                from sbom
-                union
-                SELECT DISTINCT 
-                'Request ' as name, 
-                request_id as id, 
-                request_step as version, 
-                request_status as status, 
-                '' as type, 
-                concat('Request Date: ', DATE_FORMAT(request_date, \"%m/%d/%y\")) as notes, 
-                'grandchild' as class,  
-                'request' as name_type, 
-                'request_id' as id_type,
-                request_id as row_id,
-                concat(app_id,concat('.',concat(app_name,concat('.',concat(cmp_id,concat('.',cmp_name)))))) as parent_id
-                from sbom
-                ";
-        $result = $db->query($sql);
-
-        if ($result->num_rows > 0) {
-          while($row = $result->fetch_assoc()) {
-            echo "sbomArray.push(", json_encode($row), ");\r\n";
-          }
-        }else {
-          echo "0 results";
-        }
-
-        $result->close();
-        ?>
-      $("#bom_treetable").DataTable(
+      
+  
+      $("#bom_treetable").treetable(sbom_params).DataTable(
         {
           searching: false,
           ordering:  false,
           info: false,
-          paging: false,
-          data: sbomArray,
+          paging: true,
+          //data: sbomArray,
           infoCallback: false,
-          columns: [
-            
-            {  data: "name"},
-            {  data: "id" },
-            {  data: "version" },
-            {  data: "status"  },
-            {  data: "type"  },
-            {  data: "notes"},
-            {  data: "class"},
-            {  data: "name_type"},
-            {  data: "id_type"},
-            {  data: "row_id"},
-            {  data: "parent_id"},
-
-          ],
+          
         });
-
 
       //Function for Color/No Color Button
       $(document).ready(function(){
         $("#color_noColor").click(function(){
           $("#no_color").toggle();
-          $("div").toggleClass("bw_parent");          
+          $("div .parent").toggleClass("bw_parent");          
         });
       });
 

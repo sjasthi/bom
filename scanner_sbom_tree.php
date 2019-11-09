@@ -61,123 +61,89 @@
               $getYellow = false;
             }
             if($getYellow){
-            $sql_parent = "SELECT DISTINCT app_name, app_id, app_version, app_status, '' as notes, 'parent' as class, concat(app_name,concat(' ', app_id)) as application from sbom
+            $sql = "SELECT DISTINCT app_name, app_id, app_version, app_status, '' as notes, 'parent' as class, concat(app_name,concat(' ', app_id)) as application from sbom
             union SELECT DISTINCT cmp_name as app_name, cmp_id as app_id, cmp_version as app_version, cmp_status as app_status, notes,   'child' as class, concat(app_name,concat(' ', app_id)) as application
             from sbom order by application, class desc, app_name;";
             } else{
-              $sql_parent = "SELECT DISTINCT app_name, app_id, app_version, app_status, '' as notes, 'parent' as class from sbom  order by app_name;";
-            }
-            $result_parent = $db->query($sql_parent);
-            $p=1;
-            $c=1;
-            $gc=1;
-            if ($result_parent->num_rows > 0) {
-              while($row_parent = $result_parent->fetch_assoc()) {
-                $app_name = $row_parent["app_name"];
-                $app_id = $row_parent["app_id"];
-                $app_version = $row_parent["app_version"];
-                $class = $row_parent["class"];
-                $app_status = $row_parent["app_status"];
-                $notes = $row_parent["notes"];
-                $p_id = $p;
-                echo "<tbody class= 'application' id = '".$app_id."'>
-                      <tr data-tt-id = '".$p_id."' >
-                      <td class='text-capitalize'> <div id='sashiTestParent' class = 'btn ".$class."' ><span class = 'app_name' >".$app_name."</span>
-                      <span class = 'app_id'>ID: ".$app_id."</span> &nbsp; &nbsp;</div></td>
-                      <td >".$app_version."</td>
-                      <td class='text-capitalize'>".$app_status."</td>
-                      <td/>
-                      <td >".$notes."</td>
-                      </tr>";
-                $p++;
-                // output data of child
-                if($getYellow){
-                  $sql_child = "SELECT row_id, cmp_name, cmp_id, cmp_type, cmp_version, cmp_status, notes, 'child' as class, concat(cmp_name, concat(' ', cmp_id)) as cmp, 'a' as val from sbom
-                  where app_name = '".$app_name."'
-                                  and app_id = '".$app_id."'
-                                  and app_version = '".$app_version."'
-                                  and app_status = '".$app_status."'
-                  union
-                  SELECT row_id, 'Request ' as cmp_name, request_id as cmp_id, '' as cmp_type, request_step as cmp_version, request_status as cmp_status,
-                  concat('Request Date: ', DATE_FORMAT(request_date, \"%m/%d/%y\") ) as notes, 'grandchild' as class, concat(cmp_name, concat(' ', cmp_id)) as cmp, 'z' as val
-                  from sbom
-                  where cmp_name = '".$app_name."'
-                                  and cmp_id = '".$app_id."'
-                                  and cmp_version = '".$app_version."'
-                                  and cmp_status = '".$app_status."'
-                                  order by val, cmp, class, cmp_name;";
-              }
-                  else{
-                  $sql_child = "SELECT row_id, cmp_name, cmp_id, cmp_type, cmp_version, cmp_status, notes, 'child' as class from sbom
-                                  where app_name = '".$app_name."'
-                                  and app_id = '".$app_id."'
-                                  and app_version = '".$app_version."'
-                                  and app_status = '".$app_status."' ; ";
-                  }
-                  $result_child = $db->query($sql_child);
-                  if ($result_child->num_rows > 0) {
-                    // output data of child
-                    while($row_child = $result_child->fetch_assoc()) {
-                      $cmp_name = $row_child["cmp_name"];
-                      $cmp_id = $row_child["cmp_id"];
-                      $cmp_version = $row_child["cmp_version"];
-                      $cmp_status = $row_child["cmp_status"];
-                      $cmp_type = $row_child["cmp_type"];
-                      $notes = $row_child["notes"];
-                      $row_id = $row_child["row_id"];
-                      $c_class = $row_child["class"];
-                      $c_id=$p_id."-".$c;
-                      echo "
-                      <tr data-tt-id = '".$c_id."' data-tt-parent-id='".$p_id."' class = 'component' >
-                        <td class='text-capitalize'> <div id='sashiTestChild' class = 'btn ".$c_class."'> <span class = 'cmp_name'>".$cmp_name."</span>
-                         <span class = 'cmp_id' >ID: ".$cmp_id."</span>&nbsp; &nbsp; </div></td>
-                            <td class = 'cmp_version'>".$cmp_version."</td>
-                            <td class='text-capitalize'>".$cmp_status."</td>
-                            <td class='text-capitalize'>".$cmp_type."</td>
-                            <td class='text-capitalize'>".$notes."</td>
-                            </tr>";
-                      $c++;
-                      // output data of child
-                        $sql_gchild = "SELECT request_id, request_step, request_status, DATE_FORMAT(request_date, \"%m/%d/%y\") as request_date from sbom
-                                        where app_name = '".$app_name."'
-                                        and app_id = '".$app_id."'
-                                        and row_id = '".$row_id."'
-                                        and app_version = '".$app_version."'
-                                        and app_status = '".$app_status."'
-                                        and cmp_name = '".$cmp_name."'
-                                        and cmp_id = '".$cmp_id."'
-                                        and cmp_version = '".$cmp_version."'
-                                        and cmp_status = '".$cmp_status."'
-                                        ;";
-                        $result_gchild = $db->query($sql_gchild);
-                        if ($result_gchild->num_rows > 0 ) {
-                          // output data of grandchild
-                          while($row_gchild = $result_gchild->fetch_assoc()) {
+              $sql = "SELECT DISTINCT 
+              app_name as name, 
+              app_id as id, 
+              app_version as version, 
+              app_status as status, 
+              '' as type, 
+              '' as notes,  
+              'parent' as class, 
+              'application' as row_class, 
+              'app_name' as name_type, 
+              'app_id' as id_type,
+              concat(app_id,concat('.',app_name)) as row_id,
+              null as parent_id,
+              concat(app_id,concat('.',Concat(app_name,'_a'))) as row_order
+              from sbom
+              union
+              SELECT DISTINCT 
+              cmp_name as name, 
+              cmp_id as id, 
+              cmp_version as version, 
+              cmp_status as status, 
+              cmp_type as type, 
+              notes as notes, 
+              'child' as class,  
+              'component' as row_class,  
+              'cmp_name' as name_type, 
+              'cmp_id' as id_type,
+              concat(app_id,concat('.',concat(app_name,concat('.',concat(cmp_id,concat('.',cmp_name)))))) as row_id,
+              concat(app_id,concat('.',app_name)) as parent_id,
+              concat(app_id,concat('.',Concat(app_name,concat('_b_',concat(cmp_id,concat('.',concat(cmp_name,'_a'))))))) as row_order
+              from sbom
+              union
+              SELECT DISTINCT 
+              'Request ' as name, 
+              request_id as id, 
+              request_step as version, 
+              request_status as status, 
+              '' as type, 
+              concat('Request Date: ', DATE_FORMAT(request_date, \"%m/%d/%y\")) as notes, 
+              'grandchild' as class,  
+              'request' as row_class,  
+              'request' as name_type, 
+              'request_id' as id_type,
+              request_id as row_id,
+              concat(app_id,concat('.',concat(app_name,concat('.',concat(cmp_id,concat('.',cmp_name)))))) as parent_id,
+              concat(app_id,concat('.',Concat(app_name,concat('_b_',concat(cmp_id,concat('.',concat(cmp_name,concat('_b_',request_id)))))))) as row_order
+              from sbom
+              order by row_order
+              ";
+      $result = $db->query($sql);
+    }
+            $result = $db->query($sql);
+            if ($result->num_rows > 0) {
+              while($row = $result->fetch_assoc()) {
+                $name = $row["name"];
+                $id = $row["id"];
+                $name_type = $row["name_type"];
+                $id_type = $row["id_type"];
+                $version = $row["version"];
+                $status = $row["status"];
+                $type = $row["type"];
+                $notes = $row["notes"];
+                $row_id = $row["row_id"];
+                $parent_id = $row["parent_id"];
+                $class = $row["class"];
+                $row_class = $row["row_class"];
 
-                            $request_id= $row_gchild["request_id"];
-                            $request_date= $row_gchild["request_date"];
-                            $request_step= $row_gchild["request_step"];
-                            $request_status= $row_gchild["request_status"];
-                            $gc_id=$c_id."-".$gc;
-                            echo "
-                                  <tr data-tt-id = '".$gc_id."' data-tt-parent-id='".$c_id."' >
-                                  <td > <div id='sashiTestGrandChild' class = 'btn  grandchild'>Request ID: <span class = 'request_id'>".$request_id."</span>&nbsp;&nbsp;</div></td>
-                                 <td class='text-capitalize'>".$request_step."</td>
-                                  <td class='text-capitalize'>".$request_status."</td>
-                                  <td/>
-                                  <td>Request Date: ".$request_date."</td>
-                                  </tr>";
-                            $gc++;
-
-                          }
-                          $result_gchild -> close();
-                    }
-                  }
-                  $result_child -> close();
-                } echo "</tbody>";
-              }
-            $result_parent->close();
+              echo "<tr data-tt-id = '".urlencode($row_id)."' ";
+              if($parent_id != null) { echo "data-tt-parent-id= '".urlencode($parent_id)."'"; } 
+              echo " class= '".$row_class."'>
+                        <td ><div class = 'btn ".$class."'><span class = '".$name_type."' >".$name."</span>
+                        <span class = '".$id_type."''>ID: ".$id."</span> &nbsp; &nbsp;</div></td>
+                        <td >".$version."</td>
+                        <td class='text-capitalize'>".$status."</td>
+                        <td class='text-capitalize'>".$type."</td>
+                        <td class='text-capitalize'>".$notes."</td>
+                        </tr>";
           }
+        }
           else{
             echo "<tr data-tt-id = 'No Results'> <td>No Results Found</td><td></td><td></td><td></td><td></td> </tr>";
           }
@@ -199,8 +165,8 @@
         {
           searching: false,
           ordering:  false,
-          "info": false,
-          "paging": false
+          info: false,
+          paging: false
         });
 
 
