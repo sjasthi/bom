@@ -208,9 +208,7 @@
       $(document).ready(function(){
         $("#color_noColor").click(function(){
           $("#no_color").toggle();
-          $("div .parent").toggleClass("bw_parent");          
-          $("div .child").toggleClass("bw_child");          
-          $("div .grandchild").toggleClass("bw_grandchild");          
+          $("div").toggleClass("bw_parent");          
         });
       });
 
