@@ -199,8 +199,10 @@
         {
           searching: false,
           ordering:  false,
-          "info": false,
-          "paging": false
+          info: false,
+          scrollY:        '50vh',
+          scrollCollapse: true,
+          paging:         false
         });
 
 
