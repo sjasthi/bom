@@ -1,4 +1,4 @@
-<?php
+-<?php
   $nav_selected = "SCANNER";
   $left_buttons = "YES";
   $left_selected = "SBOMTREE";
@@ -51,7 +51,6 @@
                                 <th>Notes</th>
                               </thead>
           <?php
-            $getYellow = false;
             //finds parent data
             if (isset($_GET['show'])){
               if(($_GET['show']) == "yellow"){
@@ -210,9 +209,9 @@
       $(document).ready(function(){
         $("#color_noColor").click(function(){
           $("#no_color").toggle();
-          $("div .parent").toggleClass("bw_parent");          
-          $("div .child").toggleClass("bw_child");          
-          $("div .grandchild").toggleClass("bw_grandchild");          
+          $("div .parent").toggleClass("bw_parent");
+          $("div .child").toggleClass("bw_child");
+          $("div .grandchild").toggleClass("bw_grandchild");
         });
       });
 
@@ -252,7 +251,7 @@
               if($(this).find(".cmp_id").text().toLowerCase().includes(cmp_idInput)){
                 idMatch = true;
               }
-              
+
               //Outer: if there was a sucessful match, don't bother searching more
               // 1: if (both search terms are used) and (both search terms aren't found)
               // 2: if (cmp_name is used) and (cmp_name isn't found)
