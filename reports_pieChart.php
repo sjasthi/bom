@@ -385,7 +385,23 @@
 
 
                 <script type="text/javascript" language="javascript">
-            $(document).ready( function () {
+
+                var app_status, cmp_status, request_status, request_step = null;
+                <?php
+                if ($_COOKIE['app_status_cookie']!= null) {
+                    echo "app_status ='".$_COOKIE['app_status_cookie']."';";
+                } else if ($_COOKIE['cmp_status_cookie']!= null) {
+                    echo  "cmp_status ='".$_COOKIE['cmp_status_cookie']."';";
+                } else if ($_COOKIE['request_status_cookie']!= null) {
+                    echo "request_status ='".$_COOKIE['request_status_cookie']."';";
+                } else if ($_COOKIE['request_status_cookie']!= null) {
+                    echo "request_step ='".$_COOKIE['request_step_cookie']."';";
+                } else {
+                    echo "console.log(\"No Cookies Set\");";
+                }
+                ?>
+
+               $(document).ready( function () {
                 
                 $('#info').DataTable( {
                     dom: 'lfrtBip',
@@ -397,7 +413,22 @@
                 $('#info thead tr').clone(true).appendTo( '#info thead' );
                 $('#info thead tr:eq(1) th').each( function (i) {
                     var title = $(this).text();
-                    $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+                    if (title == 'App Status' && app_status != null) {
+                        $(this).html( '<input type="text" placeholder="Search '+title+'" value = "'+app_status+'" />' );
+                        $( this ).trigger( 'keyup change' );
+                    } else if (title == 'CMP Status' && cmp_status != null) {
+                        $(this).html( '<input type="text" placeholder="Search '+title+'" value = "'+cmp_status+'" />' );
+                        $( this ).trigger( 'keyup change' );
+                    } else if (title == 'Request Status' && title != 'Request Step' && request_status != null) {
+                        $(this).html( '<input type="text" placeholder="Search '+title+'" value = "'+request_status+'" />' );
+                        $( this ).trigger( 'keyup change' );
+                    } else if (title != 'Request Status' && title == 'Request Step' && request_step != null) {
+                        $(this).html( '<input type="text" placeholder="Search '+title+'" value = "'+request_step+'" />' );
+                        $( this ).trigger( 'keyup change' );
+                    } else {
+                        $(this).html( '<input type="text" placeholder="Search '+title+'"/>' );
+                    }
+                    
             
                     $( 'input', this ).on( 'keyup change', function () {
                         if ( table.column(i).search() !== this.value ) {
@@ -407,6 +438,7 @@
                                 .draw();
                         }
                     } );
+
                 } );
             
                 var table = $('#info').DataTable( {
@@ -416,6 +448,8 @@
                 } );
                 
             } );
+
+
 
         </script>                  
         </div>
