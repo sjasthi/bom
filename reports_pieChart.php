@@ -202,7 +202,7 @@
                         </table>";
             }elseif($_COOKIE['cmp_status_cookie']!= null) {
                 $cmpStatusSelection = $_COOKIE['cmp_status_cookie'];
-                $sql = "SELECT * from sbom where cmp_status = '".$cmpStatusSelection."';";
+                $sql = "SELECT * from sbom;";
                 setcookie("cmp_status_cookie", "", time()-3600);
                 echo "<table id='info' cellpadding='0' cellspacing='0' border='0'
                 class='datatable table table-striped table-bordered datatable-style table-hover'
@@ -388,14 +388,14 @@
 
                 var app_status, cmp_status, request_status, request_step = null;
                 <?php
-                if ($_COOKIE['app_status_cookie']!= null) {
-                    echo "app_status ='".$_COOKIE['app_status_cookie']."';";
-                } else if ($_COOKIE['cmp_status_cookie']!= null) {
-                    echo  "cmp_status ='".$_COOKIE['cmp_status_cookie']."';";
-                } else if ($_COOKIE['request_status_cookie']!= null) {
-                    echo "request_status ='".$_COOKIE['request_status_cookie']."';";
-                } else if ($_COOKIE['request_status_cookie']!= null) {
-                    echo "request_step ='".$_COOKIE['request_step_cookie']."';";
+                if ($appStatusSelection != null) {
+                    echo "app_status ='".$appStatusSelection."';";
+                } else if ($cmpStatusSelection != null) {
+                    echo  "cmp_status ='".$cmpStatusSelection."';";
+                } else if ($requestType!= null) {
+                    echo "request_status ='".$requestType."';";
+                } else if ($requestStep != null) {
+                    echo "request_step ='".$requestStep."';";
                 } else {
                     echo "console.log(\"No Cookies Set\");";
                 }
@@ -410,26 +410,27 @@
                     ] }
                 );
 
+                
+
                 $('#info thead tr').clone(true).appendTo( '#info thead' );
                 $('#info thead tr:eq(1) th').each( function (i) {
                     var title = $(this).text();
                     if (title == 'App Status' && app_status != null) {
                         $(this).html( '<input type="text" placeholder="Search '+title+'" value = "'+app_status+'" />' );
-                        $( this ).trigger( 'keyup change' );
+                        $( this ).trigger( 'keyup' );
                     } else if (title == 'CMP Status' && cmp_status != null) {
                         $(this).html( '<input type="text" placeholder="Search '+title+'" value = "'+cmp_status+'" />' );
-                        $( this ).trigger( 'keyup change' );
+                        $( 'input', this ).trigger( 'keyup change' );
                     } else if (title == 'Request Status' && title != 'Request Step' && request_status != null) {
                         $(this).html( '<input type="text" placeholder="Search '+title+'" value = "'+request_status+'" />' );
-                        $( this ).trigger( 'keyup change' );
-                    } else if (title != 'Request Status' && title == 'Request Step' && request_step != null) {
+                        $( this ).trigger( 'change' );
+                    } else if (title == 'Request Step' && title != 'Request Status' && request_step != null) {
                         $(this).html( '<input type="text" placeholder="Search '+title+'" value = "'+request_step+'" />' );
-                        $( this ).trigger( 'keyup change' );
+                        $( this ).trigger( 'change' );
                     } else {
                         $(this).html( '<input type="text" placeholder="Search '+title+'"/>' );
                     }
                     
-            
                     $( 'input', this ).on( 'keyup change', function () {
                         if ( table.column(i).search() !== this.value ) {
                             table
@@ -438,6 +439,7 @@
                                 .draw();
                         }
                     } );
+                    
 
                 } );
             
