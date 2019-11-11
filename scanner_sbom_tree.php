@@ -55,6 +55,8 @@
             if (isset($_GET['show'])){
               if(($_GET['show']) == "yellow"){
                 $getYellow = true;
+              }else {
+                $getYellow = false;
               }
             } else {
               $getYellow = false;
