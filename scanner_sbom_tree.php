@@ -51,6 +51,7 @@
                                 <th>Notes</th>
                               </thead>
           <?php
+          $getYellow = false;
             //finds parent data
             if (isset($_GET['show'])){
               if(($_GET['show']) == "yellow"){
