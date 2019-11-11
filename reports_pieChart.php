@@ -202,7 +202,7 @@
                         </table>";
             }elseif($_COOKIE['cmp_status_cookie']!= null) {
                 $cmpStatusSelection = $_COOKIE['cmp_status_cookie'];
-                $sql = "SELECT * from sbom;";
+                $sql = "SELECT * from sbom where cmp_status = '".$cmpStatusSelection."';";
                 setcookie("cmp_status_cookie", "", time()-3600);
                 echo "<table id='info' cellpadding='0' cellspacing='0' border='0'
                 class='datatable table table-striped table-bordered datatable-style table-hover'
