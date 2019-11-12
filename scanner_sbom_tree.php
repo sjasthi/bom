@@ -20,7 +20,7 @@
         <nav class="navbar">
             <div class="container-fluid">
                 <ul class="nav navbar-nav" style='font-size: 18px;'>
-                    <li><a href="#" onclick="expandAll();"><span
+                    <li><a href="#" onclick="expandAll();" id = 'expandAll'><span
                                 class="glyphicon glyphicon-chevron-down"></span>Expand All</a></li>
                     <li class="active"><a href="#"
                             onclick="collapseAll();"><span
@@ -206,6 +206,7 @@
     </div>
     <?php include("./footer.php"); ?>
     <script>
+      
       //Params for the treetable
       let sbom_params = {
         expandable: true,
@@ -315,4 +316,10 @@
         }
         $('#bom_treetable').treetable('collapseAll');
       }
+
+      <?php 
+      if ($findApp) {
+        echo "$( \"#expandAll\" ).trigger( \"click\" );";
+      }
+      ?>
       </script>
