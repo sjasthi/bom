@@ -20,10 +20,10 @@
         <nav class="navbar">
             <div class="container-fluid">
                 <ul class="nav navbar-nav" style='font-size: 18px;'>
-                    <li><a href="#" onclick="$('#bom_treetable').treetable('expandAll'); return false;"><span
+                    <li><a href="#" onclick="expandAll();"><span
                                 class="glyphicon glyphicon-chevron-down"></span>Expand All</a></li>
                     <li class="active"><a href="#"
-                            onclick="$('#bom_treetable').treetable('collapseAll'); return false;"><span
+                            onclick="collapseAll();"><span
                                 class="glyphicon glyphicon-chevron-up"></span>Collapse All</a></li>
                                 <li><a href="#" id='color_noColor'><span id = 'no_color'>No </span>Color</a></li>
                                 <li><a href="?show=red" id ="showRed" >Show <span class="glyphicon glyphicon-tint" style='color:#ff6666;'> </span>Red</a></li>
@@ -41,7 +41,8 @@
                           </div>
                         </nav>
                         <div class="table-responsive">
-                          <div class="h4">
+                          <h4 id="loading-text">Loading...</h4>
+                          <div class="h4" id="responsive-wrapper" style="opacity: 0.0;">
                             <table id = "bom_treetable" class = "table table-hover">
                               <thead class = 'h4'>
                                 <th >Name</th>
@@ -82,7 +83,7 @@
                 $p_id = $p;
                 echo "<tbody class= 'application' id = '".$app_id."'>
                       <tr data-tt-id = '".$p_id."' >
-                      <td class='text-capitalize'> <div id='sashiTestParent' class = 'btn ".$class."' ><span class = 'app_name' >".$app_name."</span>
+                      <td class='text-capitalize'> <div class = 'btn ".$class."' ><span class = 'app_name' >".$app_name."</span>
                       <span class = 'app_id'>ID: ".$app_id."</span> &nbsp; &nbsp;</div></td>
                       <td >".$app_version."</td>
                       <td class='text-capitalize'>".$app_status."</td>
@@ -129,7 +130,7 @@
                       $c_id=$p_id."-".$c;
                       echo "
                       <tr data-tt-id = '".$c_id."' data-tt-parent-id='".$p_id."' class = 'component' >
-                        <td class='text-capitalize'> <div id='sashiTestChild' class = 'btn ".$c_class."'> <span class = 'cmp_name'>".$cmp_name."</span>
+                        <td class='text-capitalize'> <div class = 'btn ".$c_class."'> <span class = 'cmp_name'>".$cmp_name."</span>
                          <span class = 'cmp_id' >ID: ".$cmp_id."</span>&nbsp; &nbsp; </div></td>
                             <td class = 'cmp_version'>".$cmp_version."</td>
                             <td class='text-capitalize'>".$cmp_status."</td>
@@ -161,7 +162,7 @@
                             $gc_id=$c_id."-".$gc;
                             echo "
                                   <tr data-tt-id = '".$gc_id."' data-tt-parent-id='".$c_id."' >
-                                  <td > <div id='sashiTestGrandChild' class = 'btn  grandchild'>Request ID: <span class = 'request_id'>".$request_id."</span>&nbsp;&nbsp;</div></td>
+                                  <td > <div class = 'btn  grandchild'>Request ID: <span class = 'request_id'>".$request_id."</span>&nbsp;&nbsp;</div></td>
                                  <td class='text-capitalize'>".$request_step."</td>
                                   <td class='text-capitalize'>".$request_status."</td>
                                   <td/>
@@ -274,4 +275,27 @@
           });
         });
       });
-    </script>
+
+      document.onreadystatechange = function () {
+        if (document.readyState === 'complete') {
+          $('#loading-text').hide();
+          $("#responsive-wrapper").css('opacity', '100.0');
+        }
+      }
+
+      let expandAll = function(){
+        $("#bom_treetable tbody tr.leaf").each((index, item) => {
+          setTimeout(() => {
+            $("#bom_treetable").treetable("reveal", $(item).attr("data-tt-id"))
+          }, 0);
+        });
+      }
+
+      let collapseAll = function(){
+        let highestTimeoutId = setTimeout(";");
+        for (let i = 0 ; i < highestTimeoutId ; i++) {
+            clearTimeout(i); 
+        }
+        $('#bom_treetable').treetable('collapseAll');
+      }
+      </script>
