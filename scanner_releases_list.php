@@ -33,6 +33,7 @@
                         <th>Manager</th>
                         <th>Author</th>
                         <th>BOM ID</th>
+                        <th>View BOM Tree</th>
                 </tr>
               </thead>
 
@@ -60,6 +61,7 @@ $result = $db->query($sql);
                                 <td>'.$row["manager"].' </span> </td>
                                 <td>'.$row["author"].' </span> </td>
                                 <td>'.$row["app_id"].' </span> </td>
+                                <td><a class="btn btn-warning btn-sm" href="scanner_sbom_tree.php?id='.$row["app_id"].'">View BOM Tree</a></td>
                             </tr>';
                     }//end while
                 }//end if
@@ -84,6 +86,7 @@ $result = $db->query($sql);
                         <th>Manager</th>
                         <th>Author</th>
                         <th>BOM ID</th>
+                        <th>View BOM Tree</th>
                 </tr>
               </tfoot>
         </table>
