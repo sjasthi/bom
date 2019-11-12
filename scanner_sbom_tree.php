@@ -20,14 +20,14 @@
         <nav class="navbar">
             <div class="container-fluid">
                 <ul class="nav navbar-nav" style='font-size: 18px;'>
-                    <li><a href="#" onclick="$('#bom_treetable').treetable('expandAll'); return false;"><span
+                    <li><a href="#" onclick="expandAll();"><span
                                 class="glyphicon glyphicon-chevron-down"></span>Expand All</a></li>
                     <li class="active"><a href="#"
-                            onclick="$('#bom_treetable').treetable('collapseAll'); return false;"><span
+                            onclick="collapseAll();"><span
                                 class="glyphicon glyphicon-chevron-up"></span>Collapse All</a></li>
                                 <li><a href="#" id='color_noColor'><span id = 'no_color'>No </span>Color</a></li>
                                 <li><a href="?show=red" id ="showRed" >Show <span class="glyphicon glyphicon-tint" style='color:#ff6666;'> </span>Red</a></li>
-                                <li><a href="?show=yellow" id = "showRedYellow" > Show <span class="glyphicon glyphicon-tint" style='color:#ff6666;'></span>Red and <span class="glyphicon glyphicon-tint" style='color:#ffd966;'></span>Yellow</a></li>
+                                <li><a href="?show=redYellow" id = "showRedYellow" > Show <span class="glyphicon glyphicon-tint" style='color:#ff6666;'></span>Red and <span class="glyphicon glyphicon-tint" style='color:#ffd966;'></span>Yellow</a></li>
                                 <li><div class="input-group">
                                   <input type="text" id="input" class="form-control" placeholder="Where Used" >
                                   <div class="input-group-btn">
@@ -41,7 +41,8 @@
                           </div>
                         </nav>
                         <div class="table-responsive">
-                          <div class="h4">
+                          <h4 id="loading-text">Loading...</h4>
+                          <div class="h4" id="responsive-wrapper" style="opacity: 0.0;">
                             <table id = "bom_treetable" class = "table table-hover">
                               <thead class = 'h4'>
                                 <th >Name</th>
@@ -51,18 +52,24 @@
                                 <th>Notes</th>
                               </thead>
           <?php
+          $getRedYellow = false;
           $getYellow = false;
             //finds parent data
             if (isset($_GET['show'])){
+<<<<<<< HEAD
               if(($_GET['show']) == "yellow"){
                 $getYellow = true;
               }else {
                 $getYellow = false;
+=======
+              if(($_GET['show']) == "redYellow"){
+                $getRedYellow = true;
+>>>>>>> master
               }
             } else {
-              $getYellow = false;
+              $getRedYellow = false;
             }
-            if($getYellow){
+            if($getRedYellow){
             $sql_parent = "SELECT DISTINCT app_name, app_id, app_version, app_status, '' as notes, 'parent' as class, concat(app_name,concat(' ', app_id)) as application from sbom
             union SELECT DISTINCT cmp_name as app_name, cmp_id as app_id, cmp_version as app_version, cmp_status as app_status, notes,   'child' as class, concat(app_name,concat(' ', app_id)) as application
             from sbom order by application, class desc, app_name;";
@@ -84,7 +91,7 @@
                 $p_id = $p;
                 echo "<tbody class= 'application' id = '".$app_id."'>
                       <tr data-tt-id = '".$p_id."' >
-                      <td class='text-capitalize'> <div id='sashiTestParent' class = 'btn ".$class."' ><span class = 'app_name' >".$app_name."</span>
+                      <td class='text-capitalize'> <div class = 'btn ".$class."' ><span class = 'app_name' >".$app_name."</span>
                       <span class = 'app_id'>ID: ".$app_id."</span> &nbsp; &nbsp;</div></td>
                       <td >".$app_version."</td>
                       <td class='text-capitalize'>".$app_status."</td>
@@ -93,7 +100,7 @@
                       </tr>";
                 $p++;
                 // output data of child
-                if($getYellow){
+                if($getRedYellow){
                   $sql_child = "SELECT row_id, cmp_name, cmp_id, cmp_type, cmp_version, cmp_status, notes, 'child' as class, concat(cmp_name, concat(' ', cmp_id)) as cmp, 'a' as val from sbom
                   where app_name = '".$app_name."'
                                   and app_id = '".$app_id."'
@@ -131,7 +138,7 @@
                       $c_id=$p_id."-".$c;
                       echo "
                       <tr data-tt-id = '".$c_id."' data-tt-parent-id='".$p_id."' class = 'component' >
-                        <td class='text-capitalize'> <div id='sashiTestChild' class = 'btn ".$c_class."'> <span class = 'cmp_name'>".$cmp_name."</span>
+                        <td class='text-capitalize'> <div class = 'btn ".$c_class."'> <span class = 'cmp_name'>".$cmp_name."</span>
                          <span class = 'cmp_id' >ID: ".$cmp_id."</span>&nbsp; &nbsp; </div></td>
                             <td class = 'cmp_version'>".$cmp_version."</td>
                             <td class='text-capitalize'>".$cmp_status."</td>
@@ -163,7 +170,7 @@
                             $gc_id=$c_id."-".$gc;
                             echo "
                                   <tr data-tt-id = '".$gc_id."' data-tt-parent-id='".$c_id."' >
-                                  <td > <div id='sashiTestGrandChild' class = 'btn  grandchild'>Request ID: <span class = 'request_id'>".$request_id."</span>&nbsp;&nbsp;</div></td>
+                                  <td > <div class = 'btn  grandchild'>Request ID: <span class = 'request_id'>".$request_id."</span>&nbsp;&nbsp;</div></td>
                                  <td class='text-capitalize'>".$request_step."</td>
                                   <td class='text-capitalize'>".$request_status."</td>
                                   <td/>
@@ -276,4 +283,27 @@
           });
         });
       });
-    </script>
+
+      document.onreadystatechange = function () {
+        if (document.readyState === 'complete') {
+          $('#loading-text').hide();
+          $("#responsive-wrapper").css('opacity', '100.0');
+        }
+      }
+
+      let expandAll = function(){
+        $("#bom_treetable tbody tr.leaf").each((index, item) => {
+          setTimeout(() => {
+            $("#bom_treetable").treetable("reveal", $(item).attr("data-tt-id"))
+          }, 0);
+        });
+      }
+
+      let collapseAll = function(){
+        let highestTimeoutId = setTimeout(";");
+        for (let i = 0 ; i < highestTimeoutId ; i++) {
+            clearTimeout(i); 
+        }
+        $('#bom_treetable').treetable('collapseAll');
+      }
+      </script>
