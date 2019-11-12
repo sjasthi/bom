@@ -20,10 +20,10 @@
         <nav class="navbar">
             <div class="container-fluid">
                 <ul class="nav navbar-nav" style='font-size: 18px;'>
-                    <li><a href="#" onclick="$('#bom_treetable').treetable('expandAll'); return false;"><span
+                    <li><a href="#" onclick="$('#bom_treetable').treetable('expandAll'); return false;" id = 'expandAll'><span
                                 class="glyphicon glyphicon-chevron-down"></span>Expand All</a></li>
                     <li class="active"><a href="#"
-                            onclick="$('#bom_treetable').treetable('collapseAll'); return false;"><span
+                            onclick="$('#bom_treetable').treetable('collapseAll'); return false;" id = 'collapseAll'><span
                                 class="glyphicon glyphicon-chevron-up"></span>Collapse All</a></li>
                                 <li><a href="#" id='color_noColor'><span id = 'no_color'>No </span>Color</a></li>
                                 <li><a href="?show=red" id ="showRed" >Show <span class="glyphicon glyphicon-tint" style='color:#ff6666;'> </span>Red</a></li>
@@ -61,10 +61,22 @@
             } else {
               $getRedYellow = false;
             }
+
+
+            $getAppId = null;
+            $findApp = false;
+            if (isset($_GET['id'])){
+              $getAppId = $_GET['id'];
+              $findApp = true;
+              echo "<script>$('#expandAll').trigger('click');</script>";
+            }
+
             if($getRedYellow){
             $sql_parent = "SELECT DISTINCT app_name, app_id, app_version, app_status, '' as notes, 'parent' as class, concat(app_name,concat(' ', app_id)) as application from sbom
             union SELECT DISTINCT cmp_name as app_name, cmp_id as app_id, cmp_version as app_version, cmp_status as app_status, notes,   'child' as class, concat(app_name,concat(' ', app_id)) as application
             from sbom order by application, class desc, app_name;";
+            } elseif ($findApp) {
+              $sql_parent = "SELECT DISTINCT app_name, app_id, app_version, app_status, '' as notes, 'parent' as class from sbom  where app_id = '".$getAppId."' order by app_name;";
             } else{
               $sql_parent = "SELECT DISTINCT app_name, app_id, app_version, app_status, '' as notes, 'parent' as class from sbom  order by app_name;";
             }
@@ -180,7 +192,11 @@
             $result_parent->close();
           }
           else{
-            echo "<tr data-tt-id = 'No Results'> <td>No Results Found</td><td></td><td></td><td></td><td></td> </tr>";
+            echo "<tr data-tt-id = 'No Results'> <td>No Results Found ";
+            if ($findApp) {
+              echo "for App ID ".$getAppId;
+            }
+            echo "</td><td></td><td></td><td></td><td></td> </tr>";
           }
           ?>
         </table>
