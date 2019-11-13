@@ -22,7 +22,8 @@
             width="100%" style="width: 100px;">
               <thead>
                 <tr id="table-first-row">
-                        <th>id</th>
+                <th>Application ID</th>
+                <th>Release ID</th>
                         <th>Name</th>
                         <th>Type</th>
                         <th>Status</th>
@@ -32,7 +33,7 @@
                         <th>RTM Date(s)</th>
                         <th>Manager</th>
                         <th>Author</th>
-                        <th>BOM ID</th>
+                        
                         <th>View BOM Tree</th>
                 </tr>
               </thead>
@@ -50,6 +51,7 @@ $result = $db->query($sql);
                     // output data of each row
                     while($row = $result->fetch_assoc()) {
                         echo '<tr>
+                                <td><a class="btn" href="scanner_sbom_tree.php?id='.$row["app_id"].'">'.$row["app_id"].' </a> </td>
                                 <td>'.$row["id"].'</td>
                                 <td>'.$row["name"].' </span> </td>
                                 <td>'.$row["type"].'</td>
@@ -60,7 +62,7 @@ $result = $db->query($sql);
                                 <td>'.$row["rtm_date"].' </span> </td>
                                 <td>'.$row["manager"].' </span> </td>
                                 <td>'.$row["author"].' </span> </td>
-                                <td>'.$row["app_id"].' </span> </td>
+                               
                                 <td><a class="btn btn-warning btn-sm" href="scanner_sbom_tree.php?id='.$row["app_id"].'">View BOM Tree</a></td>
                             </tr>';
                     }//end while
@@ -75,7 +77,8 @@ $result = $db->query($sql);
               </tbody>
               <tfoot>
                 <tr>
-                        <th>ID</th>
+                <th>Application ID</th>
+                <th>Release ID</th>
                         <th>Name</th>
                         <th>Type</th>
                         <th>Status</th>
@@ -85,7 +88,7 @@ $result = $db->query($sql);
                         <th>RTM Date(s)</th>
                         <th>Manager</th>
                         <th>Author</th>
-                        <th>BOM ID</th>
+                      
                         <th>View BOM Tree</th>
                 </tr>
               </tfoot>

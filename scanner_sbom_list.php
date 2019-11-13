@@ -48,7 +48,7 @@ $result = $db->query($sql);
                     while($row = $result->fetch_assoc()) {
                         echo '<tr>
                                 <td>'.$row["row_id"].'</td>
-                                <td>'.$row["app_id"].' </span> </td>
+                                <td><a class="btn" href="scanner_sbom_tree.php?id='.$row["app_id"].'">'.$row["app_id"].' </a> </td>
                                 <td>'.$row["app_name"].'</td>
                                 <td>'.$row["app_version"].'</td>
                                 <td>'.$row["cmp_id"].' </span> </td>
