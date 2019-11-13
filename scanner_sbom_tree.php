@@ -211,7 +211,7 @@
       let sbom_params = {
         expandable: true,
         clickableNodeNames: true,
-        indent: 50
+        indent: 40
       };
 
       $("#bom_treetable").treetable(sbom_params).DataTable(
