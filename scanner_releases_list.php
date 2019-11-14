@@ -50,9 +50,17 @@ $result = $db->query($sql);
                 if ($result->num_rows > 0) {
                     // output data of each row
                     while($row = $result->fetch_assoc()) {
-                        echo '<tr>
-                                <td><a class="btn" href="scanner_sbom_tree.php?id='.$row["app_id"].'">'.$row["app_id"].' </a> </td>
-                                <td>'.$row["id"].'</td>
+                        echo '<tr>';
+                        $appLink = $row["app_id"];
+                                $sql2 = "SELECT DISTINCT app_id from sbom where app_id = '".$appLink."' Limit 1;";
+                                $result2 = $db->query($sql2);
+                                if ($result2->num_rows > 0) {
+                                  echo '<td><a href="scanner_sbom_tree.php?id='.$appLink.'">'.$appLink.' </a> </td>';
+                                }//end if
+                                else {
+                                  echo "<td>".$appLink."</td>";
+                                }//end else
+                                echo '<td>'.$row["id"].'</td>
                                 <td>'.$row["name"].' </span> </td>
                                 <td>'.$row["type"].'</td>
                                 <td>'.$row["status"].'</td>
@@ -61,18 +69,17 @@ $result = $db->query($sql);
                                 <td>'.$row["freeze_date"].'</td>
                                 <td>'.$row["rtm_date"].' </span> </td>
                                 <td>'.$row["manager"].' </span> </td>
-                                <td>'.$row["author"].' </span> </td>
-                               
-                                <td><a class="btn btn-warning btn-sm" href="scanner_sbom_tree.php?id='.$row["app_id"].'">View BOM Tree</a></td>
-                            </tr>';
-                    }//end while
-                }//end if
-                else {
-                    echo "0 results";
-                }//end else
-
-                 $result->close();
-                ?>
+                                <td>'.$row["author"].' </span> </td>';
+                                if ($result2->num_rows > 0) {
+                                   echo "<td><a class=\"btn btn-danger btn-sm\" style = \"border-radius: 10px;\" href=\"scanner_sbom_tree.php?id=".$appLink."\">View ".$appLink." in Tree</a></td></tr>";
+                                 }//end if
+                                 else {
+                                   echo '<td class="btn disabled" >No Tree Link for '.$appLink.'</td></tr>';
+                                  }//end else
+                                  $result2->close();
+                                }
+                              }
+                              ?>
 
               </tbody>
               <tfoot>
