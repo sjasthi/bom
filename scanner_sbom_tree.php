@@ -56,15 +56,8 @@
           $getYellow = false;
             //finds parent data
             if (isset($_GET['show'])){
-<<<<<<< HEAD
-              if(($_GET['show']) == "yellow"){
-                $getYellow = true;
-              }else {
-                $getYellow = false;
-=======
               if(($_GET['show']) == "redYellow"){
                 $getRedYellow = true;
->>>>>>> master
               }
             } else {
               $getRedYellow = false;
