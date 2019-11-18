@@ -20,7 +20,7 @@
         <nav class="navbar">
             <div class="container-fluid">
                 <ul class="nav navbar-nav" style='font-size: 18px;'>
-                    <li><a href="#" onclick="expandAll();"><span
+                    <li><a href="#" onclick="expandAll();" id = 'expandAll'><span
                                 class="glyphicon glyphicon-chevron-down"></span>Expand All</a></li>
                     <li class="active"><a href="#"
                             onclick="collapseAll();"><span
@@ -73,6 +73,13 @@
               $getRed = false;    
             }
 
+            $getAppId = null;
+            $findApp = false;
+            if (isset($_GET['id'])){
+              $getAppId = $_GET['id'];
+              $findApp = true;
+            }
+
             if($getRedYellow){
             $sql_parent = "SELECT DISTINCT app_name, app_id, app_version, app_status, '' as notes, 'parent' as class, concat(app_name,concat(' ', app_id)) as application from sbom
             union SELECT DISTINCT cmp_name as app_name, cmp_id as app_id, cmp_version as app_version, cmp_status as app_status, notes,   'child' as class, concat(app_name,concat(' ', app_id)) as application
@@ -83,7 +90,11 @@
               from sbom order by application, class desc, app_name;";
             }  else if($getRed){
               $sql_parent = "SELECT DISTINCT app_name, app_id, app_version, app_status, '' as notes, 'parent' as class from sbom  order by app_name;";
-            } 
+            } elseif ($findApp) {
+              $sql_parent = "SELECT DISTINCT app_name, app_id, app_version, app_status, '' as notes, 'parent' as class from sbom  where app_id = '".$getAppId."' order by app_name;";
+            } else{
+              $sql_parent = "SELECT DISTINCT app_name, app_id, app_version, app_status, '' as notes, 'parent' as class from sbom  order by app_name;";
+            }
 
             $result_parent = $db->query($sql_parent);
             $p=1;
@@ -139,7 +150,15 @@
                                 and cmp_version = '".$app_version."'
                                 and cmp_status = '".$app_status."'
                                 order by val, cmp, class, cmp_name;";
-              }
+              } else{
+                $sql_child = "SELECT row_id, cmp_name, cmp_id, cmp_type, cmp_version, cmp_status, notes, 'child' as class from sbom
+                                where app_name = '".$app_name."'
+                                and app_id = '".$app_id."'
+                                and app_version = '".$app_version."'
+                                and app_status = '".$app_status."' ; ";
+                }
+
+
                   $result_child = $db->query($sql_child);
                   if ($result_child->num_rows > 0) {
                     // output data of child
@@ -218,7 +237,7 @@
       let sbom_params = {
         expandable: true,
         clickableNodeNames: true,
-        indent: 50
+        indent: 40
       };
 
       $("#bom_treetable").treetable(sbom_params).DataTable(
@@ -323,4 +342,10 @@
         }
         $('#bom_treetable').treetable('collapseAll');
       }
+
+      <?php 
+      if ($findApp) {
+        echo "$( \"#expandAll\" ).trigger( \"click\" );";
+      }
+      ?>
       </script>
