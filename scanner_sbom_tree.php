@@ -20,12 +20,13 @@
         <nav class="navbar">
             <div class="container-fluid">
                 <ul class="nav navbar-nav" style='font-size: 18px;'>
-                    <li><a href="#" onclick="expandAll();"><span
+                    <li><a href="#" onclick="expandAll();" id = 'expandAll'><span
                                 class="glyphicon glyphicon-chevron-down"></span>Expand All</a></li>
                     <li class="active"><a href="#"
                             onclick="collapseAll();"><span
                                 class="glyphicon glyphicon-chevron-up"></span>Collapse All</a></li>
                                 <li><a href="#" id='color_noColor'><span id = 'no_color'>No </span>Color</a></li>
+                                <li><a href="?show=yellow" id ="showYellow" >Show <span class="glyphicon glyphicon-tint" style='color:#ffd966;'> </span>Yellow</a></li>
                                 <li><a href="?show=red" id ="showRed" >Show <span class="glyphicon glyphicon-tint" style='color:#ff6666;'> </span>Red</a></li>
                                 <li><a href="?show=redYellow" id = "showRedYellow" > Show <span class="glyphicon glyphicon-tint" style='color:#ff6666;'></span>Red and <span class="glyphicon glyphicon-tint" style='color:#ffd966;'></span>Yellow</a></li>
                                 <li><div class="input-group">
@@ -54,21 +55,50 @@
           <?php
           $getRedYellow = false;
           $getYellow = false;
+          $getRed = false; 
             //finds parent data
             if (isset($_GET['show'])){
               if(($_GET['show']) == "redYellow"){
                 $getRedYellow = true;
+<<<<<<< HEAD
+=======
+              }             
+              else if(($_GET['show']) == "red"){
+                $getRed = true;
+>>>>>>> master
               }
+              else if(($_GET['show']) == "yellow"){
+                $getYellow = true;
+              }             
             } else {
               $getRedYellow = false;
+              $getYellow = false;
+              $getRed = false;    
             }
+
+            $getAppId = null;
+            $findApp = false;
+            if (isset($_GET['id'])){
+              $getAppId = $_GET['id'];
+              $findApp = true;
+            }
+
             if($getRedYellow){
             $sql_parent = "SELECT DISTINCT app_name, app_id, app_version, app_status, '' as notes, 'parent' as class, concat(app_name,concat(' ', app_id)) as application from sbom
             union SELECT DISTINCT cmp_name as app_name, cmp_id as app_id, cmp_version as app_version, cmp_status as app_status, notes,   'child' as class, concat(app_name,concat(' ', app_id)) as application
             from sbom order by application, class desc, app_name;";
+            }
+            else if ($getYellow){
+              $sql_parent = "SELECT DISTINCT cmp_name as app_name, cmp_id as app_id, cmp_version as app_version, cmp_status as app_status, notes,   'child' as class, concat(app_name,concat(' ', app_id)) as application
+              from sbom order by application, class desc, app_name;";
+            }  else if($getRed){
+              $sql_parent = "SELECT DISTINCT app_name, app_id, app_version, app_status, '' as notes, 'parent' as class from sbom  order by app_name;";
+            } elseif ($findApp) {
+              $sql_parent = "SELECT DISTINCT app_name, app_id, app_version, app_status, '' as notes, 'parent' as class from sbom  where app_id = '".$getAppId."' order by app_name;";
             } else{
               $sql_parent = "SELECT DISTINCT app_name, app_id, app_version, app_status, '' as notes, 'parent' as class from sbom  order by app_name;";
             }
+
             $result_parent = $db->query($sql_parent);
             $p=1;
             $c=1;
@@ -108,14 +138,30 @@
                                   and cmp_version = '".$app_version."'
                                   and cmp_status = '".$app_status."'
                                   order by val, cmp, class, cmp_name;";
-              }
-                  else{
-                  $sql_child = "SELECT row_id, cmp_name, cmp_id, cmp_type, cmp_version, cmp_status, notes, 'child' as class from sbom
+              } else if($getRed){
+                $sql_child = "SELECT row_id, cmp_name, cmp_id, cmp_type, cmp_version, cmp_status, notes, 'child' as class from sbom
                                   where app_name = '".$app_name."'
                                   and app_id = '".$app_id."'
                                   and app_version = '".$app_version."'
                                   and app_status = '".$app_status."' ; ";
-                  }
+              } else if($getYellow){
+                $sql_child = "SELECT row_id, 'Request ' as cmp_name, request_id as cmp_id, '' as cmp_type, request_step as cmp_version, request_status as cmp_status,
+                concat('Request Date: ', DATE_FORMAT(request_date, \"%m/%d/%y\") ) as notes, 'grandchild' as class, concat(cmp_name, concat(' ', cmp_id)) as cmp, 'z' as val
+                from sbom
+                where cmp_name = '".$app_name."'
+                                and cmp_id = '".$app_id."'
+                                and cmp_version = '".$app_version."'
+                                and cmp_status = '".$app_status."'
+                                order by val, cmp, class, cmp_name;";
+              } else{
+                $sql_child = "SELECT row_id, cmp_name, cmp_id, cmp_type, cmp_version, cmp_status, notes, 'child' as class from sbom
+                                where app_name = '".$app_name."'
+                                and app_id = '".$app_id."'
+                                and app_version = '".$app_version."'
+                                and app_status = '".$app_status."' ; ";
+                }
+
+
                   $result_child = $db->query($sql_child);
                   if ($result_child->num_rows > 0) {
                     // output data of child
@@ -194,7 +240,7 @@
       let sbom_params = {
         expandable: true,
         clickableNodeNames: true,
-        indent: 50
+        indent: 40
       };
 
       $("#bom_treetable").treetable(sbom_params).DataTable(
@@ -299,4 +345,10 @@
         }
         $('#bom_treetable').treetable('collapseAll');
       }
+
+      <?php 
+      if ($findApp) {
+        echo "$( \"#expandAll\" ).trigger( \"click\" );";
+      }
+      ?>
       </script>
