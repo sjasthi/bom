@@ -60,12 +60,9 @@
             if (isset($_GET['show'])){
               if(($_GET['show']) == "redYellow"){
                 $getRedYellow = true;
-<<<<<<< HEAD
-=======
               }             
               else if(($_GET['show']) == "red"){
                 $getRed = true;
->>>>>>> master
               }
               else if(($_GET['show']) == "yellow"){
                 $getYellow = true;
