@@ -22,7 +22,8 @@
             width="100%" style="width: 100px;">
               <thead>
                 <tr id="table-first-row">
-                        <th>id</th>
+                <th>Application ID</th>
+                <th>Release ID</th>
                         <th>Name</th>
                         <th>Type</th>
                         <th>Status</th>
@@ -32,7 +33,7 @@
                         <th>RTM Date(s)</th>
                         <th>Manager</th>
                         <th>Author</th>
-                        <th>BOM ID</th>
+                        
                         <th>View BOM Tree</th>
                 </tr>
               </thead>
@@ -49,33 +50,46 @@ $result = $db->query($sql);
                 if ($result->num_rows > 0) {
                     // output data of each row
                     while($row = $result->fetch_assoc()) {
-                        echo '<tr>
-                                <td>'.$row["id"].'</td>
-                                <td>'.$row["name"].' </span> </td>
-                                <td>'.$row["type"].'</td>
+                        echo '<tr>';
+                        $appName = $row["name"];
+                        $appID = $row["app_id"];
+                                $sql2 = "SELECT DISTINCT app_name from sbom where app_id = '".$appID."' Limit 1;";
+                                $result2 = $db->query($sql2);
+
+                                echo "<td>".$row["app_id"]."</td>";
+                                echo '<td>'.$row["id"].'</td>';
+
+                                if ($result2->num_rows > 0) {
+                                  echo '<td><a href="scanner_sbom_tree.php?id='.$appID.'">'.$appName.' </a> </span> </td>';
+                                }//end if
+                                else {
+                                  echo '<td>'.$row["name"].' </span> </td>';
+                                }//end else
+
+                                echo '<td>'.$row["type"].'</td>
                                 <td>'.$row["status"].'</td>
                                 <td>'.$row["open_date"].' </span> </td>
                                 <td>'.$row["dependency_date"].'</td>
                                 <td>'.$row["freeze_date"].'</td>
                                 <td>'.$row["rtm_date"].' </span> </td>
                                 <td>'.$row["manager"].' </span> </td>
-                                <td>'.$row["author"].' </span> </td>
-                                <td>'.$row["app_id"].' </span> </td>
-                                <td><a class="btn btn-warning btn-sm" href="scanner_sbom_tree.php?id='.$row["app_id"].'">View BOM Tree</a></td>
-                            </tr>';
-                    }//end while
-                }//end if
-                else {
-                    echo "0 results";
-                }//end else
-
-                 $result->close();
-                ?>
+                                <td>'.$row["author"].' </span> </td>';
+                                if ($result2->num_rows > 0) {
+                                   echo "<td><a class=\"btn btn-danger btn-sm\" style = \"border-radius: 10px;\" href=\"scanner_sbom_tree.php?id=".$appName."\">View ".$appName." in Tree</a></td></tr>";
+                                 }//end if
+                                 else {
+                                   echo '<td class="btn disabled" >No Tree Link for '.$appName.'</td></tr>';
+                                  }//end else
+                                  $result2->close();
+                                }
+                              }
+                              ?>
 
               </tbody>
               <tfoot>
                 <tr>
-                        <th>ID</th>
+                <th>Application ID</th>
+                <th>Release ID</th>
                         <th>Name</th>
                         <th>Type</th>
                         <th>Status</th>
@@ -85,7 +99,7 @@ $result = $db->query($sql);
                         <th>RTM Date(s)</th>
                         <th>Manager</th>
                         <th>Author</th>
-                        <th>BOM ID</th>
+                      
                         <th>View BOM Tree</th>
                 </tr>
               </tfoot>
