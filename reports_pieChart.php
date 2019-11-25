@@ -248,7 +248,7 @@
                             </table>";
         }elseif ($_COOKIE['request_status_cookie']!= null) {
             $requestType = $_COOKIE['request_status_cookie'];
-            $sql = "SELECT * from sbom ;";
+            $sql = "SELECT DISTINCT request_status, request_step, request_id, request_date, app_name, app_version, cmp_name, cmp_version from sbom ;";
             setcookie("request_status_cookie", "", time()-3600);
             echo "<table id='info' cellpadding='0' cellspacing='0' border='0'
             class='datatable table table-striped table-bordered datatable-style table-hover'
@@ -308,7 +308,7 @@
                         </table>";
         }elseif ($_COOKIE['request_step_cookie']!= null) {
             $requestStep = $_COOKIE['request_step_cookie'];
-            $sql = "SELECT * from sbom ;";
+            $sql = "SELECT DISTINCT request_status, request_step, request_id, request_date, app_name, app_version, cmp_name, cmp_version from sbom ;";
             setcookie("request_step_cookie", "", time()-3600);
             echo "<table id='info' cellpadding='0' cellspacing='0' border='0'
             class='datatable table table-striped table-bordered datatable-style table-hover'
