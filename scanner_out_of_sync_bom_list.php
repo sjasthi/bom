@@ -40,7 +40,7 @@
 
               <?php
 
-$sql = "SELECT * from sbom;";
+$sql = "SELECT * FROM sbom sb WHERE (SELECT COUNT(*) FROM sbom sb2 WHERE sb.cmp_name = sb2.cmp_name AND sb.cmp_version = sb2.cmp_version) = 1 AND (NOT (app_status = 'released' OR cmp_status = 'released' OR cmp_status = 'approved')) ORDER BY cmp_name;";
 $result = $db->query($sql);
 
                 if ($result->num_rows > 0) {
