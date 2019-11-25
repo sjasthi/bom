@@ -90,6 +90,9 @@
             if (isset($_GET['name']) && isset($_GET['version']) ){
               $getAppName= $_GET['name'];
               $getAppVer = $_GET['version'];
+              $getRedYellow = false;
+              $getYellow = false;
+              $getRed = false; 
               $findAppName = true;
             }
 
