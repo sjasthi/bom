@@ -6,6 +6,13 @@
   include("./nav.php");
  ?>
 
+<!--Imports-->
+<link rel="stylesheet" href="tree_style.css" />
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-treetable/3.2.0/css/jquery.treetable.css" />
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-treetable/3.2.0/css/jquery.treetable.theme.default.css" />
+
 
 <div class="right-content">
     <div class="container" id="container">
@@ -76,75 +83,82 @@
             }
 
             if($getRedYellow){
-            $sql_parent = "SELECT DISTINCT  app_name, 
-                                            app_version, 
-                                            app_status, 
-                                            '' as cmp_type, 
-                                            '' as request_step,
-                                            '' as request_status,
-                                            '' as notes, 
-                                            'parent' as class, 
-                                            concat(app_name,concat('_',  app_version)) as application 
-                          from sbom
-                          union 
-                          SELECT DISTINCT   cmp_name as app_name, 
-                                            cmp_version as app_version, 
-                                            cmp_status as app_status, 
-                                            cmp_type, 
-                                            request_step,
-                                            request_status,
-                                            notes,   
-                                            'child' as class, 
-                                            concat(app_name,concat('_', app_version)) as application
-                          from sbom 
-                          where cmp_type not like 'internal'
-                          order by application, class desc, app_name;";
+            $sql_parent = "SELECT DISTINCT app_name as name, 
+                            app_version as version, 
+                            app_status as status, 
+                            '' as cmp_type, 
+                            '' as request_step,
+                            '' as request_status,
+                            '' as notes, 
+                            'parent' as class, 
+                            concat(app_name, concat('_', app_version)) as application
+                            from sbom
+                          union
+                          SELECT DISTINCT cmp_name as name, 
+                            cmp_version as version, 
+                            cmp_status as status, 
+                            cmp_type, 
+                            request_step,
+                            request_status,
+                            notes, 
+                            'child' as class, 
+                            concat(cmp_name, concat('_', cmp_version)) as application
+                            from sbom
+                            where 
+                            cmp_name in (select distinct app_name from sbom)
+                            order by application, class desc, name;";
             }
             else if ($getYellow){
-              $sql_parent = "SELECT DISTINCT  cmp_name as app_name, 
-                                              cmp_version as app_version, 
-                                              cmp_status as app_status, 
-                                              cmp_type, 
-                                              request_step,
-                                              request_status,
-                                              notes,   
-                                              'child' as class, 
-                                              concat(cmp_name,concat('_', cmp_version)) as application
-                            from sbom 
-                            order by application, class desc, app_name;";
+              $sql_parent = "SELECT DISTINCT cmp_name as name, 
+                              cmp_version as version, 
+                              cmp_status as status, 
+                              cmp_type, 
+                              request_step,
+                              request_status,
+                              notes, 
+                              'child' as class, 
+                              concat(cmp_name, concat('_', cmp_version)) as application
+                              from sbom
+                              where 
+                              cmp_name in (select distinct app_name from sbom)
+                              order by application, class desc, name;";
             }  else if($getRed){
-              $sql_parent = "SELECT DISTINCT  app_name, 
-                                              app_version, 
-                                              app_status, 
-                                              '' as cmp_type, 
-                                              '' as request_step,
-                                              '' as request_status,
-                                              '' as notes, 
-                                              'parent' as class, 
-                                              concat(app_name,concat('_',  app_version)) as application  
-                              from sbom  order by app_name;";
+              $sql_parent = "SELECT DISTINCT app_name as name, 
+                              app_version as version, 
+                              app_status as status, 
+                              '' as cmp_type, 
+                              '' as request_step,
+                              '' as request_status,
+                              '' as notes, 
+                              'parent' as class, 
+                              concat(app_name, concat('_', app_version)) as application
+                              from sbom 
+                              order by application, class desc, name;";
             } elseif ($findApp) {
-              $sql_parent = "SELECT DISTINCT  app_name, 
-                                              app_version, 
-                                              app_status, 
-                                              '' as cmp_type, 
-                                              '' as request_step,
-                                              '' as request_status,
-                                              '' as notes, 
-                                              'parent' as class, 
-                                              concat(app_name,concat('_',  app_version)) as application 
+              $sql_parent = "SELECT DISTINCT app_name as name, 
+                              app_version as version, 
+                              app_status as status, 
+                              '' as cmp_type, 
+                              '' as request_step,
+                              '' as request_status,
+                              '' as notes, 
+                              'parent' as class, 
+                              concat(app_name, concat('_', app_version)) as application
                               from sbom  
                               where app_id = '".$getAppId."' 
-                              order by app_name;";
+                              order by name;";
             } else{
-              $sql_parent = "SELECT DISTINCT  app_name, 
-                                              app_version, 
-                                              app_status, 
-                                              '' as notes, 
-                                              'parent' as class, 
-                                              concat(app_name,concat('_',  app_version)) as application  
-                              from sbom  
-                              order by app_name;";
+              $sql_parent = "SELECT DISTINCT app_name as name, 
+                              app_version as version, 
+                              app_status as status, 
+                              '' as cmp_type, 
+                              '' as request_step,
+                              '' as request_status,
+                              notes, 
+                              'parent' as class, 
+                              concat(app_name, concat('_', app_version)) as application
+                              from sbom   
+                              order by application, class desc, name;";
             }
 
             $result_parent = $db->query($sql_parent);
@@ -153,13 +167,13 @@
             $gc=1;
             if ($result_parent->num_rows > 0) {
               while($row_parent = $result_parent->fetch_assoc()) {
-                $app_name = $row_parent["app_name"];
-                $app_version = $row_parent["app_version"];
+                $app_name = $row_parent["name"];
+                $app_version = $row_parent["version"];
                 $class = $row_parent["class"];
-                $app_status = $row_parent["app_status"];
-                $request_status = $row_parent["request_status"];
-                $request_step = $row_parent["request_step"];
+                $app_status = $row_parent["status"];
                 $cmp_type = $row_parent["cmp_type"];
+                $request_step = $row_parent["request_step"];
+                $request_status = $row_parent["request_status"];
                 $notes = $row_parent["notes"];
                 $application = $row_parent["application"];
                 $p_id = $p;
@@ -175,7 +189,7 @@
                       </tr>";
                 $p++;
                 // output data of child
-                if($getRedYellow){
+                
                   $sql_child = "SELECT DISTINCT cmp_name, 
                                                 cmp_type, 
                                                 cmp_version, 
@@ -189,72 +203,24 @@
                                   where app_name = '".$app_name."'
                                   and app_version = '".$app_version."'
                                   and app_status = '".$app_status."'
-                  /*union
-                              SELECT DISTINCT request_id as cmp_name, 
-                                              '' as cmp_type, 
-                                              '' as cmp_version, 
-                                              request_step, 
-                                              '' as cmp_status, 
-                                              request_status,
-                                              concat('Request Date: ', DATE_FORMAT(request_date, \"%m/%d/%y\") ) as notes, 
-                                              'grandchild' as class, 
-                                              concat(request_id, concat('_', request_step)) as cmp
-                              from sbom
-                              where cmp_name = '".$app_name."'
-                              and cmp_version = '".$app_version."'
-                              and cmp_status = '".$app_status."'
-                              */
-                              order by cmp, class, cmp_name;";
-                              
-              } else if($getRed){
-                $sql_child = "SELECT DISTINCT cmp_name, 
+                                  and cmp_name not in (select distinct app_name from sbom)
+                  union
+                              SELECT DISTINCT cmp_name, 
                                               cmp_type, 
                                               cmp_version, 
                                               request_step,
                                               cmp_status, 
                                               request_status,
                                               notes, 
-                                              'grandchild' as class, 
+                                              'child' as class, 
                                               concat(cmp_name, concat('_', cmp_version)) as cmp
                               from sbom
                               where app_name = '".$app_name."'
-                              and app_version = '".$app_version."'
-                              and app_status = '".$app_status."' 
+                                  and app_version = '".$app_version."'
+                                  and app_status = '".$app_status."'
+                                  and cmp_name in (select distinct app_name from sbom)
+                           
                               order by cmp, class, cmp_name;";
-              } else if($getYellow){
-                $sql_child = "SELECT DISTINCT request_id as cmp_name, 
-                                              '' as cmp_type, 
-                                              '' as cmp_version, 
-                                              request_step, 
-                                              '' as cmp_status, 
-                                              request_status,
-                                              concat('Request Date: ', DATE_FORMAT(request_date, \"%m/%d/%y\") ) as notes, 
-                                              'grandchild' as class, 
-                                              concat(request_id, concat('_', request_step)) as cmp
-                              from sbom
-                                where cmp_name = '".$app_name."'
-                                and cmp_version = '".$app_version."'
-                                and cmp_status = '".$app_status."'
-                                and app_name = '".$app_name."'
-                                and app_status = '".$app_status."'
-                                order by cmp, class, cmp_name;";
-              } else{
-                $sql_child = "SELECT DISTINCT cmp_name, 
-                                              cmp_type, 
-                                              cmp_version, 
-                                              request_step,
-                                              cmp_status, 
-                                              request_status,
-                                              notes, 
-                                              'grandchild' as class, 
-                                              concat(cmp_name, concat('_', cmp_version)) as cmp
-                              from sbom
-                              where app_name = '".$app_name."'
-                              and app_version = '".$app_version."'
-                              and app_status = '".$app_status."' ; ";
-                }
-
-
                   $result_child = $db->query($sql_child);
                   if ($result_child->num_rows > 0) {
                     // output data of child
@@ -280,47 +246,50 @@
                             <td class='text-capitalize'>".$notes."</td>
                             </tr>";
                       $c++;
-                      // output data of grandchild
-                        /*
-                        $sql_gchild = "SELECT DISTINCT  request_id, 
-                                                        request_step, 
-                                                        request_status, 
-                                                        DATE_FORMAT(request_date, \"%m/%d/%y\") as request_date, 
-                                                        concat(request_id, concat('_', request_step)) as request 
+                      // output data of child
+                          $sql_gchild = "SELECT DISTINCT  cmp_name,
+                                          cmp_type, 
+                                          cmp_version, 
+                                          request_step,
+                                          cmp_status, 
+                                          request_status,
+                                          notes, 
+                                          'grandchild' as class, 
+                                          concat(cmp_name, concat('_', cmp_version)) as gcmp
                                         from sbom
-                                        where app_name = '".$app_name."'
-                                        and app_version = '".$app_version."'
-                                        and app_status = '".$app_status."'
-                                        and cmp_name = '".$cmp_name."'
-                                        and cmp_version = '".$cmp_version."'
-                                        and cmp_status = '".$cmp_status."'
-                                        and cmp_type= '".$cmp_type."'
+                                        where app_name = '".$cmp_name."'
+                                        and app_version = '".$cmp_version."'
+                                        and app_status = '".$cmp_status."'
                                         ;";
                         $result_gchild = $db->query($sql_gchild);
                         if ($result_gchild->num_rows > 0 ) {
                           // output data of grandchild
                           while($row_gchild = $result_gchild->fetch_assoc()) {
-                            $request= $row_gchild["request"];
-                            $request_id= $row_gchild["request_id"];
-                            $request_date= $row_gchild["request_date"];
-                            $request_step= $row_gchild["request_step"];
-                            $request_status= $row_gchild["request_status"];
+                            $gcmp_name = $row_gchild["cmp_name"];
+                            $gcmp = $row_gchild["gcmp"];
+                            $gcmp_version = $row_gchild["cmp_version"];
+                            $gcmp_status = $row_gchild["cmp_status"];
+                            $grequest_step = $row_gchild["request_step"];
+                            $grequest_status = $row_gchild["request_status"];
+                            $gcmp_type = $row_gchild["cmp_type"];
+                            $gnotes = $row_gchild["notes"];
+                            $gc_class = $row_gchild["class"];
                             $gc_id=$c_id."-".$gc;
                             echo "
-                                  <tr data-tt-id = '".$gc_id."' data-tt-parent-id='".$c_id."' id='".$request."' >
-                                  <td > <div class = 'btn  grandchild'><span class = 'request_id'>".$request_id."</span>&nbsp;&nbsp;</div></td>
-                                  <td/>
-                                  <td/>
-                                  <td/>
-                                 <td class='text-capitalize'>".$request_step."</td>
-                                  <td class='text-capitalize'>".$request_status."</td>
-                                  <td>Request Date: ".$request_date."</td>
+                                  <tr data-tt-id = '".$gc_id."' data-tt-parent-id='".$c_id."' id='".$gcmp."' >
+                                  <td class='text-capitalize'> <div class = 'btn ".$gc_class."'> <span class = 'cmp_name'>".$gcmp_name."</span>&nbsp; &nbsp;&nbsp; &nbsp;</div></td>
+                                  <td class = 'cmp_version'>".$gcmp_version."</td>
+                                  <td class='text-capitalize'>".$gcmp_status."</td>
+                                  <td class='text-capitalize'>".$gcmp_type."</td>
+                                  <td class='text-capitalize'>".$grequest_status."</td>
+                                  <td class='text-capitalize'>".$grequest_step."</td>
+                                  <td class='text-capitalize'>".$gnotes."</td>
                                   </tr>";
                             $gc++;
 
                           }
                           $result_gchild -> close();
-                    }*/
+                    }
                   }
                   $result_child -> close();
                 } echo "</tbody>";
@@ -339,10 +308,9 @@
     <script>
       //Params for the treetable
       let sbom_params = {
-        loadBranches: true ,
         expandable: true,
         clickableNodeNames: true,
-        indent: 30
+        indent: 25
       };
 
       $("#bom_treetable").treetable(sbom_params).DataTable(
