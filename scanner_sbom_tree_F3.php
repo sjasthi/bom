@@ -13,15 +13,15 @@
  <div class="right-content">
     <div class="container" id="container">
       <h3 style = "color: #01B0F1;">Scanner --> BOM Tree</h3>
-      <a href="#" onclick="$('#maintreetable').treetable('expandAll'); return false;">Expand all</a>
-      <a href="#" onclick="$('#maintreetable').treetable('collapseAll'); return false;">Collapse all</a>
+      <a href="#" onclick="$('#bom_treetable').treetable('expandAll'); return false;">Expand all</a>
+      <a href="#" onclick="$('#bom_treetable').treetable('collapseAll'); return false;">Collapse all</a>
 
       <script type="text/javascript">
         //We only use php to pull the rows from the sbom table and store them into an array
         let sbomArray = [];
 
         <?php
-        $sql = "SELECT * from sbom";
+        $sql = "SELECT concat(app_name,concat(' ', app_version)) as app_name, concat(cmp_name,concat(' ', cmp_version)) as cmp_name, request_id from sbom";
         $result = $db->query($sql);
 
         if ($result->num_rows > 0) {
@@ -45,13 +45,13 @@
           }
 
           //if the tree doesn't have the app_id of an app_name, add it
-          if(!tree.get(row['app_name']).has(row['app_id'])){
-            tree.get(row['app_name']).set(row['app_id'], new Map());
+          if(!tree.get(row['app_name']).has(row['cmp_name'])){
+            tree.get(row['app_name']).set(row['cmp_name'], new Map());
           }
 
           //if the tree doesn't have the cmp_name of an app_id of an app_name, add it
-          if(!tree.get(row['app_name']).get(row['app_id']).has(row['cmp_name'])){
-            tree.get(row['app_name']).get(row['app_id']).set(row['cmp_name'], row);
+          if(!tree.get(row['app_name']).get(row['cmp_name']).has(row['request_id'])){
+            tree.get(row['app_name']).get(row['cmp_name']).set(row['request_id'], row);
           }
         });
 
@@ -103,15 +103,16 @@
               tr.setAttribute('data-tt-parent-id', app_idParentId);
               tbody.appendChild(tr);
 
-              let data = document.createElement('td');
+              let request_id = document.createElement('td');
               //data.innerHTML = Object.entries(value);
-              data.innerHTML = value['cmp_name'];
-              tr.appendChild(data);
+              request_id.innerHTML = value['request_id'];
+              tr.appendChild(request_id);
+
             });
           });
         });
 
-        root.setAttribute('id', 'maintreetable');
+        root.setAttribute('id', 'bom_treetable');
         container.appendChild(root);
 
  
@@ -128,5 +129,5 @@
         };
 
         //Generate tree table
-        $("#maintreetable").treetable(params);
+        $("#bom_treetable").treetable(params);
   </script>

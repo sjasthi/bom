@@ -28,11 +28,11 @@
   	<br/>BOM Tree<br/></div>
   </a>
 
-  <a href = "scanner_where_used.php">
-    <div <?php if($left_selected == "WHEREUSED")
+  <a href = "scanner_out_of_sync_bom_list.php">
+    <div <?php if($left_selected == "OUTOFSYNCBOMLIST")
     { echo 'class="menu-left-current-page"'; } ?>>
-    <img src="./images/whereused.png">
-    <br/>Where Used<br/></div>
+    <img src="./images/sbom_list.png">
+    <br/>Out of Sync <br> BOM List<br/></div>
   </a>
 
   <a href = "scanner_bom_backup.php">
