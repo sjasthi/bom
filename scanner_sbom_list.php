@@ -40,8 +40,8 @@
 
               <?php
 
-$sql = "SELECT * from sbom;";
-$result = $db->query($sql);
+              $sql = "SELECT * from sbom;";
+              $result = $db->query($sql);
 
                 if ($result->num_rows > 0) {
                     // output data of each row
