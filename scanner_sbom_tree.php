@@ -82,6 +82,15 @@
               $findApp = true;
             }
 
+            $getAppName = null;
+            $getAppVer = null;
+            $findAppName = false;
+            if (isset($_GET['name']) && isset($_GET['version']) ){
+              $getAppName= $_GET['name'];
+              $getAppVer = $_GET['version'];
+              $findAppName = true;
+            }
+
             if($getRedYellow){
             $sql_parent = "SELECT DISTINCT app_name as name, 
                             app_version as version, 
@@ -146,6 +155,20 @@
                               concat(app_name, concat('_', app_version)) as application
                               from sbom  
                               where app_id = '".$getAppId."' 
+                              order by name;";
+            } elseif ($findAppName) {
+              $sql_parent = "SELECT DISTINCT app_name as name, 
+                              app_version as version, 
+                              app_status as status, 
+                              '' as cmp_type, 
+                              '' as request_step,
+                              '' as request_status,
+                              '' as notes, 
+                              'parent' as class, 
+                              concat(app_name, concat('_', app_version)) as application
+                              from sbom  
+                              where app_name = '".$getAppName."' 
+                              and app_version = '".$getAppVer."' 
                               order by name;";
             } else{
               $sql_parent = "SELECT DISTINCT app_name as name, 
@@ -417,8 +440,9 @@
       }
 
       <?php 
-      if ($findApp) {
+      if ($findApp || $findAppName) {
         echo "$( \"#expandAll\" ).trigger( \"click\" );";
       }
+      
       ?>
       </script>
