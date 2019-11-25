@@ -1,12 +1,12 @@
 <?php
 
-    $nav_selected = "REPORTS";
-    $left_buttons = "YES";
-    $left_selected = "REPORTSPIECHART";
+    $nav_selected = "REPORTS"; 
+    $left_buttons = "YES"; 
+    $left_selected = "REPORTSPIECHART"; 
 
     include("./nav.php");
     global $db;
-
+    
 ?>
 <html>
 
@@ -17,13 +17,13 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
 
         <script type="text/javascript">
-
+        
         function createPieChart(pieChart){
             let name = pieChart[0];
             let columnTitle = pieChart[1];
 
             let queryArray = [[columnTitle, 'Count', {role:'annotation'}]];
-
+            
             switch(name){
                 case 'Application':
                     <?php
@@ -120,13 +120,13 @@
                     }
 
                     location.reload();
-                }
+                }               
             }
         }
         </script>
         <!-- End Google Pie Chart API Code -->
 
-
+        
     </head>
 
     <body>
@@ -135,7 +135,7 @@
                 <h3 style = "color: #01B0F1;">Reports --> Pie Chart.</h3>
                 <h3><img src="images/reports.png" style="max-height: 35px;" /> Pie Chart</h3>
             </div>
-        </div>
+        </div>  
         <div class="container">
             <table>
                 <tr>
@@ -143,71 +143,206 @@
                     <td><div style="width:400px; height:400px; disply:inline-block;" id="ComponentStatusReport" style="width: 900px; height: 500px;"></div></td>
                 </tr>
                 <tr>
-                    <td><div style=" width:400px; height:400px; disply:inline-block;" id="RequestStatusReport" style="width: 900px; height: 500px;"></div></td>
+                    <td><div style=" width:400px; height:400px; disply:inline-block;" id="RequestStatusReport" style="width: 900px; height: 500px;"></div></td>                   
                     <td><div style=" width:400px; height:400px; disply:inline-block;" id="RequestStepReport" style="width: 900px; height: 500px;"></div></td>
                 </tr>
             </table><br><br><br><br><br><br>
         <?php
-        error_reporting(E_ERROR | E_WARNING | E_PARSE);
+        error_reporting(E_ERROR | E_WARNING | E_PARSE);    
         if ($_COOKIE['app_status_cookie']!= null) {
             $appStatusSelection = $_COOKIE['app_status_cookie'];
-        }elseif($_COOKIE['cmp_status_cookie']!= null) {
-            $cmpStatusSelection = $_COOKIE['cmp_status_cookie'];
-        }elseif ($_COOKIE['request_status_cookie']!= null) {
-            $requestType = $_COOKIE['request_status_cookie'];
-        }elseif ($_COOKIE['request_step_cookie']!= null) {
-            $requestStep = $_COOKIE['request_step_cookie'];
-        }
-        ?>
-
-
-        <table id="info" cellpadding="0" cellspacing="0" border="0"
-                class="datatable table table-striped table-bordered datatable-style table-hover"
-                width="100%" style="width: 100px;">
-                <thead>
-                    <tr id="table-first-row">
-                            <th>App ID</th>
+            $sql = "SELECT DISTINCT app_name, app_version, app_status from sbom union SELECT DISTINCT cmp_name, cmp_version, cmp_status from sbom;";
+            setcookie("app_status_cookie", "", time()-3600);
+            echo "<table id='info' cellpadding='0' cellspacing='0' border='0'
+            class='datatable table table-striped table-bordered datatable-style table-hover'
+            width='100px' style='width: 750px;'>
+                    <thead>
+                        <tr id='table-first-row'>
+                        <th>App Status</th>
                             <th>App Name</th>
                             <th>App Version</th>
-                            <th>CMP ID</th>
-                            <th>CMP Name</th>
-                            <th>CMP Version</th>
-                            <th>CMP Type</th>
-                            <th>App Status</th>
-                            <th>CMP Status</th>
-                            <th>Request ID</th>
-                            <th>Request Date</th>
-                            <th>Request Status</th>
-                            <th>Request Step</th>
-                            <th>Notes</th>
+                            
+                            
+                        </tr>
+                    </thead>
+                    <tbody>";
+                    $result = $db->query($sql);
+
+                        if ($result->num_rows > 0) {
+                            // output data of each row
+                            while($row = $result->fetch_assoc()) {
+                                echo '<tr>
+                                        <td>'.$row["app_status"].' </span> </td>
+                                        <td>'.$row["app_name"].'</td>
+                                        <td>'.$row["app_version"].'</td>
+                                        </tr>';
+                                
+                            }//end while
+                        }//end if
+                        else {
+                            echo "0 results";
+                        }//end else
+
+                        $result->close();
+                        echo "</tbody>
+                        
+                    <tfoot>
+                    <tr>
+                    <th>App Status</th>
+                    <th>App Name</th>
+                    <th>App Version</th>
                     </tr>
-                </thead>
-                <tbody>
+                </tfoot>
 
-                <?php
+                
+                        </table>";
+            }elseif($_COOKIE['cmp_status_cookie']!= null) {
+                $cmpStatusSelection = $_COOKIE['cmp_status_cookie'];
+                $sql = "SELECT DISTINCT  cmp_name, cmp_version, cmp_status, cmp_type from sbom ;";
+                setcookie("cmp_status_cookie", "", time()-3600);
+                echo "<table id='info' cellpadding='0' cellspacing='0' border='0'
+                class='datatable table table-striped table-bordered datatable-style table-hover'
+                width='100%' style='width: 50px;'>
+                        <thead>
+                            <tr id='table-first-row'>
+                                    <th>CMP Status</th>                                   
+                                    <th>CMP Name</th>
+                                    <th>CMP Version</th>
+                                    <th>CMP Type</th>
+                                    
+                            </tr>
+                        </thead>
 
-                $sql = "SELECT * from sbom;";
-                $result = $db->query($sql);
+                        <tbody>";
+                        $result = $db->query($sql);
+
+                            if ($result->num_rows > 0) {
+                                // output data of each row
+                                while($row = $result->fetch_assoc()) {
+                                    echo '<tr>
+                                            <td>'.$row["cmp_status"].'</td>                                           
+                                            <td>'.$row["cmp_name"].'</td>
+                                            <td>'.$row["cmp_version"].'</td>
+                                            <td>'.$row["cmp_type"].'</td>
+                                            
+                                        </tr>';
+                                    
+                                }//end while
+                            }//end if
+                            else {
+                                echo "0 results";
+                            }//end else
+
+                            $result->close();
+                            echo "</tbody>
+                            
+                        <tfoot>
+                        <tr>
+                        <th>CMP Status</th>
+                        <th>CMP Name</th>
+                        <th>CMP Version</th>
+                        <th>CMP Type</th>
+                        </tr>
+                    </tfoot>
+
+                            </table>";
+        }elseif ($_COOKIE['request_status_cookie']!= null) {
+            $requestType = $_COOKIE['request_status_cookie'];
+            $sql = "SELECT * from sbom ;";
+            setcookie("request_status_cookie", "", time()-3600);
+            echo "<table id='info' cellpadding='0' cellspacing='0' border='0'
+            class='datatable table table-striped table-bordered datatable-style table-hover'
+            width='100%' style='width: 75px;'>
+                    <thead>
+                        <tr id='table-first-row'>
+                        <th>Request Status</th>
+                        <th>Request ID</th>
+                        <th>Request Date</th>
+                        <th>Request Step</th>  
+                        <th>App Name</th>
+                        <th>App Version</th>
+                        <th>CMP Name</th>
+                        <th>CMP Version</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>";
+                    $result = $db->query($sql);
+
+                        if ($result->num_rows > 0) {
+                            // output data of each row
+                            while($row = $result->fetch_assoc()) {
+                                echo '<tr>
+                                <td>'.$row["request_status"].'</td>
+                                <td>'.$row["request_id"].'</td>
+                                <td>'.$row["request_date"].'</td>
+                                <td>'.$row["request_step"].'</td>
+                                <td>'.$row["app_name"].'</td>
+                                <td>'.$row["app_version"].'</td>
+                                <td>'.$row["cmp_name"].'</td>
+                                <td>'.$row["cmp_version"].'</td>
+                                </tr>';
+                                
+                            }//end while
+                        }//end if
+                        else {
+                            echo "0 results";
+                        }//end else
+
+                        $result->close();
+                        echo "</tbody>
+                        
+                    <tfoot>
+                    <tr>
+                    <th>Request Status</th>
+                    <th>Request ID</th>
+                    <th>Request Date</th>
+                    <th>Request Step</th>  
+                    <th>App Name</th>
+                    <th>App Version</th>
+                    <th>CMP Name</th>
+                    <th>CMP Version</th>
+                    </tr>
+                </tfoot>
+
+                        </table>";
+        }elseif ($_COOKIE['request_step_cookie']!= null) {
+            $requestStep = $_COOKIE['request_step_cookie'];
+            $sql = "SELECT * from sbom ;";
+            setcookie("request_step_cookie", "", time()-3600);
+            echo "<table id='info' cellpadding='0' cellspacing='0' border='0'
+            class='datatable table table-striped table-bordered datatable-style table-hover'
+             style='width:100%;'>
+             <thead>
+                <tr id='table-first-row'>
+                <th>Request Step</th> 
+                <th>Request Status</th>
+                <th>Request ID</th>
+                <th>Request Date</th>
+                <th>App Name</th>
+                <th>App Version</th>
+                <th>CMP Name</th>
+                <th>CMP Version</th>
+                </tr>
+            </thead>
+
+            <tbody>";
+            $result = $db->query($sql);
 
                 if ($result->num_rows > 0) {
                     // output data of each row
                     while($row = $result->fetch_assoc()) {
                         echo '<tr>
-                                <td>'.$row["app_id"].' </span> </td>
-                                <td>'.$row["app_name"].'</td>
-                                <td>'.$row["app_version"].'</td>
-                                <td>'.$row["cmp_id"].' </span> </td>
-                                <td>'.$row["cmp_name"].'</td>
-                                <td>'.$row["cmp_version"].'</td>
-                                <td>'.$row["cmp_type"].' </span> </td>
-                                <td>'.$row["app_status"].' </span> </td>
-                                <td>'.$row["cmp_status"].' </span> </td>
-                                <td>'.$row["request_id"].'</td>
-                                <td>'.$row["request_date"].'</td>
-                                <td>'.$row["request_status"].'</td>
-                                <td>'.$row["request_step"].'</td>
-                                <td>'.$row["notes"].' </span> </td>
-                            </tr>';
+                        <td>'.$row["request_step"].'</td>
+                        <td>'.$row["request_status"].'</td>
+                        <td>'.$row["request_id"].'</td>
+                        <td>'.$row["request_date"].'</td>
+                        <td>'.$row["app_name"].'</td>
+                        <td>'.$row["app_version"].'</td>
+                        <td>'.$row["cmp_name"].'</td>
+                        <td>'.$row["cmp_version"].'</td>
+                        </tr>';
+                        
                     }//end while
                 }//end if
                 else {
@@ -215,30 +350,29 @@
                 }//end else
 
                 $result->close();
-                ?>
+                echo "</tbody>
+                
+            <tfoot>
+            <tr>
+            <th>Request Step</th> 
+            <th>Request Status</th>
+            <th>Request ID</th>
+            <th>Request Date</th>
+            <th>App Name</th>
+            <th>App Version</th>
+            <th>CMP Name</th>
+            <th>CMP Version</th>
+            </tr>
+        </tfoot>
+        </table>";
+        }
+        ?>
 
-                </tbody>
-                <tfoot>
-                    <tr>
-                            <th>App ID</th>
-                            <th>App Name</th>
-                            <th>App Version</th>
-                            <th>CMP ID</th>
-                            <th>CMP Name</th>
-                            <th>CMP Version</th>
-                            <th>CMP Type</th>
-                            <th>App Status</th>
-                            <th>CMP Status</th>
-                            <th>Request ID</th>
-                            <th>Request Date</th>
-                            <th>Request Status</th>
-                            <th>Request Step</th>
-                            <th>Notes</th>
-                    </tr>
-                </tfoot>
-            </table>
+                    </tbody>
+                </table>
 
-            <script type="text/javascript" language="javascript">
+
+                <script type="text/javascript" language="javascript">
 
                 var app_status, cmp_status, request_status, request_step = null;
                 <?php
@@ -255,68 +389,70 @@
                 }
                 ?>
 
-            $(document).ready( function () {
+               $(document).ready( function () {
+                
+                $('#info').DataTable( {
+                    dom: 'lfrtBip',
+                    buttons: [
+                        'copy', 'excel', 'csv', 'pdf'
+                    ] }
+                );
+                
+                
 
-            $('#info').DataTable( {
-                dom: 'lfrtBip',
-                buttons: [
-                    'copy', 'excel', 'csv', 'pdf'
-                ] }
-            );
+                $('#info thead tr').clone(true).appendTo( '#info thead' );
+                $('#info thead tr:eq(1) th').each( function (i) {
+                    var title = $(this).text();
+                    if (title == 'App Status' && app_status != null) {
+                        $(this).html( '<input id = "mytext" type="text" placeholder="Search '+title+'" value = "'+app_status+'" autofocus/>' );
+                        
+                        $( this ).trigger( 'keyup' );
+                    } else if (title == 'CMP Status' && cmp_status != null) {
+                        $(this).html( '<input id = "mytext" type="text" placeholder="Search '+title+'" value = "'+cmp_status+'" autofocus/>' );
+                        $( 'input', this ).trigger( 'keyup change' );
+                    } else if (title == 'Request Status' && title != 'Request Step' && request_status != null) {
+                        $(this).html( '<input id = "mytext" type="text" placeholder="Search '+title+'" value = "'+request_status+'" autofocus/>' );
+                        $( this ).trigger( 'change' );
+                    } else if (title == 'Request Step' && title != 'Request Status' && request_step != null) {
+                        $(this).html( '<input id = "mytext" type="text" placeholder="Search '+title+'" value = "'+request_step+'" autofocus/>' );
+                        $( this ).trigger( 'change' );
+                    } else {
+                        $(this).html( '<input id = "mytext" type="text" placeholder="Search '+title+'"/>' );
+                    }
+                    
+                    $( 'input', this ).on( 'keyup change', function () {
+                        if ( table.column(i).search() !== this.value ) {
+                            table
+                                .column(i)
+                                .search( this.value )
+                                .draw();
+                        }
+                    } );
+                    
 
-
-
-        $('#info thead tr').clone(true).appendTo( '#info thead' );
-        $('#info thead tr:eq(1) th').each( function (i) {
-            var title = $(this).text();
-            if (title == 'App Status' && app_status != null) {
-                $(this).html( '<input type="text" placeholder="Search '+title+'" value = "'+app_status+'" autofocus/>' );
-                $( this ).trigger( 'keyup' );
-            } else if (title == 'CMP Status' && cmp_status != null) {
-                $(this).html( '<input type="text" placeholder="Search '+title+'" value = "'+cmp_status+'" autofocus/>' );
-                $( 'input', this ).trigger( 'keyup change' );
-            } else if (title == 'Request Status' && title != 'Request Step' && request_status != null) {
-                $(this).html( '<input type="text" placeholder="Search '+title+'" value = "'+request_status+'" autofocus/>' );
-                $( this ).trigger( 'change' );
-            } else if (title == 'Request Step' && title != 'Request Status' && request_step != null) {
-                $(this).html( '<input type="text" placeholder="Search '+title+'" value = "'+request_step+'" autofocus/>' );
-                $( this ).keyup();
-            } else {
-                $(this).html( '<input type="text" placeholder="Search '+title+'"/>' );
-            }
-
-            $( 'input', this ).on( 'keyup change', function () {
-                if ( table.column(i).search() !== this.value ) {
-                    table
-                        .column(i)
-                        .search( this.value )
-                        .draw();
-                }
+                } );
+            
+                var table = $('#info').DataTable( {
+                    orderCellsTop: true,
+                    fixedHeader: true,
+                    retrieve: true
+                } );
+                table.columns(0).search( $('#mytext').val() ).draw();
             } );
 
 
-        } );
 
-        var table = $('#info').DataTable( {
-            orderCellsTop: true,
-            fixedHeader: true,
-            retrieve: true
-        } );
-
-    } );
-
-
-
-        </script>
+        </script>                  
         </div>
     </body>
 
 </html>
-
+        
 
  <style>
    tfoot {
      display: table-header-group;
    }
  </style>
- <?php include("./footer.php"); ?>
+
+  <?php include("./footer.php"); ?>
