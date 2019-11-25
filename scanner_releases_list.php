@@ -33,8 +33,6 @@
                         <th>RTM Date(s)</th>
                         <th>Manager</th>
                         <th>Author</th>
-                        
-                        <th>View BOM Tree</th>
                 </tr>
               </thead>
 
@@ -52,15 +50,16 @@ $result = $db->query($sql);
                     while($row = $result->fetch_assoc()) {
                         echo '<tr>';
                         $appName = $row["name"];
-                        $appID = $row["app_id"];
-                                $sql2 = "SELECT DISTINCT app_name from sbom where app_id = '".$appID."' Limit 1;";
+                        list($name,$ver) = split('[ ]', $appName);
+
+                                $sql2 = "SELECT DISTINCT app_name from sbom where app_name = '".$name."' and app_version = '".$ver."' Limit 1;";
                                 $result2 = $db->query($sql2);
 
                                 echo "<td>".$row["app_id"]."</td>";
                                 echo '<td>'.$row["id"].'</td>';
 
                                 if ($result2->num_rows > 0) {
-                                  echo '<td><a href="scanner_sbom_tree.php?id='.$appID.'">'.$appName.' </a> </span> </td>';
+                                  echo '<td><a href="scanner_sbom_tree.php?name='.$name.'&version='.$ver.'">'.$appName.' </a> </span> </td>';
                                 }//end if
                                 else {
                                   echo '<td>'.$row["name"].' </span> </td>';
@@ -74,12 +73,7 @@ $result = $db->query($sql);
                                 <td>'.$row["rtm_date"].' </span> </td>
                                 <td>'.$row["manager"].' </span> </td>
                                 <td>'.$row["author"].' </span> </td>';
-                                if ($result2->num_rows > 0) {
-                                   echo "<td><a class=\"btn btn-danger btn-sm\" style = \"border-radius: 10px;\" href=\"scanner_sbom_tree.php?id=".$appName."\">View ".$appName." in Tree</a></td></tr>";
-                                 }//end if
-                                 else {
-                                   echo '<td class="btn disabled" >No Tree Link for '.$appName.'</td></tr>';
-                                  }//end else
+      
                                   $result2->close();
                                 }
                               }
@@ -99,8 +93,6 @@ $result = $db->query($sql);
                         <th>RTM Date(s)</th>
                         <th>Manager</th>
                         <th>Author</th>
-                      
-                        <th>View BOM Tree</th>
                 </tr>
               </tfoot>
         </table>
