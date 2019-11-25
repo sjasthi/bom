@@ -7,11 +7,7 @@
  ?>
 
 <!--Imports-->
-<link rel="stylesheet" href="tree_style.css" />
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-treetable/3.2.0/css/jquery.treetable.css" />
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-treetable/3.2.0/css/jquery.treetable.theme.default.css" />
 
 
 <div class="right-content">
