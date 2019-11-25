@@ -53,22 +53,28 @@
           <?php
           $getRedYellow = false;
           $getYellow = false;
-          $getRed = false; 
+          $getRed = true; 
             //finds parent data
             if (isset($_GET['show'])){
-              if(($_GET['show']) == "redYellow"){
-                $getRedYellow = true;
-              }             
-              else if(($_GET['show']) == "red"){
+              if(($_GET['show']) == "red"){
                 $getRed = true;
+                $getYellow = false;
+                $getRedYellow = false;
+              }             
+              else if(($_GET['show']) == "redYellow"){
+                $getRedYellow = true;
+                $getRed = false;
+                $getYellow = false;
               }
               else if(($_GET['show']) == "yellow"){
-                $getYellow = true;
+              $getRedYellow = false;
+              $getYellow = true;
+              $getRed = false; 
               }             
             } else {
               $getRedYellow = false;
               $getYellow = false;
-              $getRed = false;    
+              $getRed = true;    
             }
 
             $getAppId = null;
@@ -87,33 +93,19 @@
               $findAppName = true;
             }
 
-            if($getRedYellow){
-            $sql_parent = "SELECT DISTINCT app_name as name, 
-                            app_version as version, 
-                            app_status as status, 
-                            '' as cmp_type, 
-                            '' as request_step,
-                            '' as request_status,
-                            '' as notes, 
-                            'parent' as class, 
-                            concat(app_name, concat('_', app_version)) as application
-                            from sbom
-                          union
-                          SELECT DISTINCT cmp_name as name, 
-                            cmp_version as version, 
-                            cmp_status as status, 
-                            cmp_type, 
-                            request_step,
-                            request_status,
-                            notes, 
-                            'child' as class, 
-                            concat(cmp_name, concat('_', cmp_version)) as application
-                            from sbom
-                            where 
-                            cmp_name in (select distinct app_name from sbom)
-                            order by application, class desc, name;";
-            }
-            else if ($getYellow){
+            if ($getRed){
+              $sql_parent = "SELECT DISTINCT app_name as name, 
+                              app_version as version, 
+                              app_status as status, 
+                              '' as cmp_type, 
+                              '' as request_step,
+                              '' as request_status,
+                              '' as notes, 
+                              'parent' as class, 
+                              concat(app_name, concat('_', app_version)) as application
+                              from sbom 
+                              order by application, class desc, name;";
+            }  else if ($getYellow){
               $sql_parent = "SELECT DISTINCT cmp_name as name, 
                               cmp_version as version, 
                               cmp_status as status, 
@@ -127,7 +119,7 @@
                               where 
                               cmp_name in (select distinct app_name from sbom)
                               order by application, class desc, name;";
-            }  else if($getRed){
+            }  else if ($getRedYellow){
               $sql_parent = "SELECT DISTINCT app_name as name, 
                               app_version as version, 
                               app_status as status, 
@@ -137,9 +129,24 @@
                               '' as notes, 
                               'parent' as class, 
                               concat(app_name, concat('_', app_version)) as application
-                              from sbom 
+                              from sbom
+                            union
+                            SELECT DISTINCT cmp_name as name, 
+                              cmp_version as version, 
+                              cmp_status as status, 
+                              cmp_type, 
+                              request_step,
+                              request_status,
+                              notes, 
+                              'child' as class, 
+                              concat(cmp_name, concat('_', cmp_version)) as application
+                              from sbom
+                              where 
+                              cmp_name in (select distinct app_name from sbom)
                               order by application, class desc, name;";
-            } elseif ($findApp) {
+              }
+            
+            else if ($findApp) {
               $sql_parent = "SELECT DISTINCT app_name as name, 
                               app_version as version, 
                               app_status as status, 
@@ -152,7 +159,7 @@
                               from sbom  
                               where app_id = '".$getAppId."' 
                               order by name;";
-            } elseif ($findAppName) {
+            } else if ($findAppName) {
               $sql_parent = "SELECT DISTINCT app_name as name, 
                               app_version as version, 
                               app_status as status, 
@@ -166,14 +173,14 @@
                               where app_name = '".$getAppName."' 
                               and app_version = '".$getAppVer."' 
                               order by name;";
-            } else{
+            } else {
               $sql_parent = "SELECT DISTINCT app_name as name, 
                               app_version as version, 
                               app_status as status, 
                               '' as cmp_type, 
                               '' as request_step,
                               '' as request_status,
-                              notes, 
+                              '' as notes, 
                               'parent' as class, 
                               concat(app_name, concat('_', app_version)) as application
                               from sbom   
