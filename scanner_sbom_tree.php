@@ -107,6 +107,7 @@
                               'parent' as class, 
                               concat(app_name, concat('_', app_version)) as application
                               from sbom 
+                              where app_name not in (select distinct cmp_name from sbom)
                               order by application, class desc, name;";
             }  else if ($getYellow){
               $sql_parent = "SELECT DISTINCT cmp_name as name, 
@@ -133,6 +134,7 @@
                               'parent' as class, 
                               concat(app_name, concat('_', app_version)) as application
                               from sbom
+                              where app_name not in (select distinct cmp_name from sbom)
                             union
                             SELECT DISTINCT cmp_name as name, 
                               cmp_version as version, 
@@ -175,6 +177,7 @@
                               from sbom  
                               where app_name = '".$getAppName."' 
                               and app_version = '".$getAppVer."' 
+                              and app_name not in (select distinct cmp_name from sbom)
                               order by name;";
             } else {
               $sql_parent = "SELECT DISTINCT app_name as name, 
@@ -187,6 +190,7 @@
                               'parent' as class, 
                               concat(app_name, concat('_', app_version)) as application
                               from sbom   
+                              where app_name not in (select distinct cmp_name from sbom)
                               order by application, class desc, name;";
             }
 
