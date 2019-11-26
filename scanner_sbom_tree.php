@@ -37,10 +37,10 @@
                             </ul>
                           </div>
                         </nav>
-                        <div class="table-responsive">
+                        <div >
                           <h4 id="loading-text">Loading...</h4>
                           <div class="h4" id="responsive-wrapper" style="opacity: 0.0;">
-                            <table id = "bom_treetable" class = "table table-hover">
+                            <table id = "bom_treetable" class = "table">
                               <thead class = 'h4'>
                                 <th >Name</th>
                                 <th>Version</th>
@@ -108,18 +108,18 @@
                               app_name not in (select distinct cmp_name from sbom)
                               order by application, class desc, name;";
             }  else if ($getYellow){
-              $sql_parent = "SELECT DISTINCT cmp_name as name, 
-                              cmp_version as version, 
-                              cmp_status as status, 
-                              cmp_type, 
-                              request_step,
-                              request_status,
-                              notes, 
+              $sql_parent = "SELECT DISTINCT app_name as name, 
+                              app_version as version, 
+                              app_status as status, 
+                              '' as cmp_type, 
+                              '' as request_step,
+                              '' as request_status,
+                              '' as notes, 
                               'child' as class, 
                               concat(cmp_name, concat('_', cmp_version)) as application
                               from sbom
                               where 
-                              cmp_name in (select distinct app_name from sbom)
+                              app_name in (select distinct cmp_name from sbom)
                               order by application, class desc, name;";
             }  else if ($getRedYellow){
               $sql_parent = "SELECT DISTINCT app_name as name, 
@@ -135,18 +135,18 @@
                               where 
                               app_name not in (select distinct cmp_name from sbom)
                             union
-                            SELECT DISTINCT cmp_name as name, 
-                              cmp_version as version, 
-                              cmp_status as status, 
-                              cmp_type, 
-                              request_step,
-                              request_status,
-                              notes, 
+                            SELECT DISTINCT app_name as name, 
+                              app_version as version, 
+                              app_status as status, 
+                              '' as cmp_type, 
+                              '' as request_step,
+                              '' as request_status,
+                              '' as notes, 
                               'child' as class, 
                               concat(cmp_name, concat('_', cmp_version)) as application
                               from sbom
                               where 
-                              cmp_name in (select distinct app_name from sbom)
+                              app_name in (select distinct cmp_name from sbom)
                               order by application, class desc, name;";
               }
             
