@@ -27,7 +27,8 @@
             switch(name){
                 case 'Application':
                     <?php
-                    $query = $db->query("SELECT app_status, COUNT(app_status) AS occurrences FROM sbom GROUP BY app_status;");
+                    //$query = $db->query("SELECT app_status, COUNT(app_status) AS occurrences FROM (SELECT DISTINCT app_name, app_version, app_status from sbom union SELECT DISTINCT cmp_name, cmp_version, cmp_status from sbom) as subquery group by app_status;");
+                    $query = $db->query("SELECT app_status, COUNT(app_status) AS occurrences FROM (SELECT DISTINCT app_name, app_version, app_status from sbom) as subquery group by app_status;");
                     while($query_row = $query->fetch_assoc()) {
                         echo 'queryArray.push(["'.$query_row["app_status"].'", '.$query_row["occurrences"].', "'.$query_row["app_status"].'"]);';
                     }
@@ -35,7 +36,7 @@
                     break;
                 case 'Component':
                     <?php
-                    $query = $db->query("SELECT cmp_status, COUNT(cmp_status) AS occurrences FROM sbom GROUP BY cmp_status;");
+                    $query = $db->query("SELECT cmp_status, COUNT(cmp_status) AS occurrences FROM (SELECT DISTINCT cmp_name, cmp_version, cmp_status, cmp_type from sbom) as subquery GROUP BY cmp_status;");
                     while($query_row = $query->fetch_assoc()) {
                         echo 'queryArray.push(["'.$query_row["cmp_status"].'", '.$query_row["occurrences"].', "'.$query_row["cmp_status"].'"]);';
                     }
@@ -184,7 +185,8 @@
         error_reporting(E_ERROR | E_WARNING | E_PARSE);    
         if ($_COOKIE['app_status_cookie']!= null) {
             $appStatusSelection = $_COOKIE['app_status_cookie'];
-            $sql = "SELECT DISTINCT app_name, app_version, app_status from sbom union SELECT DISTINCT cmp_name, cmp_version, cmp_status from sbom;";
+            //$sql = "SELECT DISTINCT app_name, app_version, app_status from sbom union SELECT DISTINCT cmp_name, cmp_version, cmp_status from sbom;";
+            $sql = "SELECT DISTINCT app_name, app_version, app_status from sbom;";
             setcookie("app_status_cookie", "", time()-3600);
             echo "<table id='info' cellpadding='0' cellspacing='0' border='0'
             class='datatable table table-striped table-bordered datatable-style table-hover'
