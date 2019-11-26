@@ -1,8 +1,8 @@
 -<?php
+  
   $nav_selected = "SCANNER";
   $left_buttons = "YES";
   $left_selected = "SBOMTREE";
-
   include("./nav.php");
  ?>
 
@@ -76,14 +76,12 @@
               $getYellow = false;
               $getRed = true;    
             }
-
             $getAppId = null;
             $findApp = false;
             if (isset($_GET['id'])){
               $getAppId = $_GET['id'];
               $findApp = true;
             }
-
             $getAppName = null;
             $getAppVer = null;
             $findAppName = false;
@@ -95,7 +93,6 @@
               $getRed = false; 
               $findAppName = true;
             }
-
             if ($getRed){
               $sql_parent = "SELECT DISTINCT app_name as name, 
                               app_version as version, 
@@ -107,6 +104,8 @@
                               'parent' as class, 
                               concat(app_name, concat('_', app_version)) as application
                               from sbom 
+                              where 
+                              app_name not in (select distinct cmp_name from sbom)
                               order by application, class desc, name;";
             }  else if ($getYellow){
               $sql_parent = "SELECT DISTINCT cmp_name as name, 
@@ -133,6 +132,8 @@
                               'parent' as class, 
                               concat(app_name, concat('_', app_version)) as application
                               from sbom
+                              where 
+                              app_name not in (select distinct cmp_name from sbom)
                             union
                             SELECT DISTINCT cmp_name as name, 
                               cmp_version as version, 
@@ -189,7 +190,6 @@
                               from sbom   
                               order by application, class desc, name;";
             }
-
             $result_parent = $db->query($sql_parent);
             $p=1;
             $c=1;
@@ -315,7 +315,6 @@
                                   <td class='text-capitalize'>".$gnotes."</td>
                                   </tr>";
                             $gc++;
-
                           }
                           $result_gchild -> close();
                     }
@@ -341,7 +340,6 @@
         clickableNodeNames: true,
         indent: 25
       };
-
       $("#bom_treetable").treetable(sbom_params).DataTable(
         {
           searching: false,
@@ -351,8 +349,6 @@
           scrollCollapse: true,
           paging:         false
         });
-
-
       //Function for Color/No Color Button
       $(document).ready(function(){
         $("#color_noColor").click(function(){
@@ -362,44 +358,34 @@
           $("div .grandchild").toggleClass("bw_grandchild");
         });
       });
-
-
       $(document).ready(function() {
         //input search for where used
         $('#input').on('keyup', function() {
           let input = $(this).val().toLowerCase();
           let cmp_nameInput = '', cmp_idInput = '';
-
           //Checks to see if the search terms are delineated, if yes, split input into cmp_nameInput and cmp_idInput
           //Feel free to add more delimiters to this array exxcept backslash ( \ ). I'm nearly 100% sure it'll break something, somewhere.
           let delimiterArray = [';', ':', ',', '|', '/'];
-
           let usingDelimiter = delimiterArray.some(function(delimiter){
             if(input.includes(delimiter)){
               [cmp_nameInput, cmp_idInput] = input.split(delimiter, 2);
               return true;
             }
           });
-
           //if we're not using a delimiter, assume input is only for component name
           if(!usingDelimiter){cmp_nameInput = input;}
-
           //Loops over each application
           $('#bom_treetable tbody').each(function() {
-
             let sucessfulMatch = false;
             //Check if any component name in the current application matches cmp_nameInput
             $(this).find(".component").each(function(){
               let nameMatch = false, idMatch = false;
-
               if($(this).find(".cmp_name").text().toLowerCase().includes(cmp_nameInput)){
                 nameMatch = true;
               }
-
               if($(this).find(".cmp_version").text().toLowerCase().includes(cmp_idInput)){
                 idMatch = true;
               }
-
               //Outer: if there was a sucessful match, don't bother searching more
               // 1: if (both search terms are used) and (both search terms aren't found)
               // 2: if (cmp_name is used) and (cmp_name isn't found)
@@ -421,14 +407,12 @@
           });
         });
       });
-
       document.onreadystatechange = function () {
         if (document.readyState === 'complete') {
           $('#loading-text').hide();
           $("#responsive-wrapper").css('opacity', '100.0');
         }
       }
-
       let expandAll = function(){
         $("#bom_treetable tbody tr.leaf").each((index, item) => {
           setTimeout(() => {
@@ -436,7 +420,6 @@
           }, 0);
         });
       }
-
       let collapseAll = function(){
         let highestTimeoutId = setTimeout(";");
         for (let i = 0 ; i < highestTimeoutId ; i++) {
@@ -444,7 +427,6 @@
         }
         $('#bom_treetable').treetable('collapseAll');
       }
-
       <?php 
       if ($findApp || $findAppName) {
         echo "$( \"#expandAll\" ).trigger( \"click\" );";
