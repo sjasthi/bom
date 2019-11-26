@@ -87,7 +87,7 @@
             var options = {
                 title: title,
                 width: 500,
-                height: 500,
+                height: 500
             };
 
             var chart = new google.visualization.PieChart(document.getElementById(title.replace(/ /g, '')));
@@ -122,6 +122,27 @@
                     location.reload();
                 }               
             }
+
+            let reportName = queryArray[0][0].toLowerCase().replace(/ /g, '');
+
+            let length = 0;
+
+            queryArray.forEach((slice, index) => {
+                if(index !== 0){
+                    length += slice[1];
+                }
+            });
+
+            switch(reportName){
+                        case "applicationstatus":
+                            document.getElementById('totalApplicationStatusReport').innerHTML = "Total: " + length; break;
+                        case "componentstatus":
+                            document.getElementById('totalComponentStatusReport').innerHTML = "Total: " + length; break;
+                        case "requeststatus":
+                            document.getElementById('totalRequestStatusReport').innerHTML = "Total: " + length; break;
+                        case "requeststep":
+                            document.getElementById('totalRequestStepReport').innerHTML = "Total: " + length; break;
+                    }
         }
         </script>
         <!-- End Google Pie Chart API Code -->
@@ -139,12 +160,24 @@
         <div class="container">
             <table>
                 <tr>
-                    <td><div style=" width:400px; height:400px; disply:inline-block;" id="ApplicationStatusReport" style="width: 900px; height: 500px;"></div></td>
-                    <td><div style="width:400px; height:400px; disply:inline-block;" id="ComponentStatusReport" style="width: 900px; height: 500px;"></div></td>
+                    <td>
+                        <div style=" width:400px; height:400px; disply:inline-block;" id="ApplicationStatusReport" style="width: 900px; height: 500px;"></div>
+                        <p style="position:relative;z-index:1000;text-align:center" id="totalApplicationStatusReport"></p>
+                    </td>
+                    <td>
+                        <div style="width:400px; height:400px; disply:inline-block;" id="ComponentStatusReport" style="width: 900px; height: 500px;"></div>
+                        <p  style="position:relative;z-index:1000;text-align:center" id="totalComponentStatusReport"></p>
+                    </td>
                 </tr>
                 <tr>
-                    <td><div style=" width:400px; height:400px; disply:inline-block;" id="RequestStatusReport" style="width: 900px; height: 500px;"></div></td>                   
-                    <td><div style=" width:400px; height:400px; disply:inline-block;" id="RequestStepReport" style="width: 900px; height: 500px;"></div></td>
+                    <td>
+                        <div style=" width:400px; height:400px; disply:inline-block;" id="RequestStatusReport" style="width: 900px; height: 500px;"></div>
+                        <p  style="position:relative;z-index:1000;text-align:center" id="totalRequestStatusReport"></p>
+                    </td>                   
+                    <td>
+                        <div style=" width:400px; height:400px; disply:inline-block;" id="RequestStepReport" style="width: 900px; height: 500px;"></div>
+                        <p  style="position:relative;z-index:1000;text-align:center" id="totalRequestStepReport"></p>    
+                    </td>
                 </tr>
             </table><br><br><br><br><br><br>
         <?php
