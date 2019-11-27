@@ -27,7 +27,8 @@
             switch(name){
                 case 'Application':
                     <?php
-                    $query = $db->query("SELECT app_status, COUNT(app_status) AS occurrences FROM sbom GROUP BY app_status;");
+                    //$query = $db->query("SELECT app_status, COUNT(app_status) AS occurrences FROM (SELECT DISTINCT app_name, app_version, app_status from sbom union SELECT DISTINCT cmp_name, cmp_version, cmp_status from sbom) as subquery group by app_status;");
+                    $query = $db->query("SELECT app_status, COUNT(app_status) AS occurrences FROM (SELECT DISTINCT app_name, app_version, app_status from sbom) as subquery group by app_status;");
                     while($query_row = $query->fetch_assoc()) {
                         echo 'queryArray.push(["'.$query_row["app_status"].'", '.$query_row["occurrences"].', "'.$query_row["app_status"].'"]);';
                     }
@@ -35,7 +36,7 @@
                     break;
                 case 'Component':
                     <?php
-                    $query = $db->query("SELECT cmp_status, COUNT(cmp_status) AS occurrences FROM sbom GROUP BY cmp_status;");
+                    $query = $db->query("SELECT cmp_status, COUNT(cmp_status) AS occurrences FROM (SELECT DISTINCT cmp_name, cmp_version, cmp_status, cmp_type from sbom) as subquery GROUP BY cmp_status;");
                     while($query_row = $query->fetch_assoc()) {
                         echo 'queryArray.push(["'.$query_row["cmp_status"].'", '.$query_row["occurrences"].', "'.$query_row["cmp_status"].'"]);';
                     }
@@ -86,8 +87,8 @@
 
             var options = {
                 title: title,
-                width: 500,
-                height: 500,
+                width: 750,
+                height: 400,
             };
 
             var chart = new google.visualization.BarChart(document.getElementById(title.replace(/ /g, '')));
@@ -122,6 +123,27 @@
                     location.reload();
                 }               
             }
+
+            let reportName = queryArray[0][0].toLowerCase().replace(/ /g, '');
+
+            let length = 0;
+
+            queryArray.forEach((slice, index) => {
+                if(index !== 0){
+                    length += slice[1];
+                }
+            });
+
+            switch(reportName){
+                        case "applicationstatus":
+                            document.getElementById('totalApplicationStatusReport').innerHTML = "Total: " + length; break;
+                        case "componentstatus":
+                            document.getElementById('totalComponentStatusReport').innerHTML = "Total: " + length; break;
+                        case "requeststatus":
+                            document.getElementById('totalRequestStatusReport').innerHTML = "Total: " + length; break;
+                        case "requeststep":
+                            document.getElementById('totalRequestStepReport').innerHTML = "Total: " + length; break;
+                    }
         }
         </script>
         <!-- End Google Bar Chart API Code -->
@@ -139,19 +161,32 @@
         <div class="container">
             <table>
                 <tr>
-                    <td><div style=" width:400px; height:400px; disply:inline-block;" id="ApplicationStatusReport" style="width: 900px; height: 500px;"></div></td>
-                    <td><div style="width:400px; height:400px; disply:inline-block;" id="ComponentStatusReport" style="width: 900px; height: 500px;"></div></td>
+                    <td>
+                        <div style=" width:750px; height:400px; disply:inline-block;" id="ApplicationStatusReport" style="width: 50%; height: 500px;"></div>
+                        <p style="position:relative;z-index:1000;text-align:center" id="totalApplicationStatusReport"></p>
+                    </td>
+                    <td>
+                        <div style="width:750px; height:400px; disply:inline-block;" id="ComponentStatusReport" style="width: 50%; height: 500px;"></div>
+                        <p  style="position:relative;z-index:1000;text-align:center" id="totalComponentStatusReport"></p>
+                    </td>
                 </tr>
                 <tr>
-                    <td><div style=" width:400px; height:400px; disply:inline-block;" id="RequestStatusReport" style="width: 900px; height: 500px;"></div></td>                   
-                    <td><div style=" width:400px; height:400px; disply:inline-block;" id="RequestStepReport" style="width: 900px; height: 500px;"></div></td>
+                    <td>
+                        <div style=" width:750px; height:400px; disply:inline-block;" id="RequestStatusReport" style="width: 50%; height: 500px;"></div>
+                        <p  style="position:relative;z-index:1000;text-align:center" id="totalRequestStatusReport"></p>
+                    </td>                   
+                    <td>
+                        <div style=" width:750px; height:400px; disply:inline-block;" id="RequestStepReport" style="width: 50%; height: 500px;"></div>
+                        <p  style="position:relative;z-index:1000;text-align:center" id="totalRequestStepReport"></p>    
+                    </td>
                 </tr>
             </table><br><br><br><br><br><br>
         <?php
         error_reporting(E_ERROR | E_WARNING | E_PARSE);    
         if ($_COOKIE['app_status_cookie']!= null) {
             $appStatusSelection = $_COOKIE['app_status_cookie'];
-            $sql = "SELECT DISTINCT app_name, app_version, app_status from sbom union SELECT DISTINCT cmp_name, cmp_version, cmp_status from sbom;";
+            //$sql = "SELECT DISTINCT app_name, app_version, app_status from sbom union SELECT DISTINCT cmp_name, cmp_version, cmp_status from sbom;";
+            $sql = "SELECT DISTINCT app_name, app_version, app_status from sbom;";
             setcookie("app_status_cookie", "", time()-3600);
             echo "<table id='info' cellpadding='0' cellspacing='0' border='0'
             class='datatable table table-striped table-bordered datatable-style table-hover'
