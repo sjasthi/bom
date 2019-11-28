@@ -93,11 +93,7 @@
             } else {
               $sql_parent = "SELECT DISTINCT app_name as name, 
               app_version as version, 
-              app_status as status, 
-              '' as cmp_type, 
-              '' as request_step,
-              '' as request_status,
-              '' as notes, 
+              app_status as status,
               CASE WHEN app_name in (select distinct cmp_name from sbom) THEN 'child'
               ELSE 'parent'
               END AS class,
@@ -116,21 +112,20 @@
                 $app_version = $row_parent["version"];
                 $class = $row_parent["class"];
                 $app_status = $row_parent["status"];
-                $cmp_type = $row_parent["cmp_type"];
-                $request_step = $row_parent["request_step"];
-                $request_status = $row_parent["request_status"];
-                $notes = $row_parent["notes"];
                 $div_class = $row_parent["div_class"];
                 $p_id = $p;
                 echo "<tbody class= '".$div_class."'>
                       <tr data-tt-id = '".$p_id."' >
-                      <td class='text-capitalize'> <div class = 'btn ".$class."' ><span class = 'app_name' >".$app_name."</span>&nbsp; &nbsp;&nbsp; &nbsp;</div></td>
+                      <td class='text-capitalize'> 
+                      <div class = 'btn ".$class."' >
+                      <span class = 'app_name' >".$app_name."</span>&nbsp; &nbsp;&nbsp; &nbsp;
+                      </div></td>
                       <td >".$app_version."</td>
                       <td class='text-capitalize'>".$app_status."</td>
-                      <td class='text-capitalize'>".$cmp_type."</td>
-                      <td class='text-capitalize'>".$request_status."</td>
-                      <td class='text-capitalize'>".$request_step."</td>
-                      <td >".$notes."</td>
+                      <td/>
+                      <td/>
+                      <td/>
+                      <td/
                       </tr>";
                 $p++;
                       // output data of child
