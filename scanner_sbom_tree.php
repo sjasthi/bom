@@ -74,11 +74,9 @@
                               '' as request_status,
                               '' as notes, 
                               'parent' as class, 
-                              'red' as div_class,
-                              concat(app_name, concat('_', app_version)) as application
+                              'red' as div_class
                               from sbom  
-                              where app_id = '".$getAppId."' 
-                              order by name;";
+                              where app_id = '".$getAppId."';";
             } else if ($findAppName) {
               $sql_parent = "SELECT DISTINCT app_name as name, 
                               app_version as version, 
@@ -88,41 +86,25 @@
                               '' as request_status,
                               '' as notes, 
                               'parent' as class, 
-                              'red' as div_class, 
-                              concat(app_name, concat('_', app_version)) as application
+                              'red' as div_class
                               from sbom  
                               where app_name = '".$getAppName."' 
-                              and app_version = '".$getAppVer."' 
-                              order by name;";
+                              and app_version = '".$getAppVer."' ;";
             } else {
               $sql_parent = "SELECT DISTINCT app_name as name, 
-                              app_version as version, 
-                              app_status as status, 
-                              '' as cmp_type, 
-                              '' as request_step,
-                              '' as request_status,
-                              '' as notes, 
-                              'parent' as class, 
-                              'red' as div_class, 
-                              concat(app_name, concat('_', app_version)) as application
-                              from sbom
-                              where 
-                              app_name not in (select distinct cmp_name from sbom)
-                            union
-                            SELECT DISTINCT app_name as name, 
-                              app_version as version, 
-                              app_status as status, 
-                              '' as cmp_type, 
-                              '' as request_step,
-                              '' as request_status,
-                              '' as notes, 
-                              'child' as class, 
-                              'yellow' as div_class, 
-                              concat(cmp_name, concat('_', cmp_version)) as application
-                              from sbom
-                              where 
-                              app_name in (select distinct cmp_name from sbom)
-                              order by application, class desc, name;";
+              app_version as version, 
+              app_status as status, 
+              '' as cmp_type, 
+              '' as request_step,
+              '' as request_status,
+              '' as notes, 
+              CASE WHEN app_name in (select distinct cmp_name from sbom) THEN 'child'
+              ELSE 'parent'
+              END AS class,
+              CASE WHEN app_name in (select distinct cmp_name from sbom) THEN 'yellow'
+              ELSE 'red'
+              END AS div_class
+              from sbom";
              }
             $result_parent = $db->query($sql_parent);
             $p=1;
@@ -138,10 +120,9 @@
                 $request_step = $row_parent["request_step"];
                 $request_status = $row_parent["request_status"];
                 $notes = $row_parent["notes"];
-                $application = $row_parent["application"];
                 $div_class = $row_parent["div_class"];
                 $p_id = $p;
-                echo "<tbody class= '".$div_class."' id = '".$application."'>
+                echo "<tbody class= '".$div_class."'>
                       <tr data-tt-id = '".$p_id."' >
                       <td class='text-capitalize'> <div class = 'btn ".$class."' ><span class = 'app_name' >".$app_name."</span>&nbsp; &nbsp;&nbsp; &nbsp;</div></td>
                       <td >".$app_version."</td>
@@ -160,35 +141,18 @@
                                                       cmp_status, 
                                                       request_status,
                                                       notes, 
-                                                      'grandchild' as class, 
-                                                      concat(cmp_name, concat('_', cmp_version)) as cmp
+                                                      CASE WHEN cmp_name in (select distinct app_name from sbom) THEN 'child'
+                                                      ELSE 'grandchild'
+                                                      END AS class
                                         from sbom
                                         where app_name = '".$app_name."'
                                         and app_version = '".$app_version."'
-                                        and app_status = '".$app_status."'
-                                        and cmp_name not in (select distinct app_name from sbom)
-                                    union
-                                    SELECT DISTINCT cmp_name, 
-                                                    cmp_type, 
-                                                    cmp_version, 
-                                                    request_step,
-                                                    cmp_status, 
-                                                    request_status,
-                                                    notes, 
-                                                    'child' as class, 
-                                                    concat(cmp_name, concat('_', cmp_version)) as cmp
-                                    from sbom
-                                    where app_name = '".$app_name."'
-                                        and app_version = '".$app_version."'
-                                        and app_status = '".$app_status."'
-                                        and cmp_name in (select distinct app_name from sbom)
-                                        order by cmp, class, cmp_name;";
+                                        and app_status = '".$app_status."'";
                           $result_child = $db->query($sql_child);
                           if ($result_child->num_rows > 0) {
                             // output data of child
                             while($row_child = $result_child->fetch_assoc()) {
                               $cmp_name = $row_child["cmp_name"];
-                              $cmp = $row_child["cmp"];
                               $cmp_version = $row_child["cmp_version"];
                               $cmp_status = $row_child["cmp_status"];
                               $request_step = $row_child["request_step"];
@@ -198,7 +162,7 @@
                               $c_class = $row_child["class"];
                               $c_id=$p_id."-".$c;
                               echo "
-                              <tr data-tt-id = '".$c_id."' data-tt-parent-id='".$p_id."' class = 'component' id = ".$cmp."'>
+                              <tr data-tt-id = '".$c_id."' data-tt-parent-id='".$p_id."' class = 'component' >
                                 <td class='text-capitalize'> <div class = 'btn ".$c_class."'> <span class = 'cmp_name'>".$cmp_name."</span>&nbsp; &nbsp;&nbsp; &nbsp;</div></td>
                                     <td class = 'cmp_version'>".$cmp_version."</td>
                                     <td class='text-capitalize'>".$cmp_status."</td>
@@ -216,8 +180,7 @@
                                           cmp_status, 
                                           request_status,
                                           notes, 
-                                          'grandchild' as class, 
-                                          concat(cmp_name, concat('_', cmp_version)) as gcmp
+                                          'grandchild' as class
                                         from sbom
                                         where app_name = '".$cmp_name."'
                                         and app_version = '".$cmp_version."'
@@ -228,7 +191,6 @@
                                         // output data of grandchild
                                         while($row_gchild = $result_gchild->fetch_assoc()) {
                                           $gcmp_name = $row_gchild["cmp_name"];
-                                          $gcmp = $row_gchild["gcmp"];
                                           $gcmp_version = $row_gchild["cmp_version"];
                                           $gcmp_status = $row_gchild["cmp_status"];
                                           $grequest_step = $row_gchild["request_step"];
@@ -238,7 +200,7 @@
                                           $gc_class = $row_gchild["class"];
                                           $gc_id=$c_id."-".$gc;
                                           echo "
-                                                <tr data-tt-id = '".$gc_id."' data-tt-parent-id='".$c_id."' id='".$gcmp."' >
+                                                <tr data-tt-id = '".$gc_id."' data-tt-parent-id='".$c_id."' >
                                                 <td class='text-capitalize'> <div class = 'btn ".$gc_class."'> <span class = 'cmp_name'>".$gcmp_name."</span>&nbsp; &nbsp;&nbsp; &nbsp;</div></td>
                                                 <td class = 'cmp_version'>".$gcmp_version."</td>
                                                 <td class='text-capitalize'>".$gcmp_status."</td>
