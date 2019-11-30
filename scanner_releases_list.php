@@ -50,7 +50,7 @@ $result = $db->query($sql);
                     while($row = $result->fetch_assoc()) {
                         echo '<tr>';
                         $appName = $row["name"];
-                        list($name,$ver) = split('[ ]', $appName);
+                        list($name,$ver) = explode(" ", $appName);
 
                                 $sql2 = "SELECT DISTINCT app_name from sbom where app_name = '".$name."' and app_version = '".$ver."' Limit 1;";
                                 $result2 = $db->query($sql2);

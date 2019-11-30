@@ -1,12 +1,12 @@
 <?php
 
-    $nav_selected = "REPORTS"; 
-    $left_buttons = "YES"; 
-    $left_selected = "REPORTSBARCHART"; 
+    $nav_selected = "REPORTS";
+    $left_buttons = "YES";
+    $left_selected = "REPORTSBARCHART";
 
     include("./nav.php");
     global $db;
-    
+
 ?>
 <html>
 
@@ -17,13 +17,13 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
 
         <script type="text/javascript">
-        
+
         function createBarChart(barChart){
             let name = barChart[0];
             let columnTitle = barChart[1];
 
             let queryArray = [[columnTitle, 'Count', {role:'annotation'}]];
-            
+
             switch(name){
                 case 'Application':
                     <?php
@@ -121,7 +121,7 @@
                     }
 
                     location.reload();
-                }               
+                }
             }
 
             let reportName = queryArray[0][0].toLowerCase().replace(/ /g, '');
@@ -148,7 +148,7 @@
         </script>
         <!-- End Google Bar Chart API Code -->
 
-        
+
     </head>
 
     <body>
@@ -157,7 +157,7 @@
                 <h3 style = "color: #01B0F1;">Reports --> Pie Chart.</h3>
                 <h3><img src="images/reports.png" style="max-height: 35px;" /> Pie Chart</h3>
             </div>
-        </div>  
+        </div>
         <div class="container">
             <table>
                 <tr>
@@ -174,15 +174,15 @@
                     <td>
                         <div style=" width:750px; height:400px; disply:inline-block;" id="RequestStatusReport" style="width: 50%; height: 500px;"></div>
                         <p  style="position:relative;z-index:1000;text-align:center" id="totalRequestStatusReport"></p>
-                    </td>                   
+                    </td>
                     <td>
                         <div style=" width:750px; height:400px; disply:inline-block;" id="RequestStepReport" style="width: 50%; height: 500px;"></div>
-                        <p  style="position:relative;z-index:1000;text-align:center" id="totalRequestStepReport"></p>    
+                        <p  style="position:relative;z-index:1000;text-align:center" id="totalRequestStepReport"></p>
                     </td>
                 </tr>
             </table><br><br><br><br><br><br>
         <?php
-        error_reporting(E_ERROR | E_WARNING | E_PARSE);    
+        error_reporting(E_ERROR | E_WARNING | E_PARSE);
         if ($_COOKIE['app_status_cookie']!= null) {
             $appStatusSelection = $_COOKIE['app_status_cookie'];
             //$sql = "SELECT DISTINCT app_name, app_version, app_status from sbom union SELECT DISTINCT cmp_name, cmp_version, cmp_status from sbom;";
@@ -196,8 +196,8 @@
                         <th>App Status</th>
                             <th>App Name</th>
                             <th>App Version</th>
-                            
-                            
+
+
                         </tr>
                     </thead>
                     <tbody>";
@@ -211,7 +211,7 @@
                                         <td>'.$row["app_name"].'</td>
                                         <td>'.$row["app_version"].'</td>
                                         </tr>';
-                                
+
                             }//end while
                         }//end if
                         else {
@@ -220,7 +220,7 @@
 
                         $result->close();
                         echo "</tbody>
-                        
+
                     <tfoot>
                     <tr>
                     <th>App Status</th>
@@ -229,7 +229,7 @@
                     </tr>
                 </tfoot>
 
-                
+
                         </table>";
             }elseif($_COOKIE['cmp_status_cookie']!= null) {
                 $cmpStatusSelection = $_COOKIE['cmp_status_cookie'];
@@ -240,11 +240,11 @@
                 width='100%' style='width: 50px;'>
                         <thead>
                             <tr id='table-first-row'>
-                                    <th>CMP Status</th>                                   
+                                    <th>CMP Status</th>
                                     <th>CMP Name</th>
                                     <th>CMP Version</th>
                                     <th>CMP Type</th>
-                                    
+
                             </tr>
                         </thead>
 
@@ -255,13 +255,13 @@
                                 // output data of each row
                                 while($row = $result->fetch_assoc()) {
                                     echo '<tr>
-                                            <td>'.$row["cmp_status"].'</td>                                           
+                                            <td>'.$row["cmp_status"].'</td>
                                             <td>'.$row["cmp_name"].'</td>
                                             <td>'.$row["cmp_version"].'</td>
                                             <td>'.$row["cmp_type"].'</td>
-                                            
+
                                         </tr>';
-                                    
+
                                 }//end while
                             }//end if
                             else {
@@ -270,7 +270,7 @@
 
                             $result->close();
                             echo "</tbody>
-                            
+
                         <tfoot>
                         <tr>
                         <th>CMP Status</th>
@@ -293,7 +293,7 @@
                         <th>Request Status</th>
                         <th>Request ID</th>
                         <th>Request Date</th>
-                        <th>Request Step</th>  
+                        <th>Request Step</th>
                         <th>App Name</th>
                         <th>App Version</th>
                         <th>CMP Name</th>
@@ -317,7 +317,7 @@
                                 <td>'.$row["cmp_name"].'</td>
                                 <td>'.$row["cmp_version"].'</td>
                                 </tr>';
-                                
+
                             }//end while
                         }//end if
                         else {
@@ -326,13 +326,13 @@
 
                         $result->close();
                         echo "</tbody>
-                        
+
                     <tfoot>
                     <tr>
                     <th>Request Status</th>
                     <th>Request ID</th>
                     <th>Request Date</th>
-                    <th>Request Step</th>  
+                    <th>Request Step</th>
                     <th>App Name</th>
                     <th>App Version</th>
                     <th>CMP Name</th>
@@ -350,7 +350,7 @@
              style='width:100%;'>
              <thead>
                 <tr id='table-first-row'>
-                <th>Request Step</th> 
+                <th>Request Step</th>
                 <th>Request Status</th>
                 <th>Request ID</th>
                 <th>Request Date</th>
@@ -377,7 +377,7 @@
                         <td>'.$row["cmp_name"].'</td>
                         <td>'.$row["cmp_version"].'</td>
                         </tr>';
-                        
+
                     }//end while
                 }//end if
                 else {
@@ -386,10 +386,10 @@
 
                 $result->close();
                 echo "</tbody>
-                
+
             <tfoot>
             <tr>
-            <th>Request Step</th> 
+            <th>Request Step</th>
             <th>Request Status</th>
             <th>Request ID</th>
             <th>Request Date</th>
@@ -425,22 +425,22 @@
                 ?>
 
                $(document).ready( function () {
-                
+
                 $('#info').DataTable( {
                     dom: 'lfrtBip',
                     buttons: [
                         'copy', 'excel', 'csv', 'pdf'
                     ] }
                 );
-                
-                
+
+
 
                 $('#info thead tr').clone(true).appendTo( '#info thead' );
                 $('#info thead tr:eq(1) th').each( function (i) {
                     var title = $(this).text();
                     if (title == 'App Status' && app_status != null) {
                         $(this).html( '<input id = "mytext" type="text" placeholder="Search '+title+'" value = "'+app_status+'" autofocus/>' );
-                        
+
                         $( this ).trigger( 'keyup' );
                     } else if (title == 'CMP Status' && cmp_status != null) {
                         $(this).html( '<input id = "mytext" type="text" placeholder="Search '+title+'" value = "'+cmp_status+'" autofocus/>' );
@@ -454,7 +454,7 @@
                     } else {
                         $(this).html( '<input id = "mytext" type="text" placeholder="Search '+title+'"/>' );
                     }
-                    
+
                     $( 'input', this ).on( 'keyup change', function () {
                         if ( table.column(i).search() !== this.value ) {
                             table
@@ -463,10 +463,10 @@
                                 .draw();
                         }
                     } );
-                    
+
 
                 } );
-            
+
                 var table = $('#info').DataTable( {
                     orderCellsTop: true,
                     fixedHeader: true,
@@ -477,13 +477,13 @@
 
 
 
-        </script>                  
+        </script>
         </div>
     </body>
 
 
 </html>
-        
+
 
  <style>
    tfoot {
