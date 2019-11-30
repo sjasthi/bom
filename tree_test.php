@@ -36,7 +36,7 @@
                         <div >
                           <h4 id="loading-text">Loading...</h4>
                           <div class="h4" id="responsive-wrapper" style="opacity: 0.0;">
-                            <table id = "bom_treetable" class = "table">
+                            <!--table id = "bom_treetable" class = "table">
                               <thead class = 'h4'>
                                 <th >Name</th>
                                 <th>Version</th>
@@ -45,7 +45,7 @@
                                 <th>Request Status</th>
                                 <th>Request Step</th>
                                 <th>Notes</th>
-                              </thead>
+                              </thead-->
           <?php
 
             $getAppId = null;
@@ -65,6 +65,10 @@
               $findAppName = true;
             }
             
+            echo "<script>
+            let root = document.createElement('table');
+            root.setAttribute('id', 'bom_treetable');
+            ";
             if ($findApp) {
               $sql_parent = "SELECT DISTINCT app_name as name, 
                               app_version as version, 
@@ -126,16 +130,58 @@
                 $application = $row_parent["application"];
                 $div_class = $row_parent["div_class"];
                 $p_id = $p;
-                echo "<tbody class= '".$div_class."' id = '".$application."'>
-                      <tr data-tt-id = '".$p_id."' >
-                      <td class='text-capitalize'> <div class = 'btn ".$class."' ><span class = 'app_name' >".$app_name."</span>&nbsp; &nbsp;&nbsp; &nbsp;</div></td>
-                      <td >".$app_version."</td>
-                      <td class='text-capitalize'>".$app_status."</td>
-                      <td class='text-capitalize'>".$cmp_type."</td>
-                      <td class='text-capitalize'>".$request_status."</td>
-                      <td class='text-capitalize'>".$request_step."</td>
-                      <td >".$notes."</td>
-                      </tr>";
+
+                echo "
+                let tbody".$p_id." = document.createElement('tbody');
+                tbody".$p_id.".setAttribute('class', '".$div_class."');
+                tbody".$p_id.".setAttribute('id', '".$application."');
+
+                let tr".$p_id." = document.createElement('tr');
+                tr".$p_id.".setAttribute('data-tt-id', '".$p_id."');
+                tbody".$p_id.".appendChild(tr".$p_id.");
+
+                let td1_".$p_id." = document.createElement('td');
+                td1_".$p_id.".setAttribute('class', 'text-capitalize');
+                tr".$p_id.".appendChild(td1_".$p_id.");
+
+                let button_".$p_id." = document.createElement('div');
+                button_".$p_id.".setAttribute('class', 'btn ".$class."');
+                td1_".$p_id.".appendChild(button_".$p_id.");
+
+                let name_".$p_id." = document.createElement('span');
+                name_".$p_id.".setAttribute('class', 'app_name');
+                name_".$p_id.".innerHTML = ('".$app_name."');
+                button_".$p_id.".appendChild(name_".$p_id.");
+
+                let td2_".$p_id." = document.createElement('td');
+                td2_".$p_id.".setAttribute('class', 'app_version');
+                td2_".$p_id.".innerHTML = ('".$app_version."');
+                tr".$p_id.".appendChild(td2_".$p_id.");
+
+                let td3_".$p_id." = document.createElement('td');
+                td3_".$p_id.".setAttribute('class', 'text-capitalize');
+                td3_".$p_id.".innerHTML = ('".$app_status."');
+                tr".$p_id.".appendChild(td3_".$p_id.");
+
+                let td4_".$p_id." = document.createElement('td');
+                td4_".$p_id.".setAttribute('class', 'text-capitalize');
+                td4_".$p_id.".innerHTML = ('".$cmp_type."');
+                tr".$p_id.".appendChild(td4_".$p_id.");
+
+                let td5_".$p_id." = document.createElement('td');
+                td5_".$p_id.".setAttribute('class', 'text-capitalize');
+                td5_".$p_id.".innerHTML = ('".$request_status."');
+                tr".$p_id.".appendChild(td5_".$p_id.");
+
+                let td6_".$p_id." = document.createElement('td');
+                td6_".$p_id.".setAttribute('class', 'text-capitalize');
+                td6_".$p_id.".innerHTML = ('".$request_step."');
+                tr".$p_id.".appendChild(td6_".$p_id.");
+
+                let td7_".$p_id." = document.createElement('td');
+                td7_".$p_id.".setAttribute('class', 'text-capitalize');
+                td7_".$p_id.".innerHTML = ('".$notes."');
+                tr".$p_id.".appendChild(td7_".$p_id.");";
                 $p++;
                       // output data of child
                       $sql_child = "SELECT DISTINCT cmp_name, 
@@ -166,17 +212,55 @@
                               $cmp_type = $row_child["cmp_type"];
                               $notes = $row_child["notes"];
                               $c_class = $row_child["class"];
-                              $c_id=$p_id."-".$c;
+                              $c_id=$p_id."_".$c;
                               echo "
-                              <tr data-tt-id = '".$c_id."' data-tt-parent-id='".$p_id."' class = 'component' id = ".$cmp."'>
-                                <td class='text-capitalize'> <div class = 'btn ".$c_class."'> <span class = 'cmp_name'>".$cmp_name."</span>&nbsp; &nbsp;&nbsp; &nbsp;</div></td>
-                                    <td class = 'cmp_version'>".$cmp_version."</td>
-                                    <td class='text-capitalize'>".$cmp_status."</td>
-                                    <td class='text-capitalize'>".$cmp_type."</td>
-                                    <td class='text-capitalize'>".$request_status."</td>
-                                    <td class='text-capitalize'>".$request_step."</td>
-                                    <td class='text-capitalize'>".$notes."</td>
-                                    </tr>";
+                              let tr_".$c_id." = document.createElement('tr');
+                              tr_".$c_id.".setAttribute('data-tt-parent-id', '".$c_id."');
+                              tr_".$c_id.".setAttribute('data-tt-id', '".$p_id."');
+                              tbody".$p_id.".appendChild(tr_".$c_id.");
+              
+                              let td1_".$c_id." = document.createElement('td');
+                              td1_".$c_id.".setAttribute('class', 'text-capitalize');
+                              tr_".$c_id.".appendChild(td1_".$c_id.");
+              
+                              let button_".$c_id." = document.createElement('div');
+                              button_".$c_id.".setAttribute('class', 'btn ".$class."');
+                              td1_".$c_id.".appendChild(button_".$c_id.");
+              
+                              let name_".$c_id." = document.createElement('span');
+                              name_".$c_id.".setAttribute('class', 'cmp_name');
+                              name_".$c_id.".innerHTML = ('".$cmp_name."');
+                              button_".$c_id.".appendChild(name_".$c_id.");
+              
+                              let td2_".$c_id." = document.createElement('td');
+                              td2_".$c_id.".setAttribute('class', 'cmp_version');
+                              td2_".$c_id.".innerHTML = ('".$cmp_version."');
+                              tr_".$c_id.".appendChild(td2_".$c_id.");
+              
+                              let td3_".$c_id." = document.createElement('td');
+                              td3_".$c_id.".setAttribute('class', 'text-capitalize');
+                              td3_".$c_id.".innerHTML = ('".$cmp_status."');
+                              tr_".$c_id.".appendChild(td3_".$c_id.");
+              
+                              let td4_".$c_id." = document.createElement('td');
+                              td4_".$c_id.".setAttribute('class', 'text-capitalize');
+                              td4_".$c_id.".innerHTML = ('".$cmp_type."');
+                              tr_".$c_id.".appendChild(td4_".$c_id.");
+              
+                              let td5_".$c_id." = document.createElement('td');
+                              td5_".$c_id.".setAttribute('class', 'text-capitalize');
+                              td5_".$c_id.".innerHTML = ('".$request_status."');
+                              tr_".$c_id.".appendChild(td5_".$c_id.");
+              
+                              let td6_".$c_id." = document.createElement('td');
+                              td6_".$c_id.".setAttribute('class', 'text-capitalize');
+                              td6_".$c_id.".innerHTML = ('".$request_step."');
+                              tr_".$c_id.".appendChild(td6_".$c_id.");
+              
+                              let td7_".$c_id." = document.createElement('td');
+                              td7_".$c_id.".setAttribute('class', 'text-capitalize');
+                              td7_".$c_id.".innerHTML = ('".$notes."');
+                              tr_".$c_id.".appendChild(td7_".$c_id.");";
                               $c++;
                           // output data of grandchild
                           $sql_gchild = "SELECT DISTINCT  cmp_name,
@@ -206,31 +290,73 @@
                                           $gcmp_type = $row_gchild["cmp_type"];
                                           $gnotes = $row_gchild["notes"];
                                           $gc_class = $row_gchild["class"];
-                                          $gc_id=$c_id."-".$gc;
+                                          $gc_id=$c_id."_".$gc;
                                           echo "
-                                                <tr data-tt-id = '".$gc_id."' data-tt-parent-id='".$c_id."' id='".$gcmp."' >
-                                                <td class='text-capitalize'> <div class = 'btn ".$gc_class."'> <span class = 'cmp_name'>".$gcmp_name."</span>&nbsp; &nbsp;&nbsp; &nbsp;</div></td>
-                                                <td class = 'cmp_version'>".$gcmp_version."</td>
-                                                <td class='text-capitalize'>".$gcmp_status."</td>
-                                                <td class='text-capitalize'>".$gcmp_type."</td>
-                                                <td class='text-capitalize'>".$grequest_status."</td>
-                                                <td class='text-capitalize'>".$grequest_step."</td>
-                                                <td class='text-capitalize'>".$gnotes."</td>
-                                                </tr>";
+                                          let trg_".$gc_id." = document.createElement('tr');
+                                          trg_".$gc_id.".setAttribute('data-tt-parent-id', '".$gc_id."');
+                                          trg_".$gc_id.".setAttribute('data-tt-id', '".$gc_id."');
+                                          tbody".$p_id.".appendChild(trg_".$gc_id.");
+                          
+                                          let td1g_".$gc_id." = document.createElement('td');
+                                          td1g_".$gc_id.".setAttribute('class', 'text-capitalize');
+                                          trg_".$gc_id.".appendChild(td1g_".$gc_id.");
+                          
+                                          let buttong_".$gc_id." = document.createElement('div');
+                                          buttong_".$gc_id.".setAttribute('class', 'btn ".$class."');
+                                          td1g_".$gc_id.".appendChild(buttong_".$gc_id.");
+                          
+                                          let nameg_".$gc_id." = document.createElement('span');
+                                          nameg_".$gc_id.".setAttribute('class', 'cmp_name');
+                                          nameg_".$gc_id.".innerHTML = ('".$gcmp_name."');
+                                          buttong_".$gc_id.".appendChild(nameg_".$gc_id.");
+                          
+                                          let td2g_".$gc_id." = document.createElement('td');
+                                          td2g_".$gc_id.".setAttribute('class', 'cmp_version');
+                                          td2g_".$gc_id.".innerHTML = ('".$gcmp_version."');
+                                          trg_".$gc_id.".appendChild(td2g_".$gc_id.");
+                          
+                                          let td3g_".$gc_id." = document.createElement('td');
+                                          td3g_".$gc_id.".setAttribute('class', 'text-capitalize');
+                                          td3g_".$gc_id.".innerHTML = ('".$gcmp_status."');
+                                          trg_".$gc_id.".appendChild(td3g_".$gc_id.");
+                          
+                                          let td4g_".$gc_id." = document.createElement('td');
+                                          td4g_".$gc_id.".setAttribute('class', 'text-capitalize');
+                                          td4g_".$gc_id.".innerHTML = ('".$gcmp_type."');
+                                          trg_".$gc_id.".appendChild(td4g_".$gc_id.");
+                          
+                                          let td5g_".$gc_id." = document.createElement('td');
+                                          td5g_".$gc_id.".setAttribute('class', 'text-capitalize');
+                                          td5g_".$gc_id.".innerHTML = ('".$grequest_status."');
+                                          trg_".$gc_id.".appendChild(td5g_".$gc_id.");
+                          
+                                          let td6g_".$gc_id." = document.createElement('td');
+                                          td6g_".$gc_id.".setAttribute('class', 'text-capitalize');
+                                          td6g_".$gc_id.".innerHTML = ('".$grequest_step."');
+                                          trg_".$gc_id.".appendChild(td6g_".$gc_id.");
+                          
+                                          let td7g_".$gc_id." = document.createElement('td');
+                                          td7g_".$gc_id.".setAttribute('class', 'text-capitalize');
+                                          td7g_".$gc_id.".innerHTML = ('".$gnotes."');
+                                          trg_".$gc_id.".appendChild(td7g_".$gc_id.");";
                                           $gc++;
                                       }
                                     $result_gchild -> close();
                                   }
                                 }
                                 $result_child -> close();
-                            } echo "</tbody>";
+                            } echo "
+                            
+                            root.appendChild(tbody".$p_id.");
+                            ";
                         }
                     $result_parent->close();
                   }
           //if there is no parent, then add a row to reflect no results.
           else {
-            echo "<tr data-tt-id = 'No Results'> <td>No Results Found</td><td/><td/><td/><td/><td/><td/> </tr>";
+            echo "root.appendChild('<tr data-tt-id = 'No Results'> <td>No Results Found</td><td/><td/><td/><td/><td/><td/> </tr>')";
           }
+          echo "</script>";
           ?>
         </table>
         </div>

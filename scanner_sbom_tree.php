@@ -5,49 +5,44 @@
   $left_selected = "SBOMTREE";
   include("./nav.php");
  ?>
-
 <div class="right-content">
     <div class="container" id="container">
         <h3 style="color: #01B0F1;">Scanner --> BOM Tree</h3>
         <nav class="navbar">
             <div class="container-fluid">
                 <ul class="nav navbar-nav" style='font-size: 18px;'>
-                    <li><a href="#" onclick="expandAll();" id = 'expandAll'><span
-                                class="glyphicon glyphicon-chevron-down"></span>Expand All</a></li>
-                    <li class="active"><a href="#"
-                            onclick="collapseAll();"><span
-                                class="glyphicon glyphicon-chevron-up"></span>Collapse All</a></li>
-                                <li><a href="#" id='color_noColor'><span id = 'no_color'>No </span>Color</a></li>
-                                <li><a href="#" id ="showYellow" >Show <span class="glyphicon glyphicon-tint" style='color:#ffd966;'> </span>Yellow</a></li>
-                                <li><a href="#" id ="showRed" >Show <span class="glyphicon glyphicon-tint" style='color:#ff6666;'> </span>Red</a></li>
-                                <li><a href="#" id = "showRedYellow" > Show <span class="glyphicon glyphicon-tint" style='color:#ff6666;'></span>Red and <span class="glyphicon glyphicon-tint" style='color:#ffd966;'></span>Yellow</a></li>
-                                <li><div class="input-group">
-                                  <input type="text" id="input" class="form-control" placeholder="Where Used" >
-                                  <div class="input-group-btn">
-                                    <button class="btn btn-default" type="submit"> <!--Makes the user feel better, otherwise no use.-->
-                                    <i class="glyphicon glyphicon-search"></i>
-                                  </button>
-                                </div>
-                              </div>
-                            </li>
-                            </ul>
-                          </div>
-                        </nav>
-                        <div >
-                          <h4 id="loading-text">Loading...</h4>
-                          <div class="h4" id="responsive-wrapper" style="opacity: 0.0;">
-                            <table id = "bom_treetable" class = "table">
-                              <thead class = 'h4'>
-                                <th >Name</th>
-                                <th>Version</th>
-                                <th>Status</th>
-                                <th>CMP Type</th>
-                                <th>Request Status</th>
-                                <th>Request Step</th>
-                                <th>Notes</th>
-                              </thead>
+                    <li><a href="#" onclick="expandAll();" id = 'expandAll'><span class="glyphicon glyphicon-chevron-down"></span>Expand All</a></li>
+                    <li class="active"><a href="#" onclick="collapseAll();"><span class="glyphicon glyphicon-chevron-up"></span>Collapse All</a></li>
+                    <li><a href="#" id='color_noColor'><span id = 'no_color'>No </span>Color</a></li>
+                    <li><a href="#" id ="showYellow" >Show <span class="glyphicon glyphicon-tint" style='color:#ffd966;'> </span>Yellow</a></li>
+                    <li><a href="#" id ="showRed" >Show <span class="glyphicon glyphicon-tint" style='color:#ff6666;'> </span>Red</a></li>
+                    <li><a href="#" id = "showRedYellow" > Show <span class="glyphicon glyphicon-tint" style='color:#ff6666;'></span>Red and <span class="glyphicon glyphicon-tint" style='color:#ffd966;'></span>Yellow</a></li>
+                    <li><div class="input-group">
+                      <input type="text" id="input" class="form-control" placeholder="Where Used" >
+                      <div class="input-group-btn">
+                        <button class="btn btn-default" type="submit"> <!--Makes the user feel better, otherwise no use.-->
+                        <i class="glyphicon glyphicon-search"></i>
+                      </button>
+                    </div>
+                  </div>
+                </li>
+                </ul>
+              </div>
+            </nav>
+            <div >
+              <h4 id="loading-text">Loading...</h4>
+              <div class="h4" id="responsive-wrapper" style="opacity: 0.0;">
+              <table id = "bom_treetable" >
+                <thead class = 'h4'>
+                  <th >Name</th>
+                  <th>Version</th>
+                  <th>Status</th>
+                  <th>CMP Type</th>
+                  <th>Request Status</th>
+                  <th>Request Step</th>
+                  <th>Notes</th>
+                </thead>
           <?php
-
             $getAppId = null;
             $findApp = false;
             if (isset($_GET['id'])){
@@ -114,19 +109,7 @@
                 $app_status = $row_parent["status"];
                 $div_class = $row_parent["div_class"];
                 $p_id = $p;
-                echo "<tbody class= '".$div_class."'>
-                      <tr data-tt-id = '".$p_id."' >
-                      <td class='text-capitalize'> 
-                      <div class = 'btn ".$class."' >
-                      <span class = 'app_name' >".$app_name."</span>&nbsp; &nbsp;&nbsp; &nbsp;
-                      </div></td>
-                      <td >".$app_version."</td>
-                      <td class='text-capitalize'>".$app_status."</td>
-                      <td/>
-                      <td/>
-                      <td/>
-                      <td/
-                      </tr>";
+                echo "<tbody class= '".$div_class."'><tr data-tt-id = '".$p_id."' ><td class='text-capitalize'> <div class = 'btn ".$class."' ><span class = 'app_name'>".$app_name."</span>&nbsp; &nbsp;&nbsp; &nbsp;</div></td><td >".$app_version."</td><td class='text-capitalize'>".$app_status."</td><td/><td/><td/><td/></tr>";
                 $p++;
                       // output data of child
                       $sql_child = "SELECT DISTINCT cmp_name, 
@@ -156,16 +139,7 @@
                               $notes = $row_child["notes"];
                               $c_class = $row_child["class"];
                               $c_id=$p_id."-".$c;
-                              echo "
-                              <tr data-tt-id = '".$c_id."' data-tt-parent-id='".$p_id."' class = 'component' >
-                                <td class='text-capitalize'> <div class = 'btn ".$c_class."'> <span class = 'cmp_name'>".$cmp_name."</span>&nbsp; &nbsp;&nbsp; &nbsp;</div></td>
-                                    <td class = 'cmp_version'>".$cmp_version."</td>
-                                    <td class='text-capitalize'>".$cmp_status."</td>
-                                    <td class='text-capitalize'>".$cmp_type."</td>
-                                    <td class='text-capitalize'>".$request_status."</td>
-                                    <td class='text-capitalize'>".$request_step."</td>
-                                    <td class='text-capitalize'>".$notes."</td>
-                                    </tr>";
+                              echo "<tr data-tt-id = '".$c_id."' data-tt-parent-id='".$p_id."' class = 'component' ><td class='text-capitalize'> <div class = 'btn ".$c_class."'> <span class = 'cmp_name' >".$cmp_name."</span>&nbsp; &nbsp;&nbsp; &nbsp;</div></td><td class = 'cmp_version'>".$cmp_version."</td><td class='text-capitalize'>".$cmp_status."</td><td class='text-capitalize'>".$cmp_type."</td><td class='text-capitalize'>".$request_status."</td><td class='text-capitalize'>".$request_step."</td><td class='text-capitalize'>".$notes."</td></tr>";
                               $c++;
                           // output data of grandchild
                           $sql_gchild = "SELECT DISTINCT  cmp_name,
@@ -194,16 +168,7 @@
                                           $gnotes = $row_gchild["notes"];
                                           $gc_class = $row_gchild["class"];
                                           $gc_id=$c_id."-".$gc;
-                                          echo "
-                                                <tr data-tt-id = '".$gc_id."' data-tt-parent-id='".$c_id."' >
-                                                <td class='text-capitalize'> <div class = 'btn ".$gc_class."'> <span class = 'cmp_name'>".$gcmp_name."</span>&nbsp; &nbsp;&nbsp; &nbsp;</div></td>
-                                                <td class = 'cmp_version'>".$gcmp_version."</td>
-                                                <td class='text-capitalize'>".$gcmp_status."</td>
-                                                <td class='text-capitalize'>".$gcmp_type."</td>
-                                                <td class='text-capitalize'>".$grequest_status."</td>
-                                                <td class='text-capitalize'>".$grequest_step."</td>
-                                                <td class='text-capitalize'>".$gnotes."</td>
-                                                </tr>";
+                                          echo "<tr data-tt-id = '".$gc_id."' data-tt-parent-id='".$c_id."' ><td class='text-capitalize'> <div class = 'btn ".$gc_class."'> <span class = 'cmp_name' >".$gcmp_name."</span>&nbsp; &nbsp;&nbsp; &nbsp;</div></td><td class = 'cmp_version'>".$gcmp_version."</td><td class='text-capitalize'>".$gcmp_status."</td><td class='text-capitalize'>".$gcmp_type."</td><td class='text-capitalize'>".$grequest_status."</td><td class='text-capitalize'>".$grequest_step."</td><td class='text-capitalize'>".$gnotes."</td></tr>";
                                           $gc++;
                                       }
                                     $result_gchild -> close();
@@ -231,18 +196,7 @@
         clickableNodeNames: true,
         indent: 25
       };
-      $("#bom_treetable").treetable(sbom_params).DataTable(
-        {
-          searching: false,
-          columnDefs: [
-            { width: "35%", targets: 0 }
-            ],
-          ordering:  false,
-          info: false,
-          scrollY:        '50vh',
-          scrollCollapse: true,
-          paging:         false
-        });
+      $("#bom_treetable").treetable(sbom_params);
       //Function for Color/No Color Button
       $(document).ready(function(){
         $("#color_noColor").click(function(){
