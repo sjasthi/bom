@@ -68,8 +68,12 @@
                               '' as request_step,
                               '' as request_status,
                               '' as notes, 
-                              'parent' as class, 
-                              'red' as div_class
+                              CASE WHEN app_name in (select distinct cmp_name from sbom) THEN 'child'
+                              ELSE 'parent'
+                              END AS class,
+                              CASE WHEN app_name in (select distinct cmp_name from sbom) THEN 'yellow'
+                              ELSE 'red'
+                              END AS div_class
                               from sbom  
                               where app_id = '".$getAppId."';";
             } else if ($findAppName) {
@@ -80,8 +84,12 @@
                               '' as request_step,
                               '' as request_status,
                               '' as notes, 
-                              'parent' as class, 
-                              'red' as div_class
+                              CASE WHEN app_name in (select distinct cmp_name from sbom) THEN 'child'
+                              ELSE 'parent'
+                              END AS class,
+                              CASE WHEN app_name in (select distinct cmp_name from sbom) THEN 'yellow'
+                              ELSE 'red'
+                              END AS div_class
                               from sbom  
                               where app_name = '".$getAppName."' 
                               and app_version = '".$getAppVer."' ;";
