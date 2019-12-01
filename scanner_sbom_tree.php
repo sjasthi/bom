@@ -161,7 +161,6 @@
                                         from sbom
                                         where app_name = '".$cmp_name."'
                                         and app_version = '".$cmp_version."'
-                                        and app_status = '".$cmp_status."'
                                         ;";
                                       $result_gchild = $db->query($sql_gchild);
                                       if ($result_gchild->num_rows > 0 ) {
