@@ -31,19 +31,14 @@
 
 }
 
-.app_name, .cmp_name, .notes {
-  color: black;
-  max-width: 100px;
-  overflow-wrap: anywhere;
-}
-
-
 td.details-control {
   background: url('../resources/details_open.png') no-repeat center center;
   cursor: pointer;
+  
 }
 tr.shown td.details-control {
   background: url('../resources/details_close.png') no-repeat center center;  
+  
 }
 
 table.treetable span.indenter {
@@ -64,7 +59,7 @@ table.treetable span.indenter {
   -webkit-box-sizing: content-box;
   -moz-box-sizing: content-box;
   box-sizing: content-box;
-  width: 19px;
+  
 }
 
 table.treetable span.indenter a {
@@ -83,4 +78,5 @@ table.treetable {
   line-height: 1;
   margin: .6em 0 1.8em 0;
   width: 110%;
+  
 }

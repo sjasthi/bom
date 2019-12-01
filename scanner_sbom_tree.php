@@ -34,7 +34,7 @@
               <div class="h4" id="responsive-wrapper" style="opacity: 0.0;">
               <table id = "bom_treetable" >
                 <thead class = 'h4'>
-                  <th >Name</th>
+                  <th style="width:50%" >Name</th>
                   <th>Version</th>
                   <th>Status</th>
                   <th>CMP Type</th>
@@ -147,7 +147,7 @@
                               $notes = $row_child["notes"];
                               $c_class = $row_child["class"];
                               $c_id=$p_id."-".$c;
-                              echo "<tr data-tt-id = '".$c_id."' data-tt-parent-id='".$p_id."' class = 'component' ><td class='text-capitalize'> <div class = 'btn ".$c_class."'> <span class = 'cmp_name' style = 'max-width: 160em; white-space: pre-wrap; word-wrap: break-word; word-break: break-all;'>".$cmp_name."</span>&nbsp; &nbsp;&nbsp; &nbsp;</div></td><td class = 'cmp_version'>".$cmp_version."</td><td class='text-capitalize'>".$cmp_status."</td><td class='text-capitalize'>".$cmp_type."</td><td class='text-capitalize'>".$request_status."</td><td class='text-capitalize'>".$request_step."</td><td class='text-capitalize'>".$notes."</td></tr>";
+                              echo "<tr data-tt-id = '".$c_id."' data-tt-parent-id='".$p_id."' class = 'component' ><td class='text-capitalize'> <div class = 'btn ".$c_class."'> <span class = 'cmp_name'>".$cmp_name."</span>&nbsp; &nbsp;&nbsp; &nbsp;</div></td><td class = 'cmp_version'>".$cmp_version."</td><td class='text-capitalize'>".$cmp_status."</td><td class='text-capitalize'>".$cmp_type."</td><td class='text-capitalize'>".$request_status."</td><td class='text-capitalize'>".$request_step."</td><td class='text-capitalize'>".$notes."</td></tr>";
                               $c++;
                           // output data of grandchild
                           $sql_gchild = "SELECT DISTINCT  cmp_name,
@@ -175,7 +175,7 @@
                                           $gnotes = $row_gchild["notes"];
                                           $gc_class = $row_gchild["class"];
                                           $gc_id=$c_id."-".$gc;
-                                          echo "<tr data-tt-id = '".$gc_id."' data-tt-parent-id='".$c_id."' ><td class='text-capitalize'> <div class = 'btn ".$gc_class."'> <span class = 'cmp_name' style = 'max-width: 160em; white-space: pre-wrap; word-wrap: break-word; word-break: break-all;'>".$gcmp_name."</span>&nbsp; &nbsp;&nbsp; &nbsp;</div></td><td class = 'cmp_version'>".$gcmp_version."</td><td class='text-capitalize'>".$gcmp_status."</td><td class='text-capitalize'>".$gcmp_type."</td><td class='text-capitalize'>".$grequest_status."</td><td class='text-capitalize'>".$grequest_step."</td><td class='text-capitalize'>".$gnotes."</td></tr>";
+                                          echo "<tr data-tt-id = '".$gc_id."' data-tt-parent-id='".$c_id."' ><td class='text-capitalize'> <div class = 'btn ".$gc_class."'> <span class = 'cmp_name'>".$gcmp_name."</span>&nbsp; &nbsp;&nbsp; &nbsp;</div></td><td class = 'cmp_version'>".$gcmp_version."</td><td class='text-capitalize'>".$gcmp_status."</td><td class='text-capitalize'>".$gcmp_type."</td><td class='text-capitalize'>".$grequest_status."</td><td class='text-capitalize'>".$grequest_step."</td><td class='text-capitalize'>".$gnotes."</td></tr>";
                                           $gc++;
                                       }
                                     $result_gchild -> close();
@@ -201,7 +201,7 @@
       let sbom_params = {
         expandable: true,
         clickableNodeNames: true,
-        indent: 25
+        indent: 40
       };
       $("#bom_treetable").treetable(sbom_params);
       //Function for Color/No Color Button
