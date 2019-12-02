@@ -27,8 +27,8 @@
             switch(name){
                 case 'Application':
                     <?php
-                    $query = $db->query("SELECT app_status, COUNT(app_status) AS occurrences FROM (SELECT DISTINCT app_name, app_version, app_status from sbom union SELECT DISTINCT cmp_name, cmp_version, cmp_status from sbom) as subquery group by app_status;");
-                    //$query = $db->query("SELECT app_status, COUNT(app_status) AS occurrences FROM (SELECT DISTINCT app_name, app_version, app_status from sbom) as subquery group by app_status;");
+                    //$query = $db->query("SELECT app_status, COUNT(app_status) AS occurrences FROM (SELECT DISTINCT app_name, app_version, app_status from sbom union SELECT DISTINCT cmp_name, cmp_version, cmp_status from sbom) as subquery group by app_status;");
+                    $query = $db->query("SELECT app_status, COUNT(app_status) AS occurrences FROM (SELECT DISTINCT app_name, app_version, app_status from sbom) as subquery group by app_status;");
                     while($query_row = $query->fetch_assoc()) {
                         echo 'queryArray.push(["'.$query_row["app_status"].'", '.$query_row["occurrences"].', "'.$query_row["app_status"].'"]);';
                     }
