@@ -22,7 +22,8 @@
             width="100%" style="width: 100px;">
               <thead>
                 <tr id="table-first-row">
-                        <th>id</th>
+                <th>Application ID</th>
+                <th>Release ID</th>
                         <th>Name</th>
                         <th>Type</th>
                         <th>Status</th>
@@ -32,49 +33,57 @@
                         <th>RTM Date(s)</th>
                         <th>Manager</th>
                         <th>Author</th>
-                        <th>BOM ID</th>
                 </tr>
               </thead>
 
-              
+
 
               <tbody>
 
               <?php
 
-                 $sql = "SELECT * from releases ORDER BY rtm_date ASC;";
-                 $result = $db->query($sql);
+$sql = "SELECT * from releases ORDER BY rtm_date ASC;";
+$result = $db->query($sql);
 
                 if ($result->num_rows > 0) {
                     // output data of each row
                     while($row = $result->fetch_assoc()) {
-                        echo '<tr>
-                                <td>'.$row["id"].'</td>
-                                <td>'.$row["name"].' </span> </td>
-                                <td>'.$row["type"].'</td>
+                        echo '<tr>';
+                        $appName = $row["name"];
+                        list($name,$ver) = explode(" ", $appName);
+
+                                $sql2 = "SELECT DISTINCT app_name from sbom where app_name = '".$name."' and app_version = '".$ver."' Limit 1;";
+                                $result2 = $db->query($sql2);
+
+                                echo "<td>".$row["app_id"]."</td>";
+                                echo '<td>'.$row["id"].'</td>';
+
+                                if ($result2->num_rows > 0) {
+                                  echo '<td><a href="scanner_sbom_tree.php?name='.$name.'&version='.$ver.'">'.$appName.' </a> </span> </td>';
+                                }//end if
+                                else {
+                                  echo '<td>'.$row["name"].' </span> </td>';
+                                }//end else
+
+                                echo '<td>'.$row["type"].'</td>
                                 <td>'.$row["status"].'</td>
                                 <td>'.$row["open_date"].' </span> </td>
                                 <td>'.$row["dependency_date"].'</td>
                                 <td>'.$row["freeze_date"].'</td>
                                 <td>'.$row["rtm_date"].' </span> </td>
                                 <td>'.$row["manager"].' </span> </td>
-                                <td>'.$row["author"].' </span> </td>
-                                <td>'.$row["app_id"].' </span> </td>
-                            </tr>';
-                    }//end while
-                }//end if
-                else {
-                    echo "0 results";
-                }//end else
-
-                 $result->close();
-                ?>
+                                <td>'.$row["author"].' </span> </td>';
+      
+                                  $result2->close();
+                                }
+                              }
+                              ?>
 
               </tbody>
-
               <tfoot>
                 <tr>
-                        <th>id</th>
+                <th>Application ID</th>
+                <th>Release ID</th>
                         <th>Name</th>
                         <th>Type</th>
                         <th>Status</th>
@@ -84,47 +93,45 @@
                         <th>RTM Date(s)</th>
                         <th>Manager</th>
                         <th>Author</th>
-                        <th>BOM ID</th>
                 </tr>
               </tfoot>
         </table>
-    </div>
-</div>            
+
 
         <script type="text/javascript" language="javascript">
-          $(document).ready( function () {
-              
-              $('#info').DataTable( {
-                  dom: 'lfrtBip',
-                  buttons: [
-                      'copy', 'excel', 'csv', 'pdf'
-                  ] }
-              );
+    $(document).ready( function () {
+        
+        $('#info').DataTable( {
+            dom: 'lfrtBip',
+            buttons: [
+                'copy', 'excel', 'csv', 'pdf'
+            ] }
+        );
 
-              $('#info thead tr').clone(true).appendTo( '#info thead' );
-              $('#info thead tr:eq(1) th').each( function (i) {
-                  var title = $(this).text();
-                  $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
-          
-                  $( 'input', this ).on( 'keyup change', function () {
-                      if ( table.column(i).search() !== this.value ) {
-                          table
-                              .column(i)
-                              .search( this.value )
-                              .draw();
-                      }
-                  } );
-              } );
-          
-              var table = $('#info').DataTable( {
-                  orderCellsTop: true,
-                  fixedHeader: true,
-                  retrieve: true
-              } );
-              
-          } );
+        $('#info thead tr').clone(true).appendTo( '#info thead' );
+        $('#info thead tr:eq(1) th').each( function (i) {
+            var title = $(this).text();
+            $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+    
+            $( 'input', this ).on( 'keyup change', function () {
+                if ( table.column(i).search() !== this.value ) {
+                    table
+                        .column(i)
+                        .search( this.value )
+                        .draw();
+                }
+            } );
+        } );
+    
+        var table = $('#info').DataTable( {
+            orderCellsTop: true,
+            fixedHeader: true,
+            retrieve: true
+        } );
+        
+    } );
 
-         </script>
+</script>
 
         
 

@@ -1,18 +1,17 @@
 <?php
   $nav_selected = "SCANNER";
   $left_buttons = "YES";
-  $left_selected = "SOFTWAREBOM";
-
+  $left_selected = "OUTOFSYNCBOMLIST";
   include("./nav.php");
   
  ?>
 
- <div class="right-content">
+<div class="right-content">
     <div class="container">
 
-      <h3 style = "color: #01B0F1;">Scanner --> Software BOM </h3>
+      <h3 style = "color: #01B0F1;">Scanner --> Out of Sync BOM List </h3>
 
-        <h3><img src="images/sbom_list.png" style="max-height: 35px;" />BOM List</h3>
+        <h3><img src="images/sbom_list.png" style="max-height: 35px;" />Out of Sync BOM List</h3>
 
         <table id="info" cellpadding="0" cellspacing="0" border="0"
             class="datatable table table-striped table-bordered datatable-style table-hover"
@@ -39,10 +38,11 @@
               <tbody>
 
               <?php
-
-              $sql = "SELECT * from sbom;";
-              $result = $db->query($sql);
-
+$sql = "SELECT * FROM sbom sb WHERE 
+(SELECT COUNT(*) FROM sbom sb2 WHERE sb.cmp_name = sb2.cmp_name AND sb.cmp_version != sb2.cmp_version) >=1
+ AND 
+ (NOT (app_status = 'released')) ORDER BY cmp_name;";
+$result = $db->query($sql);
                 if ($result->num_rows > 0) {
                     // output data of each row
                     while($row = $result->fetch_assoc()) {
@@ -68,7 +68,6 @@
                 else {
                     echo "0 results";
                 }//end else
-
                  $result->close();
                 ?>
 
@@ -104,7 +103,6 @@
                 'copy', 'excel', 'csv', 'pdf'
             ] }
         );
-
         $('#info thead tr').clone(true).appendTo( '#info thead' );
         $('#info thead tr:eq(1) th').each( function (i) {
             var title = $(this).text();
@@ -127,7 +125,6 @@
         } );
         
     } );
-
 </script>
 
         
