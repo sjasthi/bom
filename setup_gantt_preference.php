@@ -37,6 +37,11 @@
             }
         }
         if(isset($_GET['preferencesUpdated'])){
+            if($_GET["preferencesUpdated"] == "DateFail"){
+                echo "<br><h3 align=center style='color:red'>Update Failed! The END DATE cannot come before the START DATE!</h3>";
+            }
+        }
+        if(isset($_GET['preferencesUpdated'])){
             if($_GET["preferencesUpdated"] == "StatusFail"){
                 echo "<br><h3 align=center style='color:red'>Update Failed! Please select at least one status to view!</h3>";
             }
@@ -62,7 +67,7 @@
                 <div class="panel panel-default">
                 <div class="panel-heading">
                     <h4 class="panel-title">
-                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse-date-range">Date Range</a>
+                    <a data-toggle="collapse"  href="#collapse-date-range" aria-expanded="true" class>Date Range</a>
                     </h4>
                 </div>
                 <div id="collapse-date-range" class="panel-collapse collapse in">
@@ -93,10 +98,10 @@
                 <div class="panel panel-default">
                 <div class="panel-heading">
                     <h4 class="panel-title">
-                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse-release-date">Release Status</a>
+                    <a data-toggle="collapse" href="#collapse-release-date" aria-expanded="true" class>Release Status</a>
                     </h4>
                 </div>
-                <div id="collapse-release-date" class="panel-collapse collapse">
+                <div id="collapse-release-date" class="panel-collapse collapse in">
                     <div class="panel-body">
                         <form action="modifyThePreferences.php" method="POST">
                             <table style="width:5500px">
@@ -131,10 +136,10 @@
                 <div class="panel panel-default">
                 <div class="panel-heading">
                     <h4 class="panel-title">
-                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse-type">Type</a>
+                    <a data-toggle="collapse" href="#collapse-type" aria-expanded="true" class>Type</a>
                     </h4>
                 </div>
-                <div id="collapse-type" class="panel-collapse collapse">
+                <div id="collapse-type" class="panel-collapse collapse in">
                     <div class="panel-body">
                         <form action="modifyThePreferences.php" method="POST">
                             <table style="width:5500px">
