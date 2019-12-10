@@ -49,10 +49,9 @@ $result = $db->query($sql);
                     // output data of each row
                     while($row = $result->fetch_assoc()) {
                         echo '<tr>';
-                        $appName = $row["name"];
-                        list($name,$ver) = explode(" ", $appName);
+                        $appName = str_replace(' ', '', $row["name"]);
                         
-                          $sql2 = "SELECT DISTINCT app_id as appID FROM (select distinct concat(app_name, concat(' ', app_version)) as name, app_id from sbom ) as subquery where name ='".$appName."' Limit 1;";
+                          $sql2 = "SELECT DISTINCT app_id as appID FROM (select distinct concat(TRIM(app_name), TRIM(app_version)) as name, app_id from sbom ) as subquery where name ='".$appName."' Limit 1;";
                                 $result2 = $db->query($sql2);
 
                                 echo "<td>".$row["app_id"]."</td>";
@@ -62,7 +61,7 @@ $result = $db->query($sql);
                                   while($row2 = $result2->fetch_assoc()) {
                                     $id = $row2["appID"];
                                   }
-                                  echo '<td><a href="scanner_sbom_tree.php?id='.$id.'">'.$appName.' </a> </span> </td>';
+                                  echo '<td><a href="scanner_sbom_tree.php?id='.$id.'">'.$row["name"].' </a> </span> </td>';
                                 }//end if
                                 else {
                                   echo '<td>'.$row["name"].' </span> </td>';
