@@ -23,19 +23,23 @@ $typeComment = findPreference('gantt_type', 'releases', 'type', 'all');
 if (isset($_POST['new_sDate'])){
     $sDate = $_POST['new_sDate'];
     $eDate = $_POST['new_eDate'];
-    if($startExists->num_rows == 0){
-        $sql1 = "INSERT INTO `preferences`(`id`, `type`, `value`, `comments`) VALUES ('gantt_start','DATE','$sDate','$sComment')";
+    if ($sDate > $eDate){
+        header('location: setup_gantt_preference.php?preferencesUpdated=DateFail');
     }else{
-        $sql1 = "UPDATE `preferences` SET `value`= '$sDate' WHERE `id` = 'gantt_start'";
+        if($startExists->num_rows == 0){
+            $sql1 = "INSERT INTO `preferences`(`id`, `type`, `value`, `comments`) VALUES ('gantt_start','DATE','$sDate','$sComment')";
+        }else{
+            $sql1 = "UPDATE `preferences` SET `value`= '$sDate' WHERE `id` = 'gantt_start'";
+        }
+        if($endExists->num_rows == 0){
+            $sql2 = "INSERT INTO `preferences`(`id`, `type`, `value`, `comments`) VALUES ('gantt_end','DATE','$eDate','$eComment')";
+        }else{
+            $sql2 = "UPDATE `preferences` SET `value`= '$eDate' WHERE `id` = 'gantt_end'";
+        }
+        mysqli_query($db, $sql1);
+        mysqli_query($db, $sql2);
+        header('location: setup_gantt_preference.php?preferencesUpdated=Success');
     }
-    if($endExists->num_rows == 0){
-        $sql2 = "INSERT INTO `preferences`(`id`, `type`, `value`, `comments`) VALUES ('gantt_end','DATE','$eDate','$eComment')";
-    }else{
-        $sql2 = "UPDATE `preferences` SET `value`= '$eDate' WHERE `id` = 'gantt_end'";
-    }
-    mysqli_query($db, $sql1);
-    mysqli_query($db, $sql2);
-    header('location: setup_gantt_preference.php?preferencesUpdated=Success');
 }//end if
 
 if(isset($_POST['status_submit'])){
