@@ -45,11 +45,13 @@
 
 	<h3>Team</h3>
 	<p>
-		<ul>
-      <li>Siva Jasthi (siva.jasthi@metrostate.edu) </li>
-      <li>First Last (first.last@metrostate.edu) </li>
-      
-		</ul>
+        <ul>
+            <li>Siva Jasthi (siva.jasthi@metrostate.edu) </li>
+            <li>Michael Juarez-Sweeney (michael.juarez-sweeney@go.metrostate.edu) </li>
+            <li>Jaclyn Cao (jaclyn.cao@go.metrostate.edu) </li>
+            <li>Rei Weikleenget (rei.weikleenget@go.metrostate.edu) </li>
+            <li>Christopher Corcoran (christopher.corcoran@go.metrostate.edu) </li>
+        </ul>
   </p>
   
 
