@@ -45,6 +45,7 @@
 
 	<h3>Team</h3>
 	<p>
+
 		<ul>
       <li>Siva Jasthi (siva.jasthi@metrostate.edu) </li>
       <li>Michael Juarez-Sweeney (michael.juarez-sweeney@my.metrostate.edu)</li>
@@ -53,6 +54,7 @@
       <li>Rei Weikleenget (rei.weikleengety@my.metrostate.edu)</li>
       
 		</ul>
+
   </p>
   
 
