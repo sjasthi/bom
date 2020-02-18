@@ -66,6 +66,7 @@
                                 <td>'.$row["notes"].' </span> </td>
                                 <td>'.$row["requestor"].'</td>
                                 <td>'.$row["color"].'</td>
+
                             </tr>';
                     }//end while
                 }//end if
