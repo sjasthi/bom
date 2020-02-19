@@ -176,8 +176,8 @@
         </tr>
       </tfoot>
       </table>
-
-  <script type="text/javascript" language="javascript">
+      
+ <script type="text/javascript" language="javascript">
     $(document).ready( function () {
     $('#info').DataTable( {
       dom: 'lfrtBip',
