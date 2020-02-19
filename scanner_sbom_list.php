@@ -34,7 +34,6 @@
                         <th>Request Status</th>
                         <th>Request Step</th>                        
                         <th>Notes</th>
-                        <th>Requestor</th>
                         <th>Color</th>
                 </tr>
               </thead>
@@ -64,8 +63,7 @@
                                 <td>'.$row["request_status"].'</td>
                                 <td>'.$row["request_step"].'</td>
                                 <td>'.$row["notes"].' </span> </td>
-                                <td>'.$row["requestor"].'</td>
-                                <td>'.$row["color"].'</td>
+                                <td>'.$row["color"].' </span> </td>
                             </tr>';
                     }//end while
                 }//end if
@@ -94,7 +92,6 @@
                         <th>Request Status</th>
                         <th>Request Step</th> 
                         <th>Notes</th>
-                        <th>Requestor</th>
                         <th>Color</th>
                 </tr>
               </tfoot>
