@@ -141,6 +141,7 @@ if (isset($_POST["import"])) {
 											request_status,
 											request_step,
 											notes,
+											requester,
 											color)
                    values ('" . $column[0] . "',
                            '" . $column[1] . "',
@@ -157,6 +158,7 @@ if (isset($_POST["import"])) {
 						   '" . $column[13] . "',
 						   '" . $column[14] . "',
 						   '" . $column[15] . "',
+						   '" . $column[16] . "'
                            )";
             $result = mysqli_query($conn, $sqlInsert);
 
