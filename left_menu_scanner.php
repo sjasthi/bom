@@ -4,72 +4,6 @@
 <head>
     <script src="jquery-3.2.1.min.js"></script>
 
-    <style>
-        body {
-            font-family: Arial;
-            width: 550px;
-        }
-
-        .outer-scontainer {
-            background: #F0F0F0;
-            border: #e0dfdf 1px solid;
-            padding: 20px;
-            border-radius: 2px;
-        }
-
-        .input-row {
-            margin-top: 0px;
-            margin-bottom: 20px;
-        }
-
-        .btn-submit {
-            background: #333;
-            border: #1d1d1d 1px solid;
-            color: #f0f0f0;
-            font-size: 0.9em;
-            width: 100px;
-            border-radius: 2px;
-            cursor: pointer;
-        }
-
-        .outer-scontainer table {
-            border-collapse: collapse;
-            width: 100%;
-        }
-
-        .outer-scontainer th {
-            border: 1px solid #dddddd;
-            padding: 8px;
-            text-align: left;
-        }
-
-        .outer-scontainer td {
-            border: 1px solid #dddddd;
-            padding: 8px;
-            text-align: left;
-        }
-
-        #response {
-            padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 2px;
-            display: none;
-        }
-
-        .success {
-            background: #c7efd9;
-            border: #bbe2cd 1px solid;
-        }
-
-        .error {
-            background: #fbcfcf;
-            border: #f3c6c7 1px solid;
-        }
-
-        div#response.display-block {
-            display: block;
-        }
-    </style>
     <script type="text/javascript">
         $(document).ready(function () {
             $("#frmCSVImport").on("submit", function () {
@@ -128,7 +62,7 @@
         <div <?php if ($left_selected == "OUTOFSYNCBOMLIST") {
             echo 'class="menu-left-current-page"';
         } ?>>
-            <img src="./images/sbom_list.png">
+            <img src="./images/sbom_list.png" alt="oops">
             <br/>Out of Sync <br> BOM List<br/></div>
     </a>
 
@@ -140,6 +74,16 @@
             <br/>BOM Backup<br/></div>
     </a>
 
+
+
+        <a href="scanner_bom_compare.php">
+            <div <?php if ($left_selected == "BOMCOMPARE") {
+                echo 'class="menu-left-current-page"';
+            } ?>>
+                <img src="./images/bom_compare.png">
+                <br/>BOM Compare<br/></div>
+        </a>
+
     <div id="response" class="<?php if (!empty($type)) {
         echo $type . " display-block";
     } ?>"><?php if (!empty($message)) {
@@ -150,8 +94,9 @@
 
             <form class="form-horizontal" action="" method="post"
                   name="frmCSVImport" id="frmCSVImport" enctype="multipart/form-data">
+                <img src="./images/file.png" alt="oops">
                 <div class="input-row">
-                    <input type="file" name="file"
+                    <input style="color: transparent" type="file" name="file"
                            id="file" accept=".csv">
                     <button type="submit" id="submit" name="import"
                             class="btn-submit">Import File
@@ -163,14 +108,6 @@
             </form>
 
         </div>
-
-        <a href="scanner_bom_compare.php">
-            <div <?php if ($left_selected == "BOMCOMPARE") {
-                echo 'class="menu-left-current-page"';
-            } ?>>
-                <img src="./images/bom_compare.png">
-                <br/>BOM Compare<br/></div>
-        </a>
 
     </div>
 </body>
@@ -189,8 +126,38 @@ if (isset($_POST["import"])) {
         $file = fopen($fileName, "r");
 
         while (($column = fgetcsv($file, 10000, ",")) !== FALSE) {
-            $sqlInsert = "INSERT into sbom (userId,userName,password,firstName,lastName)
-                   values ('" . $column[0] . "','" . $column[1] . "','" . $column[2] . "','" . $column[3] . "','" . $column[4] . "')";
+            $sqlInsert = "INSERT into sbom (row_id,
+											app_id,
+											app_name,
+											app_version,
+											cmp_id,
+											cmp_name,
+											cmp_version,
+											cmp_type,
+											app_status,
+											cmp_status,
+											request_id,
+											request_date,
+											request_status,
+											request_step,
+											notes,
+											color)
+                   values ('" . $column[0] . "',
+                           '" . $column[1] . "',
+                           '" . $column[2] . "',
+                           '" . $column[3] . "',
+                           '" . $column[5] . "',
+						   '" . $column[6] . "',
+						   '" . $column[7] . "',
+						   '" . $column[8] . "',
+						   '" . $column[9] . "',
+						   '" . $column[10] . "',
+						   '" . $column[11] . "',
+						   '" . $column[12] . "',
+						   '" . $column[13] . "',
+						   '" . $column[14] . "',
+						   '" . $column[15] . "',
+                           )";
             $result = mysqli_query($conn, $sqlInsert);
 
             if (!empty($result)) {
