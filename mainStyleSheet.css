@@ -488,3 +488,45 @@ a {
   cursor: pointer;
 }
 
+.input-row {
+  margin-top: 0px;
+  margin-bottom: 20px;
+}
+
+.outer-scontainer table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.outer-scontainer th {
+  border: 1px solid #dddddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.outer-scontainer td {
+  border: 1px solid #dddddd;
+  padding: 8px;
+  text-align: left;
+}
+
+#response {
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 2px;
+  display: none;
+}
+
+.success {
+  background: #c7efd9;
+  border: #bbe2cd 1px solid;
+}
+
+.error {
+  background: #fbcfcf;
+  border: #f3c6c7 1px solid;
+}
+
+div#response.display-block {
+  display: block;
+}
