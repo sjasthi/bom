@@ -17,8 +17,9 @@
   if(isset($_POST['save']) && isset($_POST['app'])) {
     $apps = $_POST['app'];
 
-    if(count($apps) > 10) {
-      $count_err = "You can't select more than 10 BOMS."; 
+    if(count($apps) > 5) {
+      $count_err = "You can't select more than 5 BOMS."; 
+
     }else {
       echo '<p 
         style="font-size: 2.5rem; 

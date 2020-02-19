@@ -67,8 +67,8 @@
     <div class="container">
       <h3 style = "color: #01B0F1;">Scanner --> Software BOM </h3>
       <!-- Form to retrieve user preference -->
-      <form id='get-form' name='get-form' method='post' action='' style='display: inline;'>
-        <button type='submit' name='get' value='submit'
+      <form id='getpref-form' name='getpref-form' method='post' action='' style='display: inline;'>
+        <button type='submit' name='getpref' value='submit'
         style='background: #01B0F1;
           color: white;
           border: none;
@@ -113,8 +113,11 @@
       <tbody>
       <?php
         /*----------------- GET PREFERENCE COOKIE -----------------*/
-        //get user preferred BOMS 
-        if(isset($_POST['get']) && isset($_COOKIE[$cookie_name])) {
+        //if user clicks "get all BOMS", retrieve all BOMS
+        if(isset($_POST['getall'])) {
+          getBoms($db);
+        }//default if preference cookie is set, display user BOM preferences
+        elseif(isset($_COOKIE[$cookie_name]) || isset($_COOKIE[$cookie_name]) && isset($_POST['getpref'])) {
           $prep = rtrim(str_repeat('?,', count(json_decode($_COOKIE[$cookie_name]))), ',');
           $sql = 'SELECT * FROM sbom WHERE app_id IN ('.$prep.')';
           $pref = $pdo->prepare($sql);
@@ -141,11 +144,9 @@
               <td>'.$row["color"].'</td>
             </tr>';
           }
-        }elseif(isset($_POST['get']) && !isset($_COOKIE[$cookie_name])) {
+        }//if no preference cookie is set but user clicks "show my BOMS"
+        elseif(isset($_POST['getpref']) && !isset($_COOKIE[$cookie_name])) {
           $pref_err = "You don't have BOMS saved.";
-          getBoms($db);
-        }//get all BOMS
-        elseif(isset($_POST['getall'])) {
           getBoms($db);
         }//if no preference cookie is set show all BOMS
         else { 
