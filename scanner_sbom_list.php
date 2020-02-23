@@ -66,6 +66,7 @@
   <div class="right-content">
     <div class="container">
       <h3 style = "color: #01B0F1;">Scanner --> Software BOM </h3>
+
       <!-- Form to retrieve user preference -->
       <form id='getpref-form' name='getpref-form' method='post' action='' style='display: inline;'>
         <button type='submit' name='getpref' value='submit'
@@ -176,7 +177,7 @@
       </tfoot>
       </table>
 
- <script type="text/javascript" language="javascript">
+    <script type="text/javascript" language="javascript">
     $(document).ready( function () {
     $('#info').DataTable( {
       dom: 'lfrtBip',
