@@ -530,3 +530,7 @@ a {
 div#response.display-block {
   display: block;
 }
+
+input[type='file'] {
+  color: transparent;
+}
