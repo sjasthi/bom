@@ -141,7 +141,7 @@
               <td>'.$row["request_status"].'</td>
               <td>'.$row["request_step"].'</td>
               <td>'.$row["notes"].' </span> </td>
-              <td>'.$row["requester"].'</td>
+              <td>'.$row["requestor"].'</td>
               <td>'.$row["color"].'</td>
             </tr>';
           }
