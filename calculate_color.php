@@ -56,35 +56,35 @@ $resultCompare2 = rowArray($result2);
 
 $color = color($resultCompare1, $resultCompare2);
 
-//create output table
-echo '<table align="left"
-cellspacing="5" cellpadding="8">
+// //create output table
+// echo '<table align="left"
+// cellspacing="5" cellpadding="8">
 
-<tr><td align="left"><b>App Id</b></td>
-<td align="left"><b>Cmp Id</b></td>
-<td align="left"><b>Color</b></td>';
+// <tr><td align="left"><b>App Id</b></td>
+// <td align="left"><b>Cmp Id</b></td>
+// <td align="left"><b>Color</b></td>';
 
-//create arrays to populate output
-$sql1 = "SELECT row_id, app_id from sbom;";
-$sql2 = "SELECT row_id, cmp_id from sbom;";
-$result1 = $db->query($sql1);
-$result2 = $db->query($sql2);
-$index = 0;
+// //create arrays to populate output
+// $sql1 = "SELECT row_id, app_id from sbom;";
+// $sql2 = "SELECT row_id, cmp_id from sbom;";
+// $result1 = $db->query($sql1);
+// $result2 = $db->query($sql2);
+// $index = 0;
 
-//populate output table
-while($row1 = mysqli_fetch_array($result1)){ 
-	$row2 = mysqli_fetch_array($result2);
-	$appId = $row1['app_id'];
-	$cmpId = $row2['cmp_id'];
+// //populate output table
+// while($row1 = mysqli_fetch_array($result1)){ 
+// 	$row2 = mysqli_fetch_array($result2);
+// 	$appId = $row1['app_id'];
+// 	$cmpId = $row2['cmp_id'];
 	
-	echo '<tr><td align="left">' . 
-	$row1['app_id'] . '</td><td align="left">' .
-	$row2['cmp_id'] . '</td><td align="left">' .
-	"$color[$index]" . 
-	'<td></td></tr>';
-	$index++;
-}
-echo '</table>';
+// 	echo '<tr><td align="left">' . 
+// 	$row1['app_id'] . '</td><td align="left">' .
+// 	$row2['cmp_id'] . '</td><td align="left">' .
+// 	"$color[$index]" . 
+// 	'<td></td></tr>';
+// 	$index++;
+// }
+// echo '</table>';
 
 //create list of database row Id to insert colors correctly
 $sql1 = "SELECT row_id from sbom;";

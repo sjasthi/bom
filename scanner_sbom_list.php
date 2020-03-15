@@ -4,7 +4,7 @@
   $left_selected = "SOFTWAREBOM";
 
   include("./nav.php");
-  
+
   //PDO connection
   $servername = 'localhost';
   $dbname = 'bom';
@@ -17,10 +17,11 @@
   $cookie_name = 'preference';
   global $pref_err;
 
+  /*----------------- FUNCTION TO GET BOMS -----------------*/
   function getBoms($db) {
     $sql = "SELECT * from sbom;";
     $result = $db->query($sql);
-    
+
     if ($result->num_rows > 0) {
       // output data of each row
       while($row = $result->fetch_assoc()) {
@@ -51,24 +52,24 @@
     $result->close();
   }
 
-  if(isset($_POST['get']) && !isset($_COOKIE[$cookie_name])) {
+  //Display error if user retrieves preferences w/o any cookies set
+  if(isset($_POST['getpref']) && !isset($_COOKIE[$cookie_name])) {
     $pref_err = "You don't have BOMS saved.";
   }
-?>
-  
-<!-- Display error if user retrieves preferences w/o any cookies set-->
-<?php echo '<p 
-  style="font-size: 2.5rem; 
-  text-align: center; 
-  background-color: red; 
+  echo '<p
+  style="font-size: 2.5rem;
+  text-align: center;
+  background-color: red;
   color: white;">'.$pref_err.'</p>'
 ?>
+
   <div class="right-content">
     <div class="container">
       <h3 style = "color: #01B0F1;">Scanner --> Software BOM </h3>
+
       <!-- Form to retrieve user preference -->
-      <form id='get-form' name='get-form' method='post' action='' style='display: inline;'>
-        <button type='submit' name='get' value='submit'
+      <form id='getpref-form' name='getpref-form' method='post' action='' style='display: inline;'>
+        <button type='submit' name='getpref' value='submit'
         style='background: #01B0F1;
           color: white;
           border: none;
@@ -77,7 +78,7 @@
           margin-right: 1rem;'>Show My BOMS</button>
       </form>
       <form id='getall-form' name='getall-form' method='post' action='' style='display: inline;'>
-        <button type='submit' name='getall' value='submit' 
+        <button type='submit' name='getall' value='submit'
         style='background: #01B0F1;
           color: white;
           border: none;
@@ -104,7 +105,7 @@
             <th>Request ID</th>
             <th>Request Date</th>
             <th>Request Status</th>
-            <th>Request Step</th>                        
+            <th>Request Step</th>
             <th>Notes</th>
             <th>Requester</th>
             <th>Color</th>
@@ -113,8 +114,11 @@
       <tbody>
       <?php
         /*----------------- GET PREFERENCE COOKIE -----------------*/
-        //get user preferred BOMS 
-        if(isset($_POST['get']) && isset($_COOKIE[$cookie_name])) {
+        //if user clicks "get all BOMS", retrieve all BOMS
+        if(isset($_POST['getall'])) {
+          getBoms($db);
+        }//default if preference cookie is set, display user BOM preferences
+        elseif(isset($_COOKIE[$cookie_name]) || isset($_COOKIE[$cookie_name]) && isset($_POST['getpref'])) {
           $prep = rtrim(str_repeat('?,', count(json_decode($_COOKIE[$cookie_name]))), ',');
           $sql = 'SELECT * FROM sbom WHERE app_id IN ('.$prep.')';
           $pref = $pdo->prepare($sql);
@@ -141,14 +145,11 @@
               <td>'.$row["color"].'</td>
             </tr>';
           }
-        }elseif(isset($_POST['get']) && !isset($_COOKIE[$cookie_name])) {
-          $pref_err = "You don't have BOMS saved.";
-          getBoms($db);
-        }//get all BOMS
-        elseif(isset($_POST['getall'])) {
+        }//if no preference cookie is set but user clicks "show my BOMS"
+        elseif(isset($_POST['getpref']) && !isset($_COOKIE[$cookie_name])) {
           getBoms($db);
         }//if no preference cookie is set show all BOMS
-        else { 
+        else {
           getBoms($db);
         }
       ?>
@@ -168,15 +169,15 @@
           <th>Request ID</th>
           <th>Request Date</th>
           <th>Request Status</th>
-          <th>Request Step</th> 
+          <th>Request Step</th>
           <th>Notes</th>
           <th>Requester</th>
           <th>Color</th>
         </tr>
       </tfoot>
       </table>
-      
- <script type="text/javascript" language="javascript">
+
+    <script type="text/javascript" language="javascript">
     $(document).ready( function () {
     $('#info').DataTable( {
       dom: 'lfrtBip',
@@ -187,7 +188,7 @@
     $('#info thead tr:eq(1) th').each( function (i) {
       var title = $(this).text();
       $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
-      
+
       $( 'input', this ).on( 'keyup change', function () {
         if ( table.column(i).search() !== this.value ) {
           table
@@ -197,7 +198,7 @@
         }
       } );
     } );
-    
+
       var table = $('#info').DataTable( {
         orderCellsTop: true,
         fixedHeader: true,
@@ -205,7 +206,7 @@
       } );
     } );
   </script>
-      
+
  <style>
    tfoot {
      display: table-header-group;
