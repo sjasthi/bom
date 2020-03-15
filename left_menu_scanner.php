@@ -67,7 +67,7 @@
 
             <form class="form-horizontal" action="" method="post"
                   name="frmCSVImport" id="frmCSVImport" enctype="multipart/form-data">
-                <img src="./images/file.png" alt="oops">
+                <img align="left" src="./images/file.png" alt="oops">
             </form>
 
         </div>
@@ -76,8 +76,8 @@
     <form enctype="multipart/form-data" method="POST" role="form">
         <div class="form_group">
             <input type="file" name="file" id="file" size="150">
-            <button style='background: #01B0F1; color: white;' type="submit"
-                    class="btn btn-default" name="submit" value="submit">Upload</button>
+        <button style='background: #01B0F1; color: white;' type="submit"
+                    class="btn btn-default" name="submit" value="submit">Import File</button>
     </form>
 </body>
 </html>
