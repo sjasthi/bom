@@ -3,6 +3,7 @@
   $left_buttons = "YES";
   $left_selected = "SOFTWAREBOM";
 
+  include "get_scope.php";
   include("./nav.php");
 
   //PDO connection
@@ -11,7 +12,12 @@
   $username = 'root';
   $password = '';
   $pdo = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
+ 
+  $def = "false";
+  $DEFAULT_SCOPE_FOR_RELEASES = getScope($db);
+  $scopeArray = array();
 ?>
+
 
 <?php
   $cookie_name = 'preference';
@@ -50,6 +56,23 @@
       echo "0 results";
     }//end else
     $result->close();
+  }
+
+  function getFilterArray($db) {
+    global $scopeArray;
+    global $pdo;
+    global $DEFAULT_SCOPE_FOR_RELEASES;
+
+    $sql = "SELECT * FROM releases WHERE tag LIKE ?";
+    foreach($DEFAULT_SCOPE_FOR_RELEASES as $currentTag){
+      $sqlTag = $pdo->prepare($sql);
+      $sqlTag->execute([$currentTag]);
+      if ($sqlTag->rowCount() > 0) {
+        while($row = $sqlTag->fetch(PDO::FETCH_ASSOC)){
+          array_push($scopeArray, $row["app_id"]);
+        }
+      }
+    }
   }
 
   //Display error if user retrieves preferences w/o any cookies set
@@ -116,9 +139,11 @@
         /*----------------- GET PREFERENCE COOKIE -----------------*/
         //if user clicks "get all BOMS", retrieve all BOMS
         if(isset($_POST['getall'])) {
+          $def = "false";
           getBoms($db);
         }//default if preference cookie is set, display user BOM preferences
         elseif(isset($_COOKIE[$cookie_name]) || isset($_COOKIE[$cookie_name]) && isset($_POST['getpref'])) {
+          $def = "false";
           $prep = rtrim(str_repeat('?,', count(json_decode($_COOKIE[$cookie_name]))), ',');
           $sql = 'SELECT * FROM sbom WHERE app_id IN ('.$prep.')';
           $pref = $pdo->prepare($sql);
@@ -147,10 +172,13 @@
           }
         }//if no preference cookie is set but user clicks "show my BOMS"
         elseif(isset($_POST['getpref']) && !isset($_COOKIE[$cookie_name])) {
+          $def = "false";
           getBoms($db);
         }//if no preference cookie is set show all BOMS
         else {
-          getBoms($db);
+         $def = "true";
+         getBoms($db);
+         getFilterArray($db);
         }
       ?>
       </tbody>
@@ -204,6 +232,31 @@
         fixedHeader: true,
         retrieve: true
       } );
+
+      /* 
+      * If the default scope is to be used then this will iterate through
+      * each row of the datatable and hide any rows whose app_id does not
+      * match a release who's tag is not in the default scope
+      */
+      
+      var def = <?php echo json_encode($def); ?>;
+      var app_id = <?php echo json_encode($scopeArray); ?>;
+
+      if (def === "true") {
+        var indexes = table.rows().indexes().filter(
+          function (value, index) {
+            var currentID = table.row(value).data()[1];
+            var currentIDString = JSON.stringify(currentID);
+            for (var i = 0; i < 3; i++){
+            if (currentIDString.includes(app_id[i])) {
+              return false;
+              break;
+              } 
+            }
+            return true;
+          });
+        table.rows(indexes).remove().draw();
+     }
     } );
   </script>
 
