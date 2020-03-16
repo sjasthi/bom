@@ -100,6 +100,15 @@
           padding: 1rem;
           margin-right: 1rem;'>Show My BOMS</button>
       </form>
+      <form id='getdef-form' name='getdef-form' method='post' action='' style='display: inline;'>
+        <button type='submit' name='getdef' value='submit'
+        style='background: #01B0F1;
+          color: white;
+          border: none;
+          border-radius: 10px;
+          padding: 1rem;
+          margin-right: 1rem;'>Show System Boms</button>
+      </form>
       <form id='getall-form' name='getall-form' method='post' action='' style='display: inline;'>
         <button type='submit' name='getall' value='submit'
         style='background: #01B0F1;
@@ -141,7 +150,11 @@
         if(isset($_POST['getall'])) {
           $def = "false";
           getBoms($db);
-        }//default if preference cookie is set, display user BOM preferences
+        } elseif (isset($_POST['getdef'])) {
+          $def = "true";
+          getBoms($db);
+          getFilterArray($db);
+         } //default if preference cookie is set, display user BOM preferences
         elseif(isset($_COOKIE[$cookie_name]) || isset($_COOKIE[$cookie_name]) && isset($_POST['getpref'])) {
           $def = "false";
           $prep = rtrim(str_repeat('?,', count(json_decode($_COOKIE[$cookie_name]))), ',');
@@ -176,9 +189,8 @@
           getBoms($db);
         }//if no preference cookie is set show all BOMS
         else {
-         $def = "true";
-         getBoms($db);
-         getFilterArray($db);
+          $def = "false";
+          getBoms($db);
         }
       ?>
       </tbody>

@@ -201,6 +201,15 @@
           padding: 1rem;
           margin-right: 1rem;'>Show My BOMS</button>
       </form>
+      <form id='getdef-form' name='getdef-form' method='post' action='' style='display: inline;'>
+        <button type='submit' name='getdef' value='submit'
+        style='background: #01B0F1;
+          color: white;
+          border: none;
+          border-radius: 10px;
+          padding: 1rem;
+          margin-right: 1rem;'>Show System Boms</button>
+      </form>
       <form id='getall-form' name='getall-form' method='post' action='' style='display: inline;'>
         <button type='submit' name='getall' value='submit'
         style='background: #01B0F1;
@@ -267,7 +276,15 @@
             if(isset($_POST['getall'])) {
               getAllBoms($db);
 
-            }elseif ($findApp) {
+            }
+            //If user clicks "get system BOMS", retrieve all default scope BOMS
+            elseif(isset($_POST['getdef'])) {
+              $def = "true";
+              $sql_parent = "SELECT DISTINCT app_name as name, app_id, app_version as version, app_status as status, CASE WHEN app_name in (select distinct cmp_name from sbom where cmp_version = version and cmp_name = name) THEN 'child' ELSE 'parent' END AS class, CASE WHEN app_name in (select distinct cmp_name from sbom where cmp_version = version and cmp_name = name) THEN 'yellow' ELSE 'red' END AS div_class from sbom";
+              getFilterArray($db);
+              getBoms($db, $sql_parent);
+
+            } elseif ($findApp) {
               $sql_parent = "SELECT DISTINCT app_name as name, 
                               app_version as version, 
                               app_status as status, 
@@ -415,10 +432,7 @@
               getAllBoms($db);
             }//if no preference cookie is set show BOMS in default scope
             else {
-              $def = "true";
-              $sql_parent = "SELECT DISTINCT app_name as name, app_id, app_version as version, app_status as status, CASE WHEN app_name in (select distinct cmp_name from sbom where cmp_version = version and cmp_name = name) THEN 'child' ELSE 'parent' END AS class, CASE WHEN app_name in (select distinct cmp_name from sbom where cmp_version = version and cmp_name = name) THEN 'yellow' ELSE 'red' END AS div_class from sbom";
-              getFilterArray($db);
-              getBoms($db, $sql_parent);
+              getAllBoms($db);
              }
           ?>
         </table>

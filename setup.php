@@ -12,11 +12,15 @@
             SET default_scope = '$newTag'
             WHERE preference_id = 0;";
     $result = $db->query($sql);
-    echo "You selected ".$_POST["tag"];
+    echo "You selected $newTag";
 }
 if(isset($_POST['submit']))
 {
-   $newTag = $_POST["tag"];
+   if($newTag != ''){
+    $newTag = $_POST["tag"];
+   } else {
+    $newTag = "NO TAG";
+   }
    updateTags($db);
 } 
  ?>
