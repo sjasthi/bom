@@ -150,7 +150,8 @@
         if(isset($_POST['getall'])) {
           $def = "false";
           getBoms($db);
-        } elseif (isset($_POST['getdef'])) {
+        } //if user clicks "get default BOMS", retrieve BOMS within system scope 
+        elseif (isset($_POST['getdef'])) {
           $def = "true";
           getBoms($db);
           getFilterArray($db);

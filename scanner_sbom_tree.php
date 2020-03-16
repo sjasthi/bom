@@ -430,7 +430,7 @@
             }//if no preference cookie is set but user clicks "show my BOMS"
             elseif(isset($_POST['getpref']) && !isset($_COOKIE[$cookie_name])) {
               getAllBoms($db);
-            }//if no preference cookie is set show BOMS in default scope
+            }//if no preference cookie is set show all BOMS
             else {
               getAllBoms($db);
              }
