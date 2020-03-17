@@ -173,15 +173,12 @@
   //get all BOMS
   function getAllBoms($db) {
     $sql_parent = "SELECT DISTINCT app_name as name, 
-      app_version as version, app_status as status, 
+      app_version as version, app_status as status, color as div_class,
       CASE WHEN app_name in (select distinct cmp_name 
         from sbom where cmp_version = version and cmp_name = name) THEN 'child' 
       ELSE 'parent' 
-      END AS class, 
-      CASE WHEN app_name in (select distinct cmp_name 
-        from sbom where cmp_version = version and cmp_name = name) THEN 'yellow' 
-      ELSE 'red' 
-      END AS div_class from sbom";
+      END AS class from sbom 
+      GROUP BY name, version, status";
 
       getBoms($db, $sql_parent);
   }
@@ -280,7 +277,10 @@
             //If user clicks "get system BOMS", retrieve all default scope BOMS
             elseif(isset($_POST['getdef'])) {
               $def = "true";
-              $sql_parent = "SELECT DISTINCT app_name as name, app_id, app_version as version, app_status as status, CASE WHEN app_name in (select distinct cmp_name from sbom where cmp_version = version and cmp_name = name) THEN 'child' ELSE 'parent' END AS class, CASE WHEN app_name in (select distinct cmp_name from sbom where cmp_version = version and cmp_name = name) THEN 'yellow' ELSE 'red' END AS div_class from sbom";
+              $sql_parent = "SELECT DISTINCT app_name as name, app_id, app_version as version, app_status as status, color as div_class, 
+              CASE WHEN app_name in (select distinct cmp_name from sbom where cmp_version = version and cmp_name = name) THEN 'child' ELSE 'parent' END AS class 
+              from sbom
+              group by name, version, status;";
               getFilterArray($db);
               getBoms($db, $sql_parent);
 
@@ -291,17 +291,15 @@
                               '' as cmp_type, 
                               '' as request_step,
                               '' as request_status,
-                              '' as notes, 
+                              '' as notes,
+                              color as div_class, 
                               CASE WHEN app_name in (select distinct cmp_name 
                                 from sbom where cmp_version = version and cmp_name = name) THEN 'child'
                               ELSE 'parent'
-                              END AS class,
-                              CASE WHEN app_name in (select distinct cmp_name 
-                                from sbom where cmp_version = version and cmp_name = name) THEN 'yellow'
-                              ELSE 'red'
-                              END AS div_class
+                              END AS class
                               from sbom  
-                              where app_id = '".$getAppId."';";
+                              where app_id = '".$getAppId."'
+                              group by name, version, status;";
 
               getBoms($db, $sql_parent);  
             } else if ($findAppName) {
@@ -311,18 +309,16 @@
                               '' as cmp_type, 
                               '' as request_step,
                               '' as request_status,
-                              '' as notes, 
+                              '' as notes,
+                              color as div_class, 
                               CASE WHEN app_name in (select distinct cmp_name 
                                 from sbom where cmp_version = version and cmp_name = name) THEN 'child'
                               ELSE 'parent'
-                              END AS class,
-                              CASE WHEN app_name in (select distinct cmp_name 
-                                from sbom where cmp_version = version and cmp_name = name) THEN 'yellow'
-                              ELSE 'red'
-                              END AS div_class
+                              END AS class
                               from sbom  
                               where app_name = '".$getAppName."' 
-                              and app_version = '".$getAppVer."' ;";
+                              and app_version = '".$getAppVer."' 
+                              group by name, version, status;";
                               
               getBoms($db, $sql_parent);
 
@@ -330,16 +326,13 @@
             elseif(isset($_COOKIE[$cookie_name]) || isset($_COOKIE[$cookie_name]) && isset($_POST['getpref'])) {
               $prep = rtrim(str_repeat('?,', count(json_decode($_COOKIE[$cookie_name]))), ',');
               $sql = "SELECT DISTINCT app_name as name, 
-                app_version as version, app_status as status, 
+                app_version as version, app_status as status, color as div_class,
                 CASE WHEN app_name in (select distinct cmp_name 
                   from sbom where cmp_version = version and cmp_name = name) THEN 'child' 
                 ELSE 'parent' 
-                END AS class, 
-                CASE WHEN app_name in (select distinct cmp_name 
-                  from sbom where cmp_version = version and cmp_name = name) THEN 'yellow' 
-                ELSE 'red' 
-                END AS div_class from sbom
-                WHERE app_id IN (".$prep.")";
+                END AS class from sbom
+                WHERE app_id IN (".$prep.")
+                group by name, version, status;";
 
               $pref = $pdo->prepare($sql);
               $pref->execute(json_decode($_COOKIE[$cookie_name]));
@@ -430,7 +423,7 @@
             }//if no preference cookie is set but user clicks "show my BOMS"
             elseif(isset($_POST['getpref']) && !isset($_COOKIE[$cookie_name])) {
               getAllBoms($db);
-            }//if no preference cookie is set show all BOMS
+            }//if no preference cookie is set show BOMS in default scope
             else {
               getAllBoms($db);
              }
