@@ -4,7 +4,7 @@
   $left_buttons = "YES";
   $left_selected = "SBOMTREE";
   include("./nav.php");
-
+  include "get_scope.php";
   //PDO connection
   $servername = 'localhost';
   $dbname = 'bom';
@@ -13,6 +13,28 @@
   $pdo = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
 
   $cookie_name = 'preference';
+
+  $def = "false";
+  $DEFAULT_SCOPE_FOR_RELEASES = getScope($db);
+  $scopeArray = array();
+
+  //Grabs default app_ids that are to be shown in the default scope
+  function getFilterArray($db) {
+    global $scopeArray;
+    global $pdo;
+    global $DEFAULT_SCOPE_FOR_RELEASES;
+
+    $sql = "SELECT * FROM releases WHERE tag LIKE ?";
+    foreach($DEFAULT_SCOPE_FOR_RELEASES as $currentTag){
+      $sqlTag = $pdo->prepare($sql);
+      $sqlTag->execute([$currentTag]);
+      if ($sqlTag->rowCount() > 0) {
+        while($row = $sqlTag->fetch(PDO::FETCH_ASSOC)){
+          array_push($scopeArray, $row["app_id"]);
+        }
+      }
+    }
+  }
 
   //Display error if user retrieves preferences w/o any cookies set
   global $pref_err;
@@ -26,9 +48,17 @@
   color: white;">'.$pref_err.'</p>';
  ?>
 
+<style>
+ .hidden{
+   display:none;
+ }
+ </style>
+
 <?php
   /*----------------- FUNCTION TO GET BOMS -----------------*/
   function getBoms($db, $sql_parent) {
+    global $def; 
+    global $scopeArray;
     $result_parent = $db->query($sql_parent);
     $p=1;
     $c=1;
@@ -42,10 +72,28 @@
         $app_status = $row_parent["status"];
         $div_class = $row_parent["div_class"];
         $p_id = $p;
+        $app_id = "NONE";
+
+        //If the default scope is 
+        if ($def == "true"){
+          $app_id = $row_parent["app_id"];
+          if (in_array($app_id, $scopeArray) && $def == "true") {
+            echo "<tbody class= '".$div_class."'>
+            <tr data-tt-id = '".$p_id."' ><td class='text-capitalize'> 
+            <div class = 'btn ".$class."' ><span class = 'app_name' style = 'max-width: 160em; white-space: pre-wrap; word-wrap: break-word; word-break: break-all;'>".$app_name."</span>&nbsp; &nbsp;&nbsp; &nbsp;</div></td>
+            <td >".$app_version."</td><td class='text-capitalize'>".$app_status."</td><td/><td/><td/><td/></tr>";
+          } else {
+            echo "<tbody class= 'hidden'>
+            <tr data-tt-id = '".$p_id."' ><td class='text-capitalize'>
+            <div class = 'btn ".$class."' ><span class = 'app_name' style = 'max-width: 160em; white-space: pre-wrap; word-wrap: break-word; word-break: break-all;'>".$app_name."</span>&nbsp; &nbsp;&nbsp; &nbsp;</div></td>
+            <td >".$app_version."</td><td class='text-capitalize'>".$app_status."</td><td/><td/><td/><td/></tr>";
+          }
+       } else {
         echo "<tbody class= '".$div_class."'>
-        <tr data-tt-id = '".$p_id."' ><td class='text-capitalize'>
+        <tr data-tt-id = '".$p_id."' ><td class='text-capitalize'> 
         <div class = 'btn ".$class."' ><span class = 'app_name' style = 'max-width: 160em; white-space: pre-wrap; word-wrap: break-word; word-break: break-all;'>".$app_name."</span>&nbsp; &nbsp;&nbsp; &nbsp;</div></td>
         <td >".$app_version."</td><td class='text-capitalize'>".$app_status."</td><td/><td/><td/><td/></tr>";
+       }
         $p++;
         
         // output data of child
@@ -117,7 +165,9 @@
     }//if there is no parent, then add a row to reflect no results.
     else {
       echo "<tr data-tt-id = 'No Results'> <td>No Results Found</td><td/><td/><td/><td/><td/><td/> </tr>";
-    }    
+    } 
+    //Default scope is turned off so it doesn't interfere with any further page activity 
+    $def = 'false';
   }
 
   //get all BOMS
@@ -150,6 +200,15 @@
           border-radius: 10px;
           padding: 1rem;
           margin-right: 1rem;'>Show My BOMS</button>
+      </form>
+      <form id='getdef-form' name='getdef-form' method='post' action='' style='display: inline;'>
+        <button type='submit' name='getdef' value='submit'
+        style='background: #01B0F1;
+          color: white;
+          border: none;
+          border-radius: 10px;
+          padding: 1rem;
+          margin-right: 1rem;'>Show System Boms</button>
       </form>
       <form id='getall-form' name='getall-form' method='post' action='' style='display: inline;'>
         <button type='submit' name='getall' value='submit'
@@ -217,7 +276,15 @@
             if(isset($_POST['getall'])) {
               getAllBoms($db);
 
-            }elseif ($findApp) {
+            }
+            //If user clicks "get system BOMS", retrieve all default scope BOMS
+            elseif(isset($_POST['getdef'])) {
+              $def = "true";
+              $sql_parent = "SELECT DISTINCT app_name as name, app_id, app_version as version, app_status as status, CASE WHEN app_name in (select distinct cmp_name from sbom where cmp_version = version and cmp_name = name) THEN 'child' ELSE 'parent' END AS class, CASE WHEN app_name in (select distinct cmp_name from sbom where cmp_version = version and cmp_name = name) THEN 'yellow' ELSE 'red' END AS div_class from sbom";
+              getFilterArray($db);
+              getBoms($db, $sql_parent);
+
+            } elseif ($findApp) {
               $sql_parent = "SELECT DISTINCT app_name as name, 
                               app_version as version, 
                               app_status as status, 
