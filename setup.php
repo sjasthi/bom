@@ -18,7 +18,7 @@ if(isset($_POST['submit']))
 {
   //If user enters an empty string then set tag to something that will never be used as a tag
   //Thus entering an empty string ensures that no rows will match during table generation
-   if($newTag != ''){
+   if($_POST["tag"] != ''){
     $newTag = $_POST["tag"];
    } else {
     $newTag = "NO TAG";
