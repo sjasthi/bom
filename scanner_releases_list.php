@@ -1,5 +1,4 @@
 <?php
-
   $nav_selected = "SCANNER"; 
   $left_buttons = "YES"; 
   $left_selected = "RELEASESLIST"; 
@@ -26,6 +25,7 @@
         text-align: center; 
         background-color: green; 
         color: white;">BOM preferences successfully saved.</p>';
+        header("Refresh:1.75");
       $preference = $apps;
       $set_pref = setcookie($cookie_name, json_encode($preference), $expire); 
     }
@@ -35,6 +35,12 @@
       $count_err = "Please select at least one BOM."; 
     }
   }
+
+  //if cookie is set, decode cookie into array
+  if(isset($_COOKIE[$cookie_name])) {
+    $cookie_arr = json_decode($_COOKIE[$cookie_name]);
+  }
+  
 ?>
 
 <!-- Display error for preference form -->
@@ -85,20 +91,31 @@
               $sql2 = "SELECT DISTINCT app_id as appID FROM (select distinct concat(TRIM(app_name), 
                 TRIM(app_version)) as name, app_id from sbom ) as subquery where name ='".$appName."' Limit 1;";
               $result2 = $db->query($sql2);
-              
-              echo "<td><input type='checkbox' name='app[]' value='".$row['app_id']."'></td>";
+
+              //if a cookie is set keep the selected apps checkbox checked
+              if(isset($_COOKIE[$cookie_name])) {
+                if (in_array($row['app_id'], $cookie_arr, true)) {
+                  echo "<td><input type='checkbox' name='app[]' value='".$row['app_id']."' checked></td>";
+                }else {
+                  echo "<td><input type='checkbox' name='app[]' value='".$row['app_id']."'></td>";
+                }
+              }//if no cookie is set, all checkboxes are unchecked by default 
+              else {
+                echo "<td><input type='checkbox' name='app[]' value='".$row['app_id']."'></td>";
+              }
+
               echo "<td>".$row["app_id"]."</td>";
               echo '<td>'.$row["id"].'</td>';
+
               if ($result2->num_rows > 0) {
                 while($row2 = $result2->fetch_assoc()) {
                   $id = $row2["appID"];
                 }
-
                 echo '<td><a href="scanner_sbom_tree.php?id='.$id.'">'.$row["name"].' </a> </span> </td>';
+
               }//end if
               else {
                 echo '<td>'.$row["name"].' </span> </td>';
-
               }//end else
               echo '<td>'.$row["type"].'</td>
                 <td>'.$row["status"].'</td>
@@ -170,8 +187,6 @@
           } );  
           } );
         </script>
-
-        
 
  <style>
    tfoot {
