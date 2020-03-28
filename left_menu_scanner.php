@@ -58,12 +58,11 @@
                 <img src="./images/bom_compare.png">
                 <br/>BOM Compare<br/></div>
         </a>
-        
+  
             <form class="form-horizontal" action="" method="post" name="frmCSVImport" 
             id="frmCSVImport" enctype="multipart/form-data">
                 <img align="left" src="./images/upload-icon.png" alt="Import File">
             </form>
-
         </div>
     </div>
     
