@@ -89,9 +89,9 @@ if (isset($_POST['submit'])) {
   $host = 'localhost';
   $user = 'root';
   $password = '12345';
-  $db = 'bom';
+  $mydb = 'bom';
   $conn = mysqli_connect($host, $user, $password) or die('Could not connect to server' .msqli_error($conn));
-  mysqli_select_db($conn, $db) or die('Could not connect to database' .msqli_error($conn));
+  mysqli_select_db($conn, $mydb) or die('Could not connect to database' .msqli_error($conn));
   
   $file = $_FILES['file']['tmp_name'];
 
@@ -162,6 +162,7 @@ foreach ($data as $row)
 
 if($sqlinsert) {
     echo "CSV data Updated Sucessfully.";
+    header('location: scanner_sbom_list.php');
 } else {
   echo $conn->error;
 }
