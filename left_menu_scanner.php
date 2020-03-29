@@ -90,7 +90,7 @@ if (isset($_POST['submit'])) {
   $user = 'root';
   $password = '12345';
   $myDB = 'bom';
-  $conn = mysqli_connect($host, $user) or die('Could not connect to server' .msqli_error($conn));
+  $conn = mysqli_connect($host, $user, $password) or die('Could not connect to server' .msqli_error($conn));
   mysqli_select_db($conn, $myDB) or die('Could not connect to database' .msqli_error($conn));
   
   $file = $_FILES['file']['tmp_name'];

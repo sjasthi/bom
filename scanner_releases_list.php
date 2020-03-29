@@ -58,15 +58,14 @@
         color: white;">Default BOM scope successfully set.</p>';
         header("Refresh:5");
       $newScope = implode(",",$apps);
+      updateScope($db, $newScope);  
+    }
+  } elseif (isset($_POST['saveScope']) && !isset($_POST['app'])){
+    if(!isset($apps)){
+      $count_err = "You have set the system scope to be empty";
+      $newScope = '';
       updateScope($db, $newScope);
-      
-      }//If no BOMS are selected then scope preferences is an empty string
-    } elseif (isset($_POST['saveScope']) && !isset($_POST['app'])){
-      if(!isset($apps)){
-        $count_err = "You have set the system scope to be empty"; 
-        $newScope = '';
-        updateScope($db, $newScope);
-      }
+    }
   }
 
   //if cookie is set, decode cookie into array
