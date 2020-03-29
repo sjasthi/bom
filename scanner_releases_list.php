@@ -44,7 +44,7 @@
     if(!isset($apps)) {
       $count_err = "Please select at least one BOM."; 
     }
-  }elseif(isset($_POST['saveScope'])) {
+  }elseif(isset($_POST['saveScope']) && isset($_POST['app'])) {
     $apps = $_POST['app'];
 
     if(count($apps) > 5) {
@@ -58,8 +58,13 @@
         color: white;">Default BOM scope successfully set.</p>';
         header("Refresh:5");
       $newScope = implode(",",$apps);
+      updateScope($db, $newScope);  
+    }
+  } elseif (isset($_POST['saveScope']) && !isset($_POST['app'])){
+    if(!isset($apps)){
+      $count_err = "You have set the system scope to be empty";
+      $newScope = '';
       updateScope($db, $newScope);
-      
     }
   }
 
