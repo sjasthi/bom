@@ -44,7 +44,7 @@
     if(!isset($apps)) {
       $count_err = "Please select at least one BOM."; 
     }
-  }elseif(isset($_POST['saveScope'])) {
+  }elseif(isset($_POST['saveScope']) && isset($_POST['app'])) {
     $apps = $_POST['app'];
 
     if(count($apps) > 5) {
@@ -60,7 +60,13 @@
       $newScope = implode(",",$apps);
       updateScope($db, $newScope);
       
-    }
+      }//If no BOMS are selected then scope preferences is an empty string
+    } elseif (isset($_POST['saveScope']) && !isset($_POST['app'])){
+      if(!isset($apps)){
+        $count_err = "You have set the system scope to be empty"; 
+        $newScope = '';
+        updateScope($db, $newScope);
+      }
   }
 
   //if cookie is set, decode cookie into array
