@@ -8,6 +8,16 @@
 ?>
 <?php
   global $count_err;
+
+
+  function updateScope($db, $newScope)
+  {
+      $sql = "UPDATE scope_preferences
+              SET default_scope = '$newScope'
+              WHERE preference_id = 0;";
+      $result = $db->query($sql);
+  }
+
   /*----------------- SET PREFERENCE COOKIE -----------------*/
   $cookie_name = 'preference';
   $expire = strtotime('+1 year');
@@ -33,6 +43,28 @@
   }elseif(isset($_POST['save']) && !isset($_POST['app'])) {
     if(!isset($apps)) {
       $count_err = "Please select at least one BOM."; 
+    }
+  }elseif(isset($_POST['saveScope']) && isset($_POST['app'])) {
+    $apps = $_POST['app'];
+
+    if(count($apps) > 5) {
+      $count_err = "You can't select more than 5 BOMS."; 
+
+    }else {
+      echo '<p 
+        style="font-size: 2.5rem; 
+        text-align: center; 
+        background-color: green; 
+        color: white;">Default BOM scope successfully set.</p>';
+        header("Refresh:5");
+      $newScope = implode(",",$apps);
+      updateScope($db, $newScope);  
+    }
+  } elseif (isset($_POST['saveScope']) && !isset($_POST['app'])){
+    if(!isset($apps)){
+      $count_err = "You have set the system scope to be empty";
+      $newScope = '';
+      updateScope($db, $newScope);
     }
   }
 
@@ -75,6 +107,7 @@
             <th>RTM Date(s)</th>
             <th>Manager</th>
             <th>Author</th>
+            <th>Tag</th>
           </tr>
         </thead>
 
@@ -124,7 +157,8 @@
                 <td>'.$row["freeze_date"].'</td>
                 <td>'.$row["rtm_date"].' </span> </td>
                 <td>'.$row["manager"].' </span> </td>
-                <td>'.$row["author"].' </span> </td>';
+                <td>'.$row["author"].' </span> </td>
+                <td>'.$row["tag"].' </span> </td>';
                 $result2->close();
             }
           }
@@ -144,6 +178,7 @@
               <th>RTM Date(s)</th>
               <th>Manager</th>
               <th>Author</th>
+              <th>Tag</th>
             </tr>
           </tfoot>
         </table>
@@ -154,6 +189,14 @@
           border-radius: 10px;
           padding: 1rem;
           margin-right: 1rem;'>Set My BOMS</button>
+
+        <button type='submit' name='saveScope' value='submit'
+        style='background: #01B0F1;
+          color: white;
+          border: none;
+          border-radius: 10px;
+          padding: 1rem;
+          margin-right: 1rem;'>Set System BOMS</button>
         </form>
         <!-- End preference form -->                       
 

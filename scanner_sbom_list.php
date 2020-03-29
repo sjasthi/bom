@@ -63,12 +63,12 @@
     global $pdo;
     global $DEFAULT_SCOPE_FOR_RELEASES;
 
-    $sql = "SELECT * FROM releases WHERE tag LIKE ?";
-    foreach($DEFAULT_SCOPE_FOR_RELEASES as $currentTag){
-      $sqlTag = $pdo->prepare($sql);
-      $sqlTag->execute([$currentTag]);
-      if ($sqlTag->rowCount() > 0) {
-        while($row = $sqlTag->fetch(PDO::FETCH_ASSOC)){
+    $sql = "SELECT * FROM releases WHERE app_id LIKE ?";
+    foreach($DEFAULT_SCOPE_FOR_RELEASES as $currentID){
+      $sqlID = $pdo->prepare($sql);
+      $sqlID->execute([$currentID]);
+      if ($sqlID->rowCount() > 0) {
+        while($row = $sqlID->fetch(PDO::FETCH_ASSOC)){
           array_push($scopeArray, $row["app_id"]);
         }
       }
@@ -150,8 +150,7 @@
         if(isset($_POST['getall'])) {
           $def = "false";
           getBoms($db);
-        } //if user clicks "get default BOMS", retrieve BOMS within system scope 
-        elseif (isset($_POST['getdef'])) {
+        } elseif (isset($_POST['getdef'])) {
           $def = "true";
           getBoms($db);
           getFilterArray($db);
@@ -249,7 +248,7 @@
       /* 
       * If the default scope is to be used then this will iterate through
       * each row of the datatable and hide any rows whose app_id does not
-      * match a release who's tag is not in the default scope
+      * match a release who's app is not in the default scope
       */
       
       var def = <?php echo json_encode($def); ?>;
@@ -260,7 +259,7 @@
           function (value, index) {
             var currentID = table.row(value).data()[1];
             var currentIDString = JSON.stringify(currentID);
-            for (var i = 0; i < 3; i++){
+            for (var i = 0; i < app_id.length; i++){
             if (currentIDString.includes(app_id[i])) {
               return false;
               break;
