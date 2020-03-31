@@ -39,6 +39,14 @@
             <br/>BOM Tree<br/></div>
     </a>
 
+        <a href="scanner_sbom_tree_v2.php">
+        <div <?php if ($left_selected == "SBOMTREE") {
+            echo 'class="menu-left-current-page"';
+        } ?>>
+            <img src="./images/sbom_tree.png">
+            <br/>BOM Tree V2<br/></div>
+    </a>
+
     <a href="scanner_out_of_sync_bom_list.php">
         <div <?php if ($left_selected == "OUTOFSYNCBOMLIST") {
             echo 'class="menu-left-current-page"';

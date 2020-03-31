@@ -1,5 +1,5 @@
 <?php
-  echo'v1';
+  echo'v2';
 
   $nav_selected = "SCANNER";
   $left_buttons = "YES";
@@ -175,11 +175,11 @@
   function getAllBoms($db) {
     $sql_parent = "SELECT DISTINCT app_name as name, 
       app_version as version, app_status as status, color as div_class,
-      CASE WHEN app_name in (select distinct cmp_name 
-        from sbom where cmp_version = version and cmp_name = name) THEN 'child' 
+      CASE WHEN color = 'yellow' THEN 'child' 
       ELSE 'parent' 
       END AS class from sbom 
       GROUP BY name, version, status";
+
       $starttime = microtime(true);
       getBoms($db, $sql_parent);
       $endtime = microtime(true);
@@ -282,7 +282,9 @@
             elseif(isset($_POST['getdef'])) {
               $def = "true";
               $sql_parent = "SELECT DISTINCT app_name as name, app_id, app_version as version, app_status as status, color as div_class, 
-              CASE WHEN app_name in (select distinct cmp_name from sbom where cmp_version = version and cmp_name = name) THEN 'child' ELSE 'parent' END AS class 
+              CASE WHEN app_name in (select distinct cmp_name from sbom where cmp_version = version and cmp_name = name) THEN 'child' 
+              ELSE 'parent' 
+              END AS class 
               from sbom
               group by name, version, status;";
               getFilterArray($db);
