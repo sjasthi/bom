@@ -25,12 +25,12 @@
     global $pdo;
     global $DEFAULT_SCOPE_FOR_RELEASES;
 
-    $sql = "SELECT * FROM releases WHERE tag LIKE ?";
-    foreach($DEFAULT_SCOPE_FOR_RELEASES as $currentTag){
-      $sqlTag = $pdo->prepare($sql);
-      $sqlTag->execute([$currentTag]);
-      if ($sqlTag->rowCount() > 0) {
-        while($row = $sqlTag->fetch(PDO::FETCH_ASSOC)){
+    $sql = "SELECT * FROM releases WHERE app_id LIKE ?";
+    foreach($DEFAULT_SCOPE_FOR_RELEASES as $currentID){
+      $sqlID = $pdo->prepare($sql);
+      $sqlID->execute([$currentID]);
+      if ($sqlID->rowCount() > 0) {
+        while($row = $sqlID->fetch(PDO::FETCH_ASSOC)){
           array_push($scopeArray, $row["app_id"]);
         }
       }
