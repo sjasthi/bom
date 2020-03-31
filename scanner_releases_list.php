@@ -2,7 +2,7 @@
   $nav_selected = "SCANNER"; 
   $left_buttons = "YES"; 
   $left_selected = "RELEASESLIST"; 
-
+  //include("session.php");
   include("./nav.php");
   global $db;
 ?>
@@ -22,8 +22,13 @@
   $cookie_name = 'preference';
   $expire = strtotime('+1 year');
 
-  //Get selected apps & put into cookie
-  if(isset($_POST['save']) && isset($_POST['app'])) {
+  //If user wants to use admin functions of release table then they must be logged in
+  if (isset($_POST['save']) || isset($_POST['saveScope'])) {
+    include("session.php");
+  }
+
+  //Get selected apps & put into cookie or system scope if the user is logged in as an admin
+  if(isset($_POST['save']) && isset($_POST['app']) && isset($_SESSION['login_user'])) {
     $apps = $_POST['app'];
 
     if(count($apps) > 5) {
@@ -40,7 +45,7 @@
       $set_pref = setcookie($cookie_name, json_encode($preference), $expire); 
     }
 
-  }elseif(isset($_POST['save']) && !isset($_POST['app'])) {
+  }elseif(isset($_POST['save']) && !isset($_POST['app']) && isset($_SESSION['login_user'])) {
     if(!isset($apps)) {
       $count_err = "Please select at least one BOM."; 
     }
@@ -60,14 +65,13 @@
       $newScope = implode(",",$apps);
       updateScope($db, $newScope);  
     }
-  } elseif (isset($_POST['saveScope']) && !isset($_POST['app'])){
+  } elseif (isset($_POST['saveScope']) && !isset($_POST['app']) && isset($_SESSION['login_user'])){
     if(!isset($apps)){
       $count_err = "You have set the system scope to be empty";
       $newScope = '';
       updateScope($db, $newScope);
     }
   }
-
   //if cookie is set, decode cookie into array
   if(isset($_COOKIE[$cookie_name])) {
     $cookie_arr = json_decode($_COOKIE[$cookie_name]);
