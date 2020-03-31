@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 31, 2020 at 09:22 PM
+-- Generation Time: Mar 31, 2020 at 11:23 PM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.2.26
 
@@ -97,18 +97,18 @@ CREATE TABLE `sbom` (
 
 INSERT INTO `sbom` (`row_id`, `app_id`, `app_name`, `app_version`, `cmp_id`, `cmp_name`, `cmp_version`, `cmp_type`, `app_status`, `cmp_status`, `request_id`, `request_date`, `request_status`, `request_step`, `notes`, `requestor`, `color`) VALUES
 (1, 'BOM-100', 'QuizMaster', '1.1', '101.1', 'DB_Layer', '2.3', 'internal', 'released', 'released', 'PQR_839_R1', '0000-00-00', 'Approved', 'Approval Step', '', '', 'red'),
-(2, 'BOM-100', 'QuizMaster', '1.1', '101.2', 'Jquery', '4.3', 'open source', 'released', 'approved', 'XYZ_789_R2', '0000-00-00', 'Approved', 'Approval Step', 'open source, no commercial support', '', 'green'),
-(3, 'BOM-100', 'QuizMaster', '1.1', '101.3', 'Bootstrap', '8.5.c', 'open source', 'released', 'pending', 'ABC_678_R1', '0000-00-00', 'Submitted', 'Inspection Step', '', '', 'green'),
-(4, 'BOM-100', 'QuizMaster', '1.1', '101.4', 'IconFinder', '2019', 'commercial', 'released', 'submitted', 'BND_387_R1', '0000-00-00', 'Submitted', 'Inspection Step', '', '', 'green'),
-(5, 'BOM-100', 'QuizMaster', '1.1', '101.5', 'Excel', '2019', 'commercial', 'released', 'in_review', 'BSL_887_R2', '0000-00-00', 'Pending', 'Review Step', '', '', 'green'),
+(2, 'BOM-100', 'QuizMaster', '1.1', '101.2', 'Jquery', '4.3', 'open source', 'released', 'approved', 'XYZ_789_R2', '0000-00-00', 'Approved', 'Approval Step', 'open source, no commercial support', '', 'yellow'),
+(3, 'BOM-100', 'QuizMaster', '1.1', '101.3', 'Bootstrap', '8.5.c', 'open source', 'released', 'pending', 'ABC_678_R1', '0000-00-00', 'Submitted', 'Inspection Step', '', '', 'yellow'),
+(4, 'BOM-100', 'QuizMaster', '1.1', '101.4', 'IconFinder', '2019', 'commercial', 'released', 'submitted', 'BND_387_R1', '0000-00-00', 'Submitted', 'Inspection Step', '', '', 'yellow'),
+(5, 'BOM-100', 'QuizMaster', '1.1', '101.5', 'Excel', '2019', 'commercial', 'released', 'in_review', 'BSL_887_R2', '0000-00-00', 'Pending', 'Review Step', '', '', 'yellow'),
 (6, '101.1', 'DB_Layer', '2.3', '101.1.1', 'DB_Layer_MySQL', 'v1.0', 'internal', 'released', 'released', 'KSI_887_R3', '0000-00-00', 'Approved', 'Approval Step', '', '', 'yellow'),
 (8, '101.1', 'DB_Layer', '2.3', '101.1.2', 'DB_Layer_DB2', 'v1.0', 'internal', 'released', 'released', 'KSE_888_R1', '0000-00-00', 'Approved', 'Approval Step', '', '', 'yellow'),
 (10, '101.1', 'DB_Layer', '2.3', '101.1.4', 'DB_Layer_Ingress', 'v1.0', 'internal', 'released', 'released', 'LSO_262_R2', '0000-00-00', 'Approved', 'Approval Step', '', '', 'yellow'),
 (11, 'BOM-104', 'QuizMaster', '2.2', '202.2', 'DB_Layer', '2.3', 'internal', 'released', 'released', 'IWU_376_R2', '0000-00-00', 'Approved', 'Approval Step', '', '', 'red'),
 (12, 'BOM-104', 'QuizMaster', '2.2', '202.2', 'Jquery', '4.3', 'open source', 'released', 'approved', 'BLD_198_R1', '0000-00-00', 'Submitted', 'Inspection Step', 'open source, no commercial support', '', 'red'),
-(13, 'BOM-104', 'QuizMaster', '2.2', '202.3', 'Bootstrap', '8.5.c', 'open source', 'released', 'pending', 'KSO_409_R2', '0000-00-00', 'Pending', 'Review Step', '', '', 'green'),
-(14, 'BOM-104', 'QuizMaster', '2.2', '202.4', 'IconFinder', '2029', 'commercial', 'released', 'submitted', 'OSP_736_R2', '0000-00-00', 'Submitted', 'Inspection Step', '', '', 'green'),
-(15, 'BOM-104', 'QuizMaster', '2.2', '202.5', 'Excel', '2029', 'commercial', 'released', 'in_review', 'NXH_309_R1', '0000-00-00', 'Pending', 'Review Step', '', '', 'green'),
+(13, 'BOM-104', 'QuizMaster', '2.2', '202.3', 'Bootstrap', '8.5.c', 'open source', 'released', 'pending', 'KSO_409_R2', '0000-00-00', 'Pending', 'Review Step', '', '', 'yellow'),
+(14, 'BOM-104', 'QuizMaster', '2.2', '202.4', 'IconFinder', '2029', 'commercial', 'released', 'submitted', 'OSP_736_R2', '0000-00-00', 'Submitted', 'Inspection Step', '', '', 'yellow'),
+(15, 'BOM-104', 'QuizMaster', '2.2', '202.5', 'Excel', '2029', 'commercial', 'released', 'in_review', 'NXH_309_R1', '0000-00-00', 'Pending', 'Review Step', '', '', 'yellow'),
 (16, '202.2', 'DB_Layer', '2.3', '202.2.2', 'DB_Layer_Maria', 'v2.0', 'internal', 'released', 'released', 'HSI_735_R2', '0000-00-00', 'Approved', 'Approval Step', '', '', 'yellow'),
 (17, '202.2', 'DB_Layer', '2.3', '202.2.2', 'DB_Layer_DB2', 'v2.0', 'internal', 'released', 'released', 'SOI_037_R3', '0000-00-00', 'Approved', 'Approval Step', '', '', 'yellow'),
 (18, '202.2', 'DB_Layer', '2.3', '202.2.3', 'DB_Layer_Oracle', 'v2.0', 'internal', 'released', 'released', 'JSE_398_R1', '0000-00-00', 'Approved', 'Approval Step', '', '', 'yellow'),
@@ -142,15 +142,16 @@ INSERT INTO `scope_preferences` (`preference_id`, `default_scope`) VALUES
 CREATE TABLE `users` (
   `id` int(5) NOT NULL,
   `username` varchar(50) NOT NULL,
-  `passcode` varchar(50) NOT NULL
+  `passcode` varchar(50) NOT NULL,
+  `type` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `username`, `passcode`) VALUES
-(1, 'admin', '12345');
+INSERT INTO `users` (`id`, `username`, `passcode`, `type`) VALUES
+(1, 'admin', '12345', 'administrator');
 
 --
 -- Indexes for dumped tables

@@ -1,10 +1,12 @@
 <?php
-    $nav_selected = "SCANNER"; 
-    $left_buttons = "YES"; 
-    $left_selected = "RELEASESLIST"; 
+    $nav_selected = ""; 
+    $left_buttons = ""; 
+    $left_selected = ""; 
     $error = '';
    include("./nav.php");
-   //session_start();
+   if(!isset($_SESSION)){
+    session_start();
+    }
    
    if($_SERVER["REQUEST_METHOD"] == "POST") {
       // username and password sent from form 
@@ -22,10 +24,13 @@
       // If result matched $myusername and $mypassword, table row must be 1 row
 		
       if($count == 1) {
-         //session_register("myusername");
          $_SESSION['login_user'] = $myusername;
+         $mytype = $row['type'];
+         if (strpos($mytype, "administrator") !== false){
+            $_SESSION['admin'] = "It is working";
+         }
          
-         header("location: scanner_releases_list.php");
+         header("location: index.php");
       }else {
          $error = "Your Login Name or Password is invalid";
       }
