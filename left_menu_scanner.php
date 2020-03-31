@@ -36,6 +36,14 @@
             <br/>BOM Tree<br/></div>
     </a>
 
+        <a href="scanner_sbom_tree_v2.php">
+        <div <?php if ($left_selected == "SBOMTREE") {
+            echo 'class="menu-left-current-page"';
+        } ?>>
+            <img src="./images/sbom_tree.png">
+            <br/>BOM Tree V2<br/></div>
+    </a>
+
     <a href="scanner_out_of_sync_bom_list.php">
         <div <?php if ($left_selected == "OUTOFSYNCBOMLIST") {
             echo 'class="menu-left-current-page"';
@@ -89,9 +97,9 @@ if (isset($_POST['submit'])) {
   $host = 'localhost';
   $user = 'root';
   $password = '12345';
-  $db = 'bom';
+  $mydb = 'bom';
   $conn = mysqli_connect($host, $user, $password) or die('Could not connect to server' .msqli_error($conn));
-  mysqli_select_db($conn, $db) or die('Could not connect to database' .msqli_error($conn));
+  mysqli_select_db($conn, $mydb) or die('Could not connect to database' .msqli_error($conn));
   
   $file = $_FILES['file']['tmp_name'];
 
@@ -162,6 +170,7 @@ foreach ($data as $row)
 
 if($sqlinsert) {
     echo "CSV data Updated Sucessfully.";
+    header('location: scanner_sbom_list.php');
 } else {
   echo $conn->error;
 }
