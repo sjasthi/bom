@@ -91,8 +91,8 @@ if(!isset($_SESSION)){
 require_once('calculate_color.php');
 $c = 0;
 
-echo $_SESSION['admin'];
-echo $_SESSION['login_user'];
+//echo $_SESSION['admin'];
+//echo $_SESSION['login_user'];
 $labels = array('row_id', 'app_id', 'app_name', 'app_version', 'cmp_id', 'cmp_name', 'cmp_version',
 'cmp_type', 'app_status', 'cmp_status', 'request_id', 'request_date', 'request_status', 'request_step',
 'request_notes', 'notes', 'requestor', 'color');
