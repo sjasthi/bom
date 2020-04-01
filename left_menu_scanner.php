@@ -37,7 +37,7 @@
     </a>
 
         <a href="scanner_sbom_tree_v2.php">
-        <div <?php if ($left_selected == "SBOMTREE") {
+        <div <?php if ($left_selected == "SBOMTREE2") {
             echo 'class="menu-left-current-page"';
         } ?>>
             <img src="./images/sbom_tree.png">
