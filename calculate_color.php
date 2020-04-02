@@ -29,12 +29,15 @@ function color($sql1, $sql2){
 function colorize($app, $cmp){
 	if (!$app && $cmp){
 		return 'red';
-	}
-	if ($app && !$cmp){
-		return 'yellow';
 	} else {
-		return 'green';
+		return 'yellow';
 	}
+
+	// if ($app && !$cmp){
+	// 	return 'yellow';
+	// } else {
+	// 	return 'green';
+	// }
 }
 
 //converts sql statement to array

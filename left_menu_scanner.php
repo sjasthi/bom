@@ -36,6 +36,14 @@
             <br/>BOM Tree<br/></div>
     </a>
 
+        <a href="scanner_sbom_tree_v2.php">
+        <div <?php if ($left_selected == "SBOMTREE") {
+            echo 'class="menu-left-current-page"';
+        } ?>>
+            <img src="./images/sbom_tree.png">
+            <br/>BOM Tree V2<br/></div>
+    </a>
+
     <a href="scanner_out_of_sync_bom_list.php">
         <div <?php if ($left_selected == "OUTOFSYNCBOMLIST") {
             echo 'class="menu-left-current-page"';
@@ -76,21 +84,27 @@
 </html>
 
 <?php
+if(!isset($_SESSION)){
+    session_start();
+}
+
 require_once('calculate_color.php');
 $c = 0;
 
+//echo $_SESSION['admin'];
+//echo $_SESSION['login_user'];
 $labels = array('row_id', 'app_id', 'app_name', 'app_version', 'cmp_id', 'cmp_name', 'cmp_version',
 'cmp_type', 'app_status', 'cmp_status', 'request_id', 'request_date', 'request_status', 'request_step',
 'request_notes', 'notes', 'requestor', 'color');
 $data = array();
 $map = array();
 
-if (isset($_POST['submit'])) {
+if (isset($_POST['submit']) && isset($_SESSION['admin'])) {
   $host = 'localhost';
   $user = 'root';
   $password = '12345';
   $mydb = 'bom';
-  $conn = mysqli_connect($host, $user, $password) or die('Could not connect to server' .msqli_error($conn));
+  $conn = mysqli_connect($host, $user) or die('Could not connect to server' .msqli_error($conn));
   mysqli_select_db($conn, $mydb) or die('Could not connect to database' .msqli_error($conn));
   
   $file = $_FILES['file']['tmp_name'];
@@ -167,5 +181,15 @@ if($sqlinsert) {
   echo $conn->error;
 }
   }
+} elseif (isset($_POST['submit']) && !isset($_SESSION['admin'])){
+    echo '<p 
+        style="font-size: 2.5rem; 
+        text-align: center; 
+        background-color: green; 
+        color: white;">You must be logged in as an administrator to use this function.</p>';
+        header("Refresh:3");
+   // echo $_SESSION['login_user'];
+   // echo $_SESSION['isAdmin'];
+        //unset($_POST['submit']);
 }
  ?>
