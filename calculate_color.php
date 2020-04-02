@@ -1,5 +1,8 @@
 <?php 
 require_once('initialize.php');
+/*To clear colors in database:
+UPDATE `sbom` SET `color`= ''
+*/
 
 //seaches array for a match, returns true if match is found
 function exist($key, $array){
@@ -26,15 +29,15 @@ function color($sql1, $sql2){
 function colorize($app, $cmp){
 	if (!$app && $cmp){
 		return 'red';
-	}
-	if ($app && $cmp){
-		return 'yellow';
-	}
-	if ($app && !$cmp){
-		return 'green';
 	} else {
 		return 'yellow';
 	}
+
+	// if ($app && !$cmp){
+	// 	return 'yellow';
+	// } else {
+	// 	return 'green';
+	// }
 }
 
 //converts sql statement to array
