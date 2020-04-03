@@ -102,18 +102,23 @@
             <br/>help</li>
         </a>
 
-        <a href="login.php">
-          <li <?php if($nav_selected == "LOGIN"){ echo 'class="current-page"'; } ?>>
-            <img src="./images/about.png">
-            <br/>login</li>
-        </a>
-
-        <a href="logout.php">
-          <li <?php if($nav_selected == "LOGOUT"){ echo 'class="current-page"'; } ?>>
+        <?php
+        if(isset($_SESSION['login_user'])) {
+          echo '
+          <a href="logout.php">
+          <li <?php if($nav_selected == "LOGOUT"){ echo "class="current-page""; } ?>
             <img src="./images/about.png">
             <br/>logout</li>
-        </a>
-
+          </a>';
+        }else {
+          echo '
+          <a href="login.php">
+          <li <?php if($nav_selected == "LOGIN"){ echo "class="current-page""; } ?>
+            <img src="./images/about.png">
+            <br/>login</li>
+          </a>';
+        }
+        ?>
       </ul>
       <br />
     </div>
