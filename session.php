@@ -2,8 +2,6 @@
     $nav_selected = ""; 
     $left_buttons = ""; 
     $left_selected = ""; 
-   include("./nav.php");
-
    if(!isset($_SESSION)){
    session_start();
    }
