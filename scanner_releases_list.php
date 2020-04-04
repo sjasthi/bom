@@ -61,7 +61,6 @@
         text-align: center; 
         background-color: green; 
         color: white;">Default BOM scope successfully set.</p>';
-        header("Refresh:5");
       $newScope = implode(",",$apps);
       updateScope($db, $newScope);  
     }
@@ -76,8 +75,7 @@
         style="font-size: 2.5rem; 
         text-align: center; 
         background-color: green; 
-        color: white;">You must be loggin in as an administrator to use this function.</p>';
-        header("Refresh:5");
+        color: white;">You must be login in as an administrator to use this function.</p>';
   }
   //if cookie is set, decode cookie into array
   if(isset($_COOKIE[$cookie_name])) {

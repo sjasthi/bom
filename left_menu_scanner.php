@@ -66,20 +66,8 @@
                 <img src="./images/bom_compare.png">
                 <br/>BOM Compare<br/></div>
         </a>
-  
-            <form class="form-horizontal" action="" method="post" name="frmCSVImport" 
-            id="frmCSVImport" enctype="multipart/form-data">
-                <img align="left" src="./images/upload-icon.png" alt="Import File">
-            </form>
         </div>
     </div>
-    
-    <p style='color: #1B5BA0; font-weight: bold;'>Import File</p>
-    <form enctype="multipart/form-data" method="POST" role="form">
-        <input type="file" name="file" id="file" size="150">
-        <button style='background: #01B0F1; color: white;' type="submit"
-        class="btn btn-default" name="submit" value="submit">Import File</button>
-    </form>
 </body>
 </html>
 
@@ -91,20 +79,33 @@ if(!isset($_SESSION)){
 require_once('calculate_color.php');
 $c = 0;
 
-echo $_SESSION['admin'];
-echo $_SESSION['login_user'];
+//echo $_SESSION['admin'];
+//echo $_SESSION['login_user'];
 $labels = array('row_id', 'app_id', 'app_name', 'app_version', 'cmp_id', 'cmp_name', 'cmp_version',
 'cmp_type', 'app_status', 'cmp_status', 'request_id', 'request_date', 'request_status', 'request_step',
 'request_notes', 'notes', 'requestor', 'color');
 $data = array();
 $map = array();
 
+if(isset($_SESSION['admin'])) {
+echo '<form class="form-horizontal" action="" method="post" name="frmCSVImport" 
+        id="frmCSVImport" enctype="multipart/form-data">
+        <img align="left" src="./images/upload-icon.png" alt="Import File" width="50">
+      </form>
+      <form enctype="multipart/form-data" method="POST" role="form">
+          <input type="file" name="file" id="file" size="150">
+          <button style="background: #01B0F1; color: white;" type="submit"
+          class="btn btn-default" name="submit" value="submit">Import File</button>
+      </form>
+      <p style="color: #1B5BA0; font-weight: bold;">Import File</p>';
+}
+
 if (isset($_POST['submit']) && isset($_SESSION['admin'])) {
   $host = 'localhost';
   $user = 'root';
   $password = '12345';
   $mydb = 'bom';
-  $conn = mysqli_connect($host, $user) or die('Could not connect to server' .msqli_error($conn));
+  $conn = mysqli_connect($host, $user, $password) or die('Could not connect to server' .msqli_error($conn));
   mysqli_select_db($conn, $mydb) or die('Could not connect to database' .msqli_error($conn));
   
   $file = $_FILES['file']['tmp_name'];
@@ -143,7 +144,7 @@ $sqlDelete = "DELETE FROM sbom";
 mysqli_query($conn, $sqlDelete);
 
 //insert data into database
-$sqlinsert = $conn->prepare('INSERT INTO sbom (row_id, app_id, app_name, app_version, cmp_id,
+$sqlinsert = $conn->prepare('INSERT INTO sbom (row_id, app_id, `app_name`, app_version, cmp_id,
   cmp_name, cmp_version, cmp_type, app_status, cmp_status, request_id, request_date,
   request_status, request_step, notes, requestor, color) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)');
 
@@ -165,6 +166,7 @@ foreach ($data as $row)
     $cmp_status = $row['cmp_status'];
     $request_id = $row['request_id'];
     $request_date = $row['request_date'];
+    $request_date = date("Y-m-d");
     $request_status = $row['request_status'];
     $request_step = $row['request_step'];
     $notes = $row['notes'];
@@ -175,19 +177,13 @@ foreach ($data as $row)
 }
 
 if($sqlinsert) {
-    echo "CSV data Updated Sucessfully.";
     header('location: scanner_sbom_list.php');
 } else {
   echo $conn->error;
 }
   }
 } elseif (isset($_POST['submit']) && !isset($_SESSION['admin'])){
-    echo '<p 
-        style="font-size: 2.5rem; 
-        text-align: center; 
-        background-color: green; 
-        color: white;">You must be logged in as an administrator to use this function.</p>';
-        header("Refresh:3");
+    header("location:login.php");
    // echo $_SESSION['login_user'];
    // echo $_SESSION['isAdmin'];
         //unset($_POST['submit']);
