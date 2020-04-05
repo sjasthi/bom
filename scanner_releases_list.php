@@ -12,9 +12,9 @@
 
   function updateScope($db, $newScope)
   {
-      $sql = "UPDATE scope_preferences
-              SET default_scope = '$newScope'
-              WHERE preference_id = 0;";
+      $sql = "UPDATE preferences
+              SET value = '$newScope'
+              WHERE name = 'SYSTEM_BOMS';";
       $result = $db->query($sql);
   }
 
