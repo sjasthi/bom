@@ -1,3 +1,4 @@
+row_id,app_id,app_name,app_version,cmp_id,cmp_name,cmp_version,cmp_type,app_status,cmp_status,request_id,request_date,request_status,request_step,notes,requestor,color
 1,BOM-100,QuizMaster,1.1,101.1,DB_Layer,2.3,internal,released,released,PQR_839_R1,9/2/2019,Approved,Approval Step,,,red
 2,BOM-100,QuizMaster,1.1,101.2,Jquery,4.3,open source,released,approved,XYZ_789_R2,10/1/2019,Approved,Approval Step,"open source, no commercial support",,yellow
 3,BOM-100,QuizMaster,1.1,101.3,Bootstrap,8.5.c,open source,released,pending,ABC_678_R1,2/12/2018,Submitted,Inspection Step,,,yellow
