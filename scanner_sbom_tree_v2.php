@@ -25,7 +25,7 @@
     global $pdo;
     global $DEFAULT_SCOPE_FOR_RELEASES;
 
-    $sql = "SELECT * FROM releases WHERE tag LIKE ?";
+    $sql = "SELECT * FROM releases WHERE app_id LIKE ?";
     foreach($DEFAULT_SCOPE_FOR_RELEASES as $currentTag){
       $sqlTag = $pdo->prepare($sql);
       $sqlTag->execute([$currentTag]);
