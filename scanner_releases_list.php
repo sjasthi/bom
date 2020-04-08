@@ -146,14 +146,14 @@
                 echo "<td><input type='checkbox' name='app[]' value='".$row['app_id']."'></td>";
               }
 
-              echo "<td>".$row["app_id"]."</td>";
-              echo '<td>'.$row["id"].'</td>';
+              echo '<td><a class="btn" href="scanner_sbom_tree_v2.php?id='.$row["app_id"].'">'.$row["app_id"].' </a> </td>';
+              echo '<td><a class="btn" href="scanner_sbom_tree_v2.php?id='.$row["app_id"].'">'.$row["id"].' </a> </td>';
 
               if ($result2->num_rows > 0) {
                 while($row2 = $result2->fetch_assoc()) {
                   $id = $row2["appID"];
                 }
-                echo '<td><a href="scanner_sbom_tree.php?id='.$id.'">'.$row["name"].' </a> </span> </td>';
+                echo '<td><a href="scanner_sbom_tree_v2.php?id='.$id.'">'.$row["name"].' </a> </span> </td>';
 
               }//end if
               else {
