@@ -319,7 +319,7 @@
               getBoms($db, $sql_parent);
               $endtime = microtime(true);
               $timediff = $endtime - $starttime;
-              echo "Time (sec): $timediff"; 
+              echo "Time (sec): $timediff";   
             } else if ($findAppName) {
               $sql_parent = "SELECT DISTINCT app_name as name, 
                               app_version as version, 
@@ -346,7 +346,7 @@
 
             }//default if preference cookie is set, display user BOM preferences
             elseif(isset($_COOKIE[$cookie_name]) || isset($_COOKIE[$cookie_name]) && isset($_POST['getpref'])) {
-              ?>
+                ?>
               <script>document.getElementById("scannerHeader").innerHTML = "Scanner --> BOM Tree --> My BOMS";</script>
               <?php
               $prep = rtrim(str_repeat('?,', count(json_decode($_COOKIE[$cookie_name]))), ',');

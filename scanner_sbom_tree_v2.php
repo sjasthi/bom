@@ -25,7 +25,7 @@
     global $pdo;
     global $DEFAULT_SCOPE_FOR_RELEASES;
 
-    $sql = "SELECT * FROM releases WHERE tag LIKE ?";
+    $sql = "SELECT * FROM releases WHERE app_id LIKE ?";
     foreach($DEFAULT_SCOPE_FOR_RELEASES as $currentTag){
       $sqlTag = $pdo->prepare($sql);
       $sqlTag->execute([$currentTag]);
@@ -279,6 +279,7 @@
               <script>document.getElementById("scannerHeader").innerHTML = "Scanner --> BOM Tree V2 --> All BOMS";</script>
               <?php
               getAllBoms($db);
+
             }
             //If user clicks "get system BOMS", retrieve all default scope BOMS
             elseif(isset($_POST['getdef'])) {
@@ -319,7 +320,7 @@
               getBoms($db, $sql_parent);
               $endtime = microtime(true);
               $timediff = $endtime - $starttime;
-              echo "Time (sec): $timediff";   
+              echo "Time (sec): $timediff";  
             } else if ($findAppName) {
               $sql_parent = "SELECT DISTINCT app_name as name, 
                               app_version as version, 
@@ -353,7 +354,7 @@
                 app_version as version, app_status as status, color as div_class,
                 CASE WHEN color = 'yellow' THEN 'child' 
                 ELSE 'parent' 
-                END AS class from sbom 
+                END AS class from sbom
                 WHERE app_id IN (".$prep.")
                 group by name, version, status;";
 
