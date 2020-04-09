@@ -2,10 +2,19 @@
   $nav_selected = "SCANNER"; 
   $left_buttons = "YES"; 
   $left_selected = "RELEASESLIST"; 
-  //include("session.php");
-  include("./nav.php");
   global $db;
 ?>
+
+<head>
+<?php include('nav.php'); ?>
+</head>
+
+<style>
+.toggle-vis{
+  color:blue;
+}
+</style>
+
 <?php
   global $count_err;
 
@@ -97,10 +106,16 @@
       <h3 style = "color: #01B0F1;">Scanner -> System Releases List</h3>
       <h3><img src="images/releases.png" style="max-height: 35px;" />System Releases</h3>
 
+      Toggle column: <a class="toggle-vis" data-column="0">Select App</a> - <a class="toggle-vis" data-column="1">Application ID</a> - <a class="toggle-vis" data-column=
+					"2">Release ID</a> - <a class="toggle-vis" data-column="3">Name</a> - <a class="toggle-vis" data-column="4">Type</a> - <a class="toggle-vis" data-column=
+					"5">Status</a> - <a class="toggle-vis" data-column="6">Open Date</a> <br>- <a class="toggle-vis" data-column="7">Dependency Date</a> - <a class="toggle-vis" data-column="8">Content Date</a> 
+          - <a class="toggle-vis" data-column="9">RTM Date(s)</a> - <a class="toggle-vis" data-column="10">Manager</a> - <a class="toggle-vis" data-column="11">Author</a>
+          - <a class="toggle-vis" data-column="12">Tag</a>
+
       <!-- Form to set user preference -->
       <form id='app-form' name='app-form' method='post' action=''>
       <table id="info" cellpadding="0" cellspacing="0" border="0"
-        class="datatable table table-striped table-bordered datatable-style table-hover"
+      class="datatable table table-striped table-bordered datatable-style table-hover"
         width="100%" style="width: 100px;">
         <thead>
           <tr id="table-first-row">
@@ -211,33 +226,51 @@
 
         <script type="text/javascript" language="javascript">
           $(document).ready( function () {
-          $('#info').DataTable( {
-            dom: 'lfrtBip',
-            buttons: [
-                'copy', 'excel', 'csv', 'pdf'
-            ] }
-          );
-
-          $('#info thead tr').clone(true).appendTo( '#info thead' );
-          $('#info thead tr:eq(1) th').each( function (i) {
+            
+            //Create search bars at the footer of every column
+            $('#info tfoot th').each( function () {
             var title = $(this).text();
             $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
-            $( 'input', this ).on( 'keyup change', function () {
-              if ( table.column(i).search() !== this.value ) {
-                table
-                .column(i)
-                .search( this.value )
-                .draw();
-              }
             } );
-          } );
-    
-          var table = $('#info').DataTable( {
+
+          var table = $('#info').DataTable({
+            dom: 'lfrtBip',
             orderCellsTop: true,
             fixedHeader: true,
-            retrieve: true
-          } );  
+            retrieve: true,
+            "paging": false
+          });
+
+          $('a.toggle-vis').on('click', function(e) {
+           e.preventDefault();
+
+            // Get the column API object
+          var column = table.column($(this).attr('data-column'));
+
+          //Change link color
+          if (column.visible()){
+            $(this).css('color','red');
+          } else {
+            $(this).css('color','#0000EE');
+          }
+
+          // Toggle the visibility
+          column.visible(!column.visible());
+          });
+
+          // Apply the search
+          table.columns().every( function () {
+            var that = this;
+ 
+            $( 'input', this.footer() ).on( 'keyup change clear', function () {
+            if ( that.search() !== this.value ) {
+                that
+                    .search( this.value )
+                    .draw();
+                }
+            } );
           } );
+          });
         </script>
 
  <style>
