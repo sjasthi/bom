@@ -141,10 +141,6 @@ if (isset($_POST['submit'])) {
                 $notes = $row['notes'];
                 $requestor = $row['requestor'];
                 $sqlinsert->execute();
-                echo $request_date;
-
-                //print_r($request_date);
-                echo '<br>';
           }
           if(!$sqlinsert->execute()) {
             echo '<p style="background: red; color: white; font-size: 2rem;">'.$db->error.'</p>';
