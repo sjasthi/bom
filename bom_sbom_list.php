@@ -1,5 +1,5 @@
 <?php
-  $nav_selected = "SCANNER";
+  $nav_selected = "BOM";
   $left_buttons = "YES";
   $left_selected = "SOFTWAREBOM";
 
@@ -12,10 +12,12 @@
   $username = 'root';
   $password = '';
   $pdo = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
- 
+
   $def = "false";
   $DEFAULT_SCOPE_FOR_RELEASES = getScope($db);
   $scopeArray = array();
+
+  require_once('calculate_color.php');
 ?>
 
 
@@ -33,7 +35,7 @@
       while($row = $result->fetch_assoc()) {
         echo '<tr>
           <td>'.$row["row_id"].'</td>
-          <td><a class="btn" href="scanner_sbom_tree.php?id='.$row["app_id"].'">'.$row["app_id"].' </a> </td>
+          <td><a class="btn" href="bom_sbom_tree_v2.php?id='.$row["app_id"].'">'.$row["app_id"].' </a> </td>
           <td>'.$row["app_name"].'</td>
           <td>'.$row["app_version"].'</td>
           <td>'.$row["cmp_id"].' </span> </td>
@@ -150,14 +152,14 @@
         if(isset($_POST['getall'])) {
           $def = "false";
           ?>
-          <script>document.getElementById("scannerHeader").innerHTML = "Scanner --> Software BOM --> All BOMS";</script>
+          <script>document.getElementById("scannerHeader").innerHTML = "BOM --> Software BOM --> All BOMS";</script>
           <?php
           getBoms($db);
         //If user clicks "show system BOMS", display BOM list filtered by default system scope
         } elseif (isset($_POST['getdef'])) {
           $def = "true";
           ?>
-          <script>document.getElementById("scannerHeader").innerHTML = "Scanner --> Software BOM --> System BOMS";</script>
+          <script>document.getElementById("scannerHeader").innerHTML = "BOM --> Software BOM --> System BOMS";</script>
           <?php
           getBoms($db);
           getFilterArray($db);
@@ -165,7 +167,7 @@
         elseif(isset($_COOKIE[$cookie_name]) || isset($_COOKIE[$cookie_name]) && isset($_POST['getpref'])) {
           $def = "false";
           ?>
-          <script>document.getElementById("scannerHeader").innerHTML = "Scanner --> Software BOM --> My BOMS";</script>
+          <script>document.getElementById("scannerHeader").innerHTML = "BOM --> Software BOM --> My BOMS";</script>
           <?php
           $prep = rtrim(str_repeat('?,', count(json_decode($_COOKIE[$cookie_name]))), ',');
           $sql = 'SELECT * FROM sbom WHERE app_id IN ('.$prep.')';
@@ -175,7 +177,7 @@
           while($row = $pref->fetch(PDO::FETCH_ASSOC)) {
             echo '<tr>
               <td>'.$row["row_id"].'</td>
-              <td><a class="btn" href="scanner_sbom_tree.php?id='.$row["app_id"].'">'.$row["app_id"].' </a> </td>
+              <td><a class="btn" href="bom_sbom_tree_v2.php?id='.$row["app_id"].'">'.$row["app_id"].' </a> </td>
               <td>'.$row["app_name"].'</td>
               <td>'.$row["app_version"].'</td>
               <td>'.$row["cmp_id"].' </span> </td>
@@ -197,14 +199,14 @@
         elseif(isset($_POST['getpref']) && !isset($_COOKIE[$cookie_name])) {
           $def = "false";
           ?>
-          <script>document.getElementById("scannerHeader").innerHTML = "Scanner --> Software BOM --> All BOMS";</script>
+          <script>document.getElementById("scannerHeader").innerHTML = "BOM --> Software BOM --> All BOMS";</script>
           <?php
           getBoms($db);
         }//if no preference cookie is set show all BOMS
         else {
           $def = "false";
           ?>
-          <script>document.getElementById("scannerHeader").innerHTML = "Scanner --> Software BOM --> All BOMS";</script>
+          <script>document.getElementById("scannerHeader").innerHTML = "BOM --> Software BOM --> All BOMS";</script>
           <?php
           getBoms($db);
         }
@@ -261,12 +263,12 @@
         retrieve: true
       } );
 
-      /* 
+      /*
       * If the default scope is to be used then this will iterate through
       * each row of the datatable and hide any rows whose app_id does not
       * match a release who's app is not in the default scope
       */
-      
+
       var def = <?php echo json_encode($def); ?>;
       var app_id = <?php echo json_encode($scopeArray); ?>;
 
@@ -279,7 +281,7 @@
             if (currentIDString.includes(app_id[i])) {
               return false;
               break;
-              } 
+              }
             }
             return true;
           });
