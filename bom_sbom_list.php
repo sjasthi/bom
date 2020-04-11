@@ -10,7 +10,7 @@
   $servername = 'localhost';
   $dbname = 'bom';
   $username = 'root';
-  $password = '12345';
+  $password = '';
   $pdo = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
 
   $def = "false";
@@ -35,7 +35,7 @@
       while($row = $result->fetch_assoc()) {
         echo '<tr>
           <td>'.$row["row_id"].'</td>
-          <td><a class="btn" href="scanner_sbom_tree.php?id='.$row["app_id"].'">'.$row["app_id"].' </a> </td>
+          <td><a class="btn" href="scanner_sbom_tree_v2.php?id='.$row["app_id"].'">'.$row["app_id"].' </a> </td>
           <td>'.$row["app_name"].'</td>
           <td>'.$row["app_version"].'</td>
           <td>'.$row["cmp_id"].' </span> </td>
@@ -177,7 +177,7 @@
           while($row = $pref->fetch(PDO::FETCH_ASSOC)) {
             echo '<tr>
               <td>'.$row["row_id"].'</td>
-              <td><a class="btn" href="scanner_sbom_tree.php?id='.$row["app_id"].'">'.$row["app_id"].' </a> </td>
+              <td><a class="btn" href="scanner_sbom_tree_v2.php?id='.$row["app_id"].'">'.$row["app_id"].' </a> </td>
               <td>'.$row["app_name"].'</td>
               <td>'.$row["app_version"].'</td>
               <td>'.$row["cmp_id"].' </span> </td>
