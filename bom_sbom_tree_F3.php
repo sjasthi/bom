@@ -1,5 +1,5 @@
 <?php
-  $nav_selected = "SCANNER";
+  $nav_selected = "BOM";
   $left_buttons = "YES";
   $left_selected = "SBOMTREE";
 
@@ -12,7 +12,7 @@
 
  <div class="right-content">
     <div class="container" id="container">
-      <h3 style = "color: #01B0F1;">Scanner --> BOM Tree</h3>
+      <h3 style = "color: #01B0F1;">BOM --> BOM Tree</h3>
       <a href="#" onclick="$('#bom_treetable').treetable('expandAll'); return false;">Expand all</a>
       <a href="#" onclick="$('#bom_treetable').treetable('collapseAll'); return false;">Collapse all</a>
 
@@ -37,7 +37,7 @@
 
         //Build a very nested Map
         //I did this to simulate a tree datastructure w/o actually implementing a tree datastructure (take that, ICS-340)
-        let tree = new Map();        
+        let tree = new Map();
         sbomArray.forEach(row => {
           //If the tree doesn't have the app_name, add it
           if(!tree.has(row['app_name'])){
@@ -115,7 +115,7 @@
         root.setAttribute('id', 'bom_treetable');
         container.appendChild(root);
 
- 
+
       </script>
     </div>
 </div>
