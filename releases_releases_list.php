@@ -8,10 +8,6 @@
   global $db;
 ?>
 
-<head>
-<?php include('nav.php'); ?>
-</head>
-
 <style>
 .toggle-vis{
   color:blue;
