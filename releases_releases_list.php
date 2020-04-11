@@ -1,15 +1,10 @@
 <?php
-<<<<<<< HEAD:scanner_releases_list.php
-  $nav_selected = "SCANNER"; 
-  $left_buttons = "YES"; 
-  $left_selected = "RELEASESLIST"; 
-=======
   $nav_selected = "RELEASES";
   $left_buttons = "YES";
   $left_selected = "RELEASESLIST";
   //include("session.php");
   include("./nav.php");
->>>>>>> CJaclyn-master:releases_releases_list.php
+
   global $db;
 ?>
 
@@ -240,7 +235,6 @@
             var title = $(this).text();
             $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
             } );
-<<<<<<< HEAD:scanner_releases_list.php
 
           var table = $('#info').DataTable({
             dom: 'lfrtBip',
@@ -278,7 +272,7 @@
                     .draw();
                 }
             } );
-=======
+
           } );
 
           var table = $('#info').DataTable( {
@@ -286,7 +280,7 @@
             fixedHeader: true,
             retrieve: true
           } );
->>>>>>> CJaclyn-master:releases_releases_list.php
+
           } );
           });
         </script>

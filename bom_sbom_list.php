@@ -10,7 +10,7 @@
   $servername = 'localhost';
   $dbname = 'bom';
   $username = 'root';
-  $password = '12345';
+  $password = '';
   $pdo = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
 
   $def = "false";
