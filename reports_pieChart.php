@@ -1,6 +1,6 @@
 <?php
 
-    $nav_selected = "REPORTS";
+    $nav_selected = "BOM";
     $left_buttons = "YES";
     $left_selected = "REPORTSPIECHART";
 
@@ -154,7 +154,7 @@
     <body>
         <div class="right-content">
             <div class="container">
-                <h3 style = "color: #01B0F1;">Reports --> Pie Chart.</h3>
+                <h3 style = "color: #01B0F1;">BOM --> Pie Chart.</h3>
                 <h3><img src="images/reports.png" style="max-height: 35px;" /> Pie Chart</h3>
             </div>
         </div>

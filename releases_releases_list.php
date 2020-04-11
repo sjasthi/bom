@@ -1,7 +1,7 @@
 <?php
-  $nav_selected = "SCANNER"; 
-  $left_buttons = "YES"; 
-  $left_selected = "RELEASESLIST"; 
+  $nav_selected = "RELEASES";
+  $left_buttons = "YES";
+  $left_selected = "RELEASESLIST";
   //include("session.php");
   include("./nav.php");
   global $db;
@@ -32,37 +32,37 @@
     $apps = $_POST['app'];
 
     if(count($apps) > 5) {
-      $count_err = "You can't select more than 5 BOMS."; 
+      $count_err = "You can't select more than 5 BOMS.";
 
     }else {
-      echo '<p 
-        style="font-size: 2.5rem; 
-        text-align: center; 
-        background-color: green; 
+      echo '<p
+        style="font-size: 2.5rem;
+        text-align: center;
+        background-color: green;
         color: white;">BOM preferences successfully saved.</p>';
         header("Refresh:1.75");
       $preference = $apps;
-      $set_pref = setcookie($cookie_name, json_encode($preference), $expire); 
+      $set_pref = setcookie($cookie_name, json_encode($preference), $expire);
     }
 
   }elseif(isset($_POST['save']) && !isset($_POST['app'])) {
     if(!isset($apps)) {
-      $count_err = "Please select at least one BOM."; 
+      $count_err = "Please select at least one BOM.";
     }
   }elseif(isset($_POST['saveScope']) && isset($_POST['app']) && isset($_SESSION['login_user']) && isset($_SESSION['admin'])) {
     $apps = $_POST['app'];
 
     if(count($apps) > 5) {
-      $count_err = "You can't select more than 5 BOMS."; 
+      $count_err = "You can't select more than 5 BOMS.";
 
     }else {
-      echo '<p 
-        style="font-size: 2.5rem; 
-        text-align: center; 
-        background-color: green; 
+      echo '<p
+        style="font-size: 2.5rem;
+        text-align: center;
+        background-color: green;
         color: white;">Default BOM scope successfully set.</p>';
       $newScope = implode(",",$apps);
-      updateScope($db, $newScope);  
+      updateScope($db, $newScope);
     }
   } elseif (isset($_POST['saveScope']) && !isset($_POST['app']) && isset($_SESSION['login_user']) && isset($_SESSION['admin'])){
     if(!isset($apps)){
@@ -71,30 +71,30 @@
       updateScope($db, $newScope);
     }
   } elseif (isset($_POST['saveScope']) && !isset($_SESSION['admin'])){
-    echo '<p 
-        style="font-size: 2.5rem; 
-        text-align: center; 
-        background-color: green; 
+    echo '<p
+        style="font-size: 2.5rem;
+        text-align: center;
+        background-color: green;
         color: white;">You must be login in as an administrator to use this function.</p>';
   }
   //if cookie is set, decode cookie into array
   if(isset($_COOKIE[$cookie_name])) {
     $cookie_arr = json_decode($_COOKIE[$cookie_name]);
   }
-  
+
 ?>
 
 <!-- Display error for preference form -->
-<?php echo '<p 
-  style="font-size: 2.5rem; 
-  text-align: center; 
-  background-color: red; 
+<?php echo '<p
+  style="font-size: 2.5rem;
+  text-align: center;
+  background-color: red;
   color: white;">'.$count_err.'</p>'
 ?>
 
   <div class="right-content">
     <div class="container">
-      <h3 style = "color: #01B0F1;">Scanner -> System Releases List</h3>
+      <h3 style = "color: #01B0F1;">Releases -> System Releases List</h3>
       <h3><img src="images/releases.png" style="max-height: 35px;" />System Releases</h3>
 
       <!-- Form to set user preference -->
@@ -130,7 +130,7 @@
             while($row = $result->fetch_assoc()) {
               echo '<tr>';
               $appName = str_replace(' ', '', $row["name"]);
-              $sql2 = "SELECT DISTINCT app_id as appID FROM (select distinct concat(TRIM(app_name), 
+              $sql2 = "SELECT DISTINCT app_id as appID FROM (select distinct concat(TRIM(app_name),
                 TRIM(app_version)) as name, app_id from sbom ) as subquery where name ='".$appName."' Limit 1;";
               $result2 = $db->query($sql2);
 
@@ -141,7 +141,7 @@
                 }else {
                   echo "<td><input type='checkbox' name='app[]' value='".$row['app_id']."'></td>";
                 }
-              }//if no cookie is set, all checkboxes are unchecked by default 
+              }//if no cookie is set, all checkboxes are unchecked by default
               else {
                 echo "<td><input type='checkbox' name='app[]' value='".$row['app_id']."'></td>";
               }
@@ -207,7 +207,7 @@
           padding: 1rem;
           margin-right: 1rem;'>Set System BOMS</button>
         </form>
-        <!-- End preference form -->                       
+        <!-- End preference form -->
 
         <script type="text/javascript" language="javascript">
           $(document).ready( function () {
@@ -231,12 +231,12 @@
               }
             } );
           } );
-    
+
           var table = $('#info').DataTable( {
             orderCellsTop: true,
             fixedHeader: true,
             retrieve: true
-          } );  
+          } );
           } );
         </script>
 

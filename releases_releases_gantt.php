@@ -1,7 +1,7 @@
 <?php
-    $nav_selected = "SCANNER"; 
-    $left_buttons = "YES"; 
-    $left_selected = "RELEASESGANTT"; 
+    $nav_selected = "RELEASES";
+    $left_buttons = "YES";
+    $left_selected = "RELEASESGANTT";
 
     include("./nav.php");
     global $db;
@@ -10,7 +10,7 @@
 <div class="right-content">
     <div class="container">
 
-        <h3 style = "color: #01B0F1;">Scanner -> System Releases Gantt</h3><br>
+        <h3 style = "color: #01B0F1;">Releases -> System Releases Gantt</h3><br>
         <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
         <script type="text/javascript">
             class Release{
@@ -75,7 +75,7 @@
                             $dependency = $useDependencyDateInsteadOfOpenDate ? explode('-', $row["open_date"]) : explode('-', $row["dependency_date"]);
                             $freeze = explode('-', $row["freeze_date"]);
                             $rtm = explode('-', $row["rtm_date"]);
-                            
+
                             echo "rawData.push(new Release(";
                             echo "'{$row["id"]}',";
                             echo "'{$row["name"]}',";
