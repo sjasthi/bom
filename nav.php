@@ -16,17 +16,20 @@
         <!-- <script src="https://code.jquery.com/jquery-3.3.1.js"></script>-->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
         <script src="jquery.treetable.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.12/js/jquery.dataTables.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.12/js/dataTables.bootstrap.min.js"></script>
         <!-- Latest compiled JavaScript -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.6.1/css/buttons.dataTables.css"/>
+        <script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+        <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.js"></script>
+        <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.colVis.js"></script>
         
         <link rel="stylesheet" href="styles/custom_nav.css" type="text/css">
         
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-treetable/3.2.0/css/jquery.treetable.theme.default.css" />
         <title>A Basic Composer</title>
         <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"/>
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.12/css/dataTables.bootstrap.min.css" rel="stylesheet"/>
+
         <link rel="stylesheet" href="./mainStyleSheet.css">
         <link rel="stylesheet" href="tree_style.css" />
     </head>
@@ -47,78 +50,58 @@
               <br/>Home</li>
             </a>
 
-            <a href="list.php">
-              <li <?php if($nav_selected == "LIST"){ echo 'class="current-page"'; } ?>>
+            <a href="releases_releases_list.php">
+              <li <?php if($nav_selected == "RELEASES"){ echo 'class="current-page"'; } ?>>
                 <img src="./images/list.png">
-                <br/>List</li>
+                <br/>Releases</li>
             </a>
 
-            <a href="timeline.php">
-              <li <?php if($nav_selected == "TIMELINE"){ echo 'class="current-page"'; } ?>>
-              <img src="./images/gantt.png">
-              <br/>Timeline</li>
+            <a href="bom_sbom_list.php">
+              <li <?php if($nav_selected == "BOM"){ echo 'class="current-page"'; } ?>>
+              <img src="./images/sbom_list.png">
+              <br/>BOM</li>
             </a>
 
-            <a href="reports.php">
-              <li <?php if($nav_selected == "REPORTS"){ echo 'class="current-page"'; } ?>>
-              <img src="./images/reports.png">
-              <br/>Reports</li>
+            <a href="setup_system_preference.php">
+              <li <?php if($nav_selected == "SETUP"){ echo 'class="current-page"'; } ?>>
+                <img src="./images/setup.png">
+                <br/>Setup</li>
             </a>
 
-            <a href="scanner.php">
-              <li <?php if($nav_selected == "SCANNER"){ echo 'class="current-page"'; } ?>>
-                <img src="./images/scanner.png">
-                <br/>Scanner</li>
+            <a href="help.php">
+              <li <?php if($nav_selected == "HELP"){ echo 'class="current-page"'; } ?>>
+                <img src="./images/help.png">
+                <br/>help</li>
             </a>
 
-            <a href="history.php">
-              <li <?php if($nav_selected == "HISTORY"){ echo 'class="current-page"'; } ?>>
-                <img src="./images/history.png">
-                <br/>History</li>
-            </a>
+            <?php
+            if(isset($_SESSION['login_user'])) {
+              echo '
+              <a href="logout.php">
+              <li <?php if($nav_selected == "LOGOUT"){ echo "class="current-page""; } ?>
+                <img src="./images/login.png">
+                <br/>logout</li>
+              </a>';
+            }else {
+              echo '
+              <a href="login.php">
+              <li <?php if($nav_selected == "LOGIN"){ echo "class="current-page""; } ?>
+                <img src="./images/login.png">
+                <br/>login</li>
+              </a>';
+            }
+            ?>
 
-            <a href="trend.php">
-              <li <?php if($nav_selected == "TREND"){ echo 'class="current-page"'; } ?>>
-                <img src="./images/trend.png">
-                <br/>Trend</li>
-            </a>
-
-
-        <a href="setup.php">
-          <li <?php if($nav_selected == "SETUP"){ echo 'class="current-page"'; } ?>>
-            <img src="./images/setup.png">
-            <br/>Setup</li>
-        </a>
-
-        <a href="about.php">
-          <li <?php if($nav_selected == "ABOUT"){ echo 'class="current-page"'; } ?>>
-            <img src="./images/about.png">
-            <br/>About</li>
-        </a>
-
-        <a href="help.php">
-          <li <?php if($nav_selected == "HELP"){ echo 'class="current-page"'; } ?>>
-            <img src="./images/help.png">
-            <br/>help</li>
-        </a>
-
-        <?php
-        if(isset($_SESSION['login_user'])) {
-          echo '
-          <a href="logout.php">
-          <li <?php if($nav_selected == "LOGOUT"){ echo "class="current-page""; } ?>
-            <img src="./images/about.png">
-            <br/>logout</li>
-          </a>';
-        }else {
-          echo '
-          <a href="login.php">
-          <li <?php if($nav_selected == "LOGIN"){ echo "class="current-page""; } ?>
-            <img src="./images/about.png">
-            <br/>login</li>
-          </a>';
-        }
-        ?>
+            <?php
+            if(isset($_SESSION['admin'])) {
+              echo '
+              <a href="admin_users.php">
+                <li <?php if($nav_selected == "ABOUT"){ echo "class="current-page""; } ?>
+                  <img src="./images/admin.png">
+                  <br/>Admin</li>
+              </a>';
+            }
+            ?>
       </ul>
       <br />
     </div>
@@ -134,23 +117,19 @@
         <?php
             if ($nav_selected == "HOME") {
                 include("./index.php");
-            } elseif ($nav_selected == "LIST") {
-                include("./left_menu_list.php");
-            } elseif ($nav_selected == "TIMELINE") {
-                include("./left_menu_timeline.php");
+            } elseif ($nav_selected == "RELEASES") {
+                include("./left_menu_releases.php");
+            } elseif ($nav_selected == "BOM") {
+                include("./left_menu_bom.php");
             } elseif ($nav_selected == "REPORTS") {
                 include("./left_menu_reports.php");
-            } elseif ($nav_selected == "SCANNER") {
-                include("./left_menu_scanner.php");
-            } elseif ($nav_selected == "HISTORY") {
-                include("./left_menu_history.php");
-            } elseif ($nav_selected == "TREND") {
-              include("./left_menu_trend.php");
-           } elseif ($nav_selected == "SETUP") {
+            } elseif ($nav_selected == "ADMIN") {
+              include("./left_menu_admin.php");
+            }elseif ($nav_selected == "SETUP") {
             include("./left_menu_setup.php");
-          } elseif ($nav_selected == "ABOUT") {
-          include("./left_menu_about.php");
-          }elseif ($nav_selected == "HELP") {
+            } elseif ($nav_selected == "ABOUT") {
+             include("./left_menu_about.php");
+            }elseif ($nav_selected == "HELP") {
                 include("./left_menu_help.php");
             } else {
                 include("./left_menu.php");
