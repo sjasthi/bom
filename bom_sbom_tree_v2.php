@@ -1,5 +1,5 @@
 <?php
-  echo'v2';
+  //echo'v2';
 
   $nav_selected = "BOM";
   $left_buttons = "YES";
@@ -10,7 +10,7 @@
   $servername = 'localhost';
   $dbname = 'bom';
   $username = 'root';
-  $password = '12345';
+  $password = '';
   $pdo = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
 
   $cookie_name = 'preference';

@@ -2,11 +2,12 @@
   $nav_selected = "RELEASES";
   $left_buttons = "YES";
   $left_selected = "RELEASESLIST";
-  //include("session.php");
-  include("./nav.php");
-
   global $db;
 ?>
+
+<head>
+<?php include('nav.php'); ?>
+</head>
 
 <style>
 .toggle-vis{
@@ -268,14 +269,6 @@
                     .draw();
                 }
             } );
-
-          } );
-
-          var table = $('#info').DataTable( {
-            orderCellsTop: true,
-            fixedHeader: true,
-            retrieve: true
-          } );
 
           } );
           });

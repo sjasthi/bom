@@ -19,8 +19,13 @@
         <!-- Latest compiled JavaScript -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.6.1/css/buttons.dataTables.css"/>
+        <script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+        <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.js"></script>
+        <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.colVis.js"></script>
+        
         <link rel="stylesheet" href="styles/custom_nav.css" type="text/css">
-
+        
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-treetable/3.2.0/css/jquery.treetable.theme.default.css" />
         <title>A Basic Composer</title>
         <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"/>
@@ -63,16 +68,11 @@
                 <br/>Setup</li>
             </a>
 
-            <?php
-            if(isset($_SESSION['admin'])) {
-              echo '
-              <a href="admin_users.php">
-                <li <?php if($nav_selected == "ABOUT"){ echo "class="current-page""; } ?>
-                  <img src="./images/admin.png">
-                  <br/>Admin</li>
-              </a>';
-            }
-            ?>
+            <a href="help.php">
+              <li <?php if($nav_selected == "HELP"){ echo 'class="current-page"'; } ?>>
+                <img src="./images/help.png">
+                <br/>help</li>
+            </a>
 
             <?php
             if(isset($_SESSION['login_user'])) {
@@ -92,11 +92,16 @@
             }
             ?>
 
-            <a href="help.php">
-              <li <?php if($nav_selected == "HELP"){ echo 'class="current-page"'; } ?>>
-                <img src="./images/help.png">
-                <br/>help</li>
-            </a>
+            <?php
+            if(isset($_SESSION['admin'])) {
+              echo '
+              <a href="admin_users.php">
+                <li <?php if($nav_selected == "ABOUT"){ echo "class="current-page""; } ?>
+                  <img src="./images/admin.png">
+                  <br/>Admin</li>
+              </a>';
+            }
+            ?>
       </ul>
       <br />
     </div>
@@ -122,9 +127,9 @@
               include("./left_menu_admin.php");
             }elseif ($nav_selected == "SETUP") {
             include("./left_menu_setup.php");
-          } elseif ($nav_selected == "ABOUT") {
-          include("./left_menu_about.php");
-          }elseif ($nav_selected == "HELP") {
+            } elseif ($nav_selected == "ABOUT") {
+             include("./left_menu_about.php");
+            }elseif ($nav_selected == "HELP") {
                 include("./left_menu_help.php");
             } else {
                 include("./left_menu.php");
