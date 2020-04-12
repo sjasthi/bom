@@ -134,7 +134,8 @@ if (isset($_POST['submit'])) {
                 $cmp_status = $row['cmp_status'];
                 $request_id = $row['request_id'];
                 $request_date = $row['request_date'];
-                $request_date = date("Y-m-d");
+                $request_date = strtotime($request_date);
+                $request_date = date('Y/m/d', $request_date);
                 $request_status = $row['request_status'];
                 $request_step = $row['request_step'];
                 $notes = $row['notes'];
@@ -142,7 +143,7 @@ if (isset($_POST['submit'])) {
                 $sqlinsert->execute();
           }
           if(!$sqlinsert->execute()) {
-            echo $db->error;
+            echo '<p style="background: red; color: white; font-size: 2rem;">'.$db->error.'</p>';
           }else {
             echo "<p style='color: white; background-color: green; font-weight: bold; width: 500px;
             text-align: center; border-radius: 2px;'>IMPORT SUCCESSFUL";
