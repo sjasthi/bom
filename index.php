@@ -25,7 +25,7 @@ table.center {
 </head>
 
 <body>
-<h2 style = "color: #01B0F1;">Welcome to Software Build Of Materials</h3>
+<h2 style = "color: #01B0F1;">Welcome to Software Bill Of Materials</h3>
 </body>
 
 </html>
