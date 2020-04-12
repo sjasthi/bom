@@ -68,16 +68,11 @@
                 <br/>Setup</li>
             </a>
 
-            <?php
-            if(isset($_SESSION['admin'])) {
-              echo '
-              <a href="admin_users.php">
-                <li <?php if($nav_selected == "ABOUT"){ echo "class="current-page""; } ?>
-                  <img src="./images/admin.png">
-                  <br/>Admin</li>
-              </a>';
-            }
-            ?>
+            <a href="help.php">
+              <li <?php if($nav_selected == "HELP"){ echo 'class="current-page"'; } ?>>
+                <img src="./images/help.png">
+                <br/>help</li>
+            </a>
 
             <?php
             if(isset($_SESSION['login_user'])) {
@@ -97,11 +92,16 @@
             }
             ?>
 
-            <a href="help.php">
-              <li <?php if($nav_selected == "HELP"){ echo 'class="current-page"'; } ?>>
-                <img src="./images/help.png">
-                <br/>help</li>
-            </a>
+            <?php
+            if(isset($_SESSION['admin'])) {
+              echo '
+              <a href="admin_users.php">
+                <li <?php if($nav_selected == "ABOUT"){ echo "class="current-page""; } ?>
+                  <img src="./images/admin.png">
+                  <br/>Admin</li>
+              </a>';
+            }
+            ?>
       </ul>
       <br />
     </div>
