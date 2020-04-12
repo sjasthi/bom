@@ -127,9 +127,9 @@
               include("./left_menu_admin.php");
             }elseif ($nav_selected == "SETUP") {
             include("./left_menu_setup.php");
-          } elseif ($nav_selected == "ABOUT") {
-          include("./left_menu_about.php");
-          }elseif ($nav_selected == "HELP") {
+            } elseif ($nav_selected == "ABOUT") {
+             include("./left_menu_about.php");
+            }elseif ($nav_selected == "HELP") {
                 include("./left_menu_help.php");
             } else {
                 include("./left_menu.php");
