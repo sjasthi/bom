@@ -40,8 +40,8 @@
         <ul>
             <a href="index.php">
               <li class="horozontal-li-logo">
-              <img src ="./images/main_logo.png">
-              <br/>A Basic Composer</li>
+              <img src ="./images/sbom_main.png">
+              <br/>Software BOM</li>
             </a>
 
             <a href="index.php">
@@ -68,16 +68,11 @@
                 <br/>Setup</li>
             </a>
 
-            <?php
-            if(isset($_SESSION['admin'])) {
-              echo '
-              <a href="admin_users.php">
-                <li <?php if($nav_selected == "ABOUT"){ echo "class="current-page""; } ?>
-                  <img src="./images/admin.png">
-                  <br/>Admin</li>
-              </a>';
-            }
-            ?>
+            <a href="help.php">
+              <li <?php if($nav_selected == "HELP"){ echo 'class="current-page"'; } ?>>
+                <img src="./images/help.png">
+                <br/>help</li>
+            </a>
 
             <?php
             if(isset($_SESSION['login_user'])) {
@@ -97,11 +92,16 @@
             }
             ?>
 
-            <a href="help.php">
-              <li <?php if($nav_selected == "HELP"){ echo 'class="current-page"'; } ?>>
-                <img src="./images/help.png">
-                <br/>help</li>
-            </a>
+            <?php
+            if(isset($_SESSION['admin'])) {
+              echo '
+              <a href="admin_users.php">
+                <li <?php if($nav_selected == "ABOUT"){ echo "class="current-page""; } ?>
+                  <img src="./images/admin.png">
+                  <br/>Admin</li>
+              </a>';
+            }
+            ?>
       </ul>
       <br />
     </div>
@@ -127,9 +127,9 @@
               include("./left_menu_admin.php");
             }elseif ($nav_selected == "SETUP") {
             include("./left_menu_setup.php");
-          } elseif ($nav_selected == "ABOUT") {
-          include("./left_menu_about.php");
-          }elseif ($nav_selected == "HELP") {
+            } elseif ($nav_selected == "ABOUT") {
+             include("./left_menu_about.php");
+            }elseif ($nav_selected == "HELP") {
                 include("./left_menu_help.php");
             } else {
                 include("./left_menu.php");

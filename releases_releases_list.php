@@ -101,7 +101,7 @@
   color: white;">'.$count_err.'</p>'
 ?>
 
-  <div class="right-content">
+  <div class="right-content" style="cursor: pointer;">
     <div class="container">
       <h3 style = "color: #01B0F1;">Releases -> System Releases List</h3>
       <h3><img src="images/releases.png" style="max-height: 35px;" />System Releases</h3>

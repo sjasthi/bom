@@ -4,12 +4,12 @@
   $nav_selected = "ABOUT";
 
   // make the left menu buttons visible; options: YES, NO
-  $left_buttons = "NO";
+  $left_buttons = "YES";
 
   // set the left menu button selected; options will change based on the main selection
   $left_selected = "";
 
-  include("./nav.php");
+  include("nav.php");
 ?>
 
 

@@ -44,6 +44,13 @@
       	<br/>Bar Chart<br/></div>
     </a>
 
+    <a href="bom_status.php">
+      	<div <?php if($left_selected == "BOMSTATUS")
+      	{ echo 'class="menu-left-current-page"'; } ?>>
+      	<img src="./images/training_status.png">
+      	<br/>BOM Status<br/></div>
+    </a>
+
     <a href="bom_out_of_sync_bom_list.php">
         <div <?php if ($left_selected == "OUTOFSYNCBOMLIST") {
             echo 'class="menu-left-current-page"';
