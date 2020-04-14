@@ -1,9 +1,9 @@
 <?php
-  $nav_selected = "SCANNER";
+  $nav_selected = "BOM";
   $left_buttons = "YES";
   $left_selected = "OUTOFSYNCBOMLIST";
   include("./nav.php");
-  
+
  ?>
 
 <div class="right-content">
@@ -31,16 +31,16 @@
                         <th>Request ID</th>
                         <th>Request Date</th>
                         <th>Request Status</th>
-                        <th>Request Step</th>                        
+                        <th>Request Step</th>
                         <th>Notes</th>
                 </tr>
               </thead>
               <tbody>
 
               <?php
-$sql = "SELECT * FROM sbom sb WHERE 
+$sql = "SELECT * FROM sbom sb WHERE
 (SELECT COUNT(*) FROM sbom sb2 WHERE sb.cmp_name = sb2.cmp_name AND sb.cmp_version != sb2.cmp_version) >=1
- AND 
+ AND
  (NOT (app_status = 'released')) ORDER BY cmp_name;";
 $result = $db->query($sql);
                 if ($result->num_rows > 0) {
@@ -48,7 +48,7 @@ $result = $db->query($sql);
                     while($row = $result->fetch_assoc()) {
                         echo '<tr>
                                 <td>'.$row["row_id"].'</td>
-                                <td><a class="btn" href="scanner_sbom_tree.php?id='.$row["app_id"].'">'.$row["app_id"].' </a> </td>
+                                <td><a class="btn" href="bom_sbom_tree.php?id='.$row["app_id"].'">'.$row["app_id"].' </a> </td>
                                 <td>'.$row["app_name"].'</td>
                                 <td>'.$row["app_version"].'</td>
                                 <td>'.$row["cmp_id"].' </span> </td>
@@ -87,7 +87,7 @@ $result = $db->query($sql);
                         <th>Request ID</th>
                         <th>Request Date</th>
                         <th>Request Status</th>
-                        <th>Request Step</th> 
+                        <th>Request Step</th>
                         <th>Notes</th>
                 </tr>
               </tfoot>
@@ -96,7 +96,7 @@ $result = $db->query($sql);
 
         <script type="text/javascript" language="javascript">
     $(document).ready( function () {
-        
+
         $('#info').DataTable( {
             dom: 'lfrtBip',
             buttons: [
@@ -107,7 +107,7 @@ $result = $db->query($sql);
         $('#info thead tr:eq(1) th').each( function (i) {
             var title = $(this).text();
             $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
-    
+
             $( 'input', this ).on( 'keyup change', function () {
                 if ( table.column(i).search() !== this.value ) {
                     table
@@ -117,17 +117,17 @@ $result = $db->query($sql);
                 }
             } );
         } );
-    
+
         var table = $('#info').DataTable( {
             orderCellsTop: true,
             fixedHeader: true,
             retrieve: true
         } );
-        
+
     } );
 </script>
 
-        
+
 
  <style>
    tfoot {
