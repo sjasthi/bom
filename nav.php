@@ -40,8 +40,8 @@
         <ul>
             <a href="index.php">
               <li class="horozontal-li-logo">
-              <img src ="./images/main_logo.png">
-              <br/>A Basic Composer</li>
+              <img src ="./images/sbom_main.png">
+              <br/>Software BOM</li>
             </a>
 
             <a href="index.php">

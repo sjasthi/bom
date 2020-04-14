@@ -1,7 +1,7 @@
 <?php
   $nav_selected = "BOM";
   $left_buttons = "YES";
-  $left_selected = "SOFTWAREBOM";
+  $left_selected = "SBOMLIST";
 
   include "get_scope.php";
   include("./nav.php");
