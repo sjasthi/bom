@@ -9,7 +9,7 @@
 <div class="right-content">
     <div class="container">
 
-      <h3 style = "color: #01B0F1;">Scanner --> Out of Sync BOM List </h3>
+      <h3 style = "color: #01B0F1;">BOM --> Out of Sync BOM List </h3>
 
         <h3><img src="images/sbom_list.png" style="max-height: 35px;" />Out of Sync BOM List</h3>
 
