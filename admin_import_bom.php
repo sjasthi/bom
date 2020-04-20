@@ -16,16 +16,45 @@ table.center {
     margin-left:auto;
     margin-right:auto;
   }
+#list ul {
+  display: inline-block;
+  text-align: left;
+}
 </style>
 </head>
 
 <body>
   <h2 style = "color: #01B0F1;">Admin --> Import BOM</h2>
-  <form enctype="multipart/form-data" method="POST" role="form">
-    <input type="file" name="file" id="file" size="150" style="color:black;">
-    <button style="background: #01B0F1; color: white;" type="submit"
-    class="btn btn-default" name="submit" value="submit">Import File</button>
-  </form>
+  <div id='list'>
+    <p>Before importing your file, please make sure your file is a <span style="font-weight: bold;">CSV</span> 
+    file with these <span style="font-weight: bold;">15</span> columns and headers:<br></p>
+    <ul>
+            <li>app_id</li>
+            <li>app_name</li>
+            <li>app_version</li>
+            <li>cmp_id</li>
+            <li>cmp_name</li>
+    </ul>
+    <ul>
+            <li>cmp_version</li>
+            <li>cmp_type</li>
+            <li>app_status</li>
+            <li>cmp_status</li>
+            <li>request_id</li>
+    </ul>
+    <ul>
+            <li>request_date</li>
+            <li>request_status</li>
+            <li>request_step</li>
+            <li>notes</li>
+            <li>requestor</li>
+    </ul>
+  </div>
+    <form enctype="multipart/form-data" method="POST" role="form">
+      <input type="file" name="file" id="file" size="150" style="color:black; display: inline-block;">
+      <button style="background: #01B0F1; color: white;" type="submit"
+      class="btn btn-default" name="submit" value="submit">Import File</button>
+    </form>
 </body>
 </html>
 
@@ -38,7 +67,7 @@ $c = 0;
 
 $labels = array('app_id', 'app_name', 'app_version', 'cmp_id', 'cmp_name', 'cmp_version',
 'cmp_type', 'app_status', 'cmp_status', 'request_id', 'request_date', 'request_status', 'request_step',
-'request_notes', 'notes', 'requestor');
+'notes', 'requestor');
 $data = array();
 $map = array();
 
@@ -88,25 +117,7 @@ if (isset($_POST['submit'])) {
           echo "<div style='color: white; background-color: red; font-weight: bold; width: 500px;
           border-radius: 2px; padding: 1rem;'>CSV FILE MUST HAVE 15 COLUMNS";
           echo "<br>Your uploaded CSV file has ".count($map)."/15 column(s) or column labels.";
-          echo "<br><br>Please make sure you have these columns and their labels in your csv file:
-          <ul>
-            <li>app_id</li>
-            <li>app_name</li>
-            <li>app_version</li>
-            <li>cmp_id</li>
-            <li>cmp_name</li>
-            <li>cmp_version</li>
-            <li>cmp_type</li>
-            <li>app_status</li>
-            <li>cmp_status</li>
-            <li>request_id</li>
-            <li>request_date</li>
-            <li>request_status</li>
-            <li>request_step</li>
-            <li>request_notes</li>
-            <li>notes</li>
-            <li>requestor</li>
-          </ul></div>";
+          echo "<br>Please make sure you have the correct columns and labels in your csv file.</div>";
 
         }else {
           //delete existing data in table
