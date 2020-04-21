@@ -156,17 +156,21 @@ if (isset($_POST['submit'])) {
       $target_file = $target_dir.basename($_FILES["file"]["name"]);
       move_uploaded_file($file,$target_file);
       $_SESSION["the_file"] = $target_file;
-
       $handle = fopen($target_file, "r");
+
       if(FALSE !== $handle) {
           $row = fgetcsv($handle, 1000, ',');
-
-          function dropdown($row) {
-            foreach($row as $val) {
-                echo '<option value="'.$val.'">'.$val.'</option>';
+          if(count($row) < 15) {
+            echo "<p style='color: white; background-color: red; font-weight: bold; width: 500px;
+            text-align: center; border-radius: 2px;'>FILE CAN'T HAVE LESS THAN 15 COLUMNS</p>";
+          }else {
+            function dropdown($row) {
+              foreach($row as $val) {
+                  echo '<option value="'.$val.'">'.$val.'</option>';
+              }
             }
+            include('import_form.php');
           }
-          include('import_form.php');
       }
     }
   }
@@ -224,6 +228,7 @@ if (isset($_POST['submit'])) {
 
      if(empty($data)) {
        echo "EMPTY";
+
      }else {
        //delete existing data in table
        $sqlDelete = "DELETE FROM sbom";
