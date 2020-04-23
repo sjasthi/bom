@@ -6,18 +6,31 @@
   $left_selected = "SBOMTREE2";
   include("./nav.php");
   include "get_scope.php";
-  //PDO connection
-  $servername = 'localhost';
-  $dbname = 'bom';
-  $username = 'root';
-  $password = '';
-  $pdo = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
 
+  //Get DB Credentials
+  $DB_SERVER = constant('DB_SERVER');
+  $DB_NAME = constant('DB_NAME');
+  $DB_USER = constant('DB_USER');
+  $DB_PASS = constant('DB_PASS');
+  //PDO connection
+  $pdo = new PDO("mysql:host=$DB_SERVER;dbname=$DB_NAME", $DB_USER, $DB_PASS);
+  
   $cookie_name = 'preference';
 
   $def = "false";
   $DEFAULT_SCOPE_FOR_RELEASES = getScope($db);
   $scopeArray = array();
+
+
+  //initialize for use in logging
+  $logpref = false;
+  getLoggingPreference($db);
+  $timestamp = date("h:i:sa\r\n");
+  $logfile = "./logs/bom_error.log";
+
+  if ($logpref) {
+    error_log($timestamp, 3, $logfile);
+  }
 
   //Grabs default app_ids that are to be shown in the default scope
   function getFilterArray($db) {
@@ -37,6 +50,22 @@
     }
   }
 
+
+  function getLoggingPreference($db){
+    global $pdo;
+    global $logpref;
+
+    $sql = "SELECT value FROM preferences WHERE preference_id = 1";
+    $sqlLog = $pdo->prepare($sql);
+    $sqlLog->execute();
+    if ($sqlLog->rowCount() > 0) {
+      $row = $sqlLog->fetch(PDO::FETCH_ASSOC);
+      if($row["value"] == "true"){
+        $logpref = true;
+      }
+    }
+  }
+
   //Display error if user retrieves preferences w/o any cookies set
   global $pref_err;
   if(isset($_POST['getpref']) && !isset($_COOKIE[$cookie_name])) {
@@ -47,6 +76,7 @@
   text-align: center;
   background-color: red;
   color: white;">'.$pref_err.'</p>';
+  
  ?>
 
 <style>
@@ -60,10 +90,18 @@
   function getBoms($db, $sql_parent) {
     global $def;
     global $scopeArray;
+    global $logpref;
+    global $logfile;
     $result_parent = $db->query($sql_parent);
     $p=1;
     $c=1;
     $gc=1;
+
+    //If log enabled, store query to file
+    if($logpref){
+      $querylog = $sql_parent."\r\n";
+      error_log($querylog, 3, $logfile);
+    }
 
     if ($result_parent->num_rows > 0) {
       while($row_parent = $result_parent->fetch_assoc()) {
@@ -74,6 +112,12 @@
         $div_class = $row_parent["div_class"];
         $p_id = $p;
         $app_id = "NONE";
+
+        //If log enabled, store parent info to file
+        if($logpref){
+          $parentlog = $p_id." ".$app_name." ".$app_version." ".$div_class."\r\n";
+          error_log($parentlog, 3, $logfile);
+        }
 
         //If the default scope is
         if ($def == "true"){
@@ -106,6 +150,12 @@
           from sbom where app_name = '".$app_name."' and app_version = '".$app_version."' and app_status = '".$app_status."'";
         $result_child = $db->query($sql_child);
 
+        // if log enabled store query to file
+        if($logpref){
+          $querylog = $sql_child."\r\n";
+          error_log($querylog, 3, $logfile);
+        }
+        
         if ($result_child->num_rows > 0) {
           // output data of child
           while($row_child = $result_child->fetch_assoc()) {
@@ -118,6 +168,13 @@
             $notes = $row_child["notes"];
             $c_class = $row_child["class"];
             $c_id=$p_id."-".$c;
+
+            //If log enabled, store child info to file
+            if($logpref){
+              $childlog = $c_id." ".$cmp_name." ".$cmp_version." ".$c_class."\r\n";
+              error_log($childlog, 3, $logfile);
+            }
+
             echo "<tr data-tt-id = '".$c_id."' data-tt-parent-id='".$p_id."' class = 'component' >
             <td class='text-capitalize'> <div class = 'btn ".$c_class."'> <span class = 'cmp_name'>".$cmp_name."</span>&nbsp; &nbsp;&nbsp; &nbsp;</div></td>
             <td class = 'cmp_version'>".$cmp_version."</td>
@@ -134,6 +191,13 @@
             where app_name = '".$cmp_name."' and app_version = '".$cmp_version."' ;";
 
             $result_gchild = $db->query($sql_gchild);
+
+            //if log enabled store query to file
+            if($logpref){
+              $querylog = $sql_gchild."\r\n";
+              error_log($querylog, 3, $logfile);
+            }
+
             if ($result_gchild->num_rows > 0 ) {
               // output data of grandchild
               while($row_gchild = $result_gchild->fetch_assoc()) {
@@ -146,6 +210,13 @@
                 $gnotes = $row_gchild["notes"];
                 $gc_class = $row_gchild["class"];
                 $gc_id=$c_id."-".$gc;
+
+                // if log enabled store grandchild info to log
+                if($logpref){
+                  $gchildlog = $gc_id." ".$gcmp_name." ".$gcmp_version." ".$gc_class."\r\n";
+                  error_log($gchildlog, 3, $logfile);
+                }
+
                 echo "<tr data-tt-id = '".$gc_id."' data-tt-parent-id='".$c_id."' >
                 <td class='text-capitalize'> <div class = 'btn ".$gc_class."'> <span class = 'cmp_name'>".$gcmp_name."</span>&nbsp; &nbsp;&nbsp; &nbsp;</div></td>
                 <td class = 'cmp_version'>".$gcmp_version."</td>
