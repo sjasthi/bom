@@ -11,6 +11,14 @@ include("./nav.php");
 if(!isset($_SESSION)){
     session_start();
 }
+
+$cookie_name = 'mapping';
+$expire = strtotime('+1 year');
+
+//if cookie is set, decode cookie into array
+if(isset($_COOKIE[$cookie_name])) {
+  $cookie_map = json_decode($_COOKIE[$cookie_name]);
+}
 ?>
 
 <html>
@@ -52,37 +60,6 @@ select {
   border-radius: 4px;
 }
 </style>
-
-<!--JavaScript to disable and enabled selected options to prevent duplicate selections from form-->
-<script>
-$(document).ready(function() {
-  $("select").change(function()
-  {
-      $("select option").prop("hidden",""); //enable everything
-
-      //collect the values from selected;
-      var  arr = $.map
-      (
-          $("select option:selected"), function(n)
-          {
-              return n.value;
-          }
-      );
-
-      //disable elements
-      $("select option").filter(function()
-      {
-          return $.inArray($(this).val(),arr)>-1; //if value is in the array of selected values
-      }).prop("hidden","hidden");
-
-      //re-enable elements
-      $("select option").filter(function()
-      {
-          return $.inArray($(this).val(),arr)==-1; //if value is not in the array of selected values
-      }).prop("hidden","");
-  }).trigger("change"); // Trigger the change function on page load. Useful if select values are pre-selected.
-});
-</script>
 </head>
 
 <body>
@@ -164,9 +141,102 @@ if (isset($_POST['submit'])) {
             echo "<p style='color: white; background-color: red; font-weight: bold; width: 500px;
             text-align: center; border-radius: 2px;'>FILE CAN'T HAVE LESS THAN 15 COLUMNS</p>";
           }else {
-            function dropdown($row) {
+            //function to populate options with headers from uploaded file
+            function file_options($row) {
               foreach($row as $val) {
-                  echo '<option value="'.$val.'">'.$val.'</option>';
+                echo '<option value="'.$val.'">'.$val.'</option>';
+              }
+            }
+
+            //function to populate options
+            function dropdown($cookie_map, $col, $row) {
+              //if mapping cookie is set, set headers from mapping cookie array as the default option
+              //with headers pulled from uploaded file
+              if(isset($cookie_map)) {
+                //get column headers from mapping cookie array
+                $appid = $cookie_map[0];
+                $appname = $cookie_map[1];
+                $appver = $cookie_map[2];
+                $cmpid = $cookie_map[3];
+                $cmpname = $cookie_map[4];
+                $cmpver = $cookie_map[5];
+                $cmptype = $cookie_map[6];
+                $appstatus = $cookie_map[7];
+                $cmpstatus = $cookie_map[8];
+                $requestid = $cookie_map[9];
+                $requestdate = $cookie_map[10];
+                $requeststatus = $cookie_map[11];
+                $requeststep = $cookie_map[12];
+                $notes = $cookie_map[13];
+                $requestor = $cookie_map[14];
+
+                //set default option for each selection
+                switch($col) {
+                  case 'appid':
+                    echo '<option value="'.$appid.'">'.$appid.'</option>';
+                    file_options($row);
+                    break;
+                  case 'appname':
+                    echo '<option value="'.$appname.'">'.$appname.'</option>';
+                    file_options($row);
+                    break;
+                  case 'appver':
+                    echo '<option value="'.$appver.'">'.$appver.'</option>';
+                    file_options($row);
+                  case 'cmpid':
+                    echo '<option value="'.$cmpid.'">'.$cmpid.'</option>';
+                    file_options($row);
+                    break;
+                  case 'cmpname':
+                    echo '<option value="'.$cmpname.'">'.$cmpname.'</option>';
+                    file_options($row);
+                    break;
+                  case 'cmpver':
+                    echo '<option value="'.$cmpver.'">'.$cmpver.'</option>';
+                    file_options($row);
+                  case 'cmptype':
+                    echo '<option value="'.$cmptype.'">'.$cmptype.'</option>';
+                    file_options($row);
+                    break;
+                  case 'appstatus':
+                    echo '<option value="'.$appstatus.'">'.$appstatus.'</option>';
+                    file_options($row);
+                    break;
+                  case 'cmpstatus':
+                    echo '<option value="'.$cmpstatus.'">'.$cmpstatus.'</option>';
+                    file_options($row);
+                  case 'cmpid':
+                    echo '<option value="'.$cmpid.'">'.$cmpid.'</option>';
+                    file_options($row);
+                    break;
+                  case 'requestid':
+                    echo '<option value="'.$requestid.'">'.$requestid.'</option>';
+                    file_options($row);
+                    break;
+                  case 'requestdate':
+                    echo '<option value="'.$requestdate.'">'.$requestdate.'</option>';
+                    file_options($row);
+                  case 'requeststatus':
+                    echo '<option value="'.$requeststatus.'">'.$requeststatus.'</option>';
+                    file_options($row);
+                  case 'requeststep':
+                    echo '<option value="'.$requeststep.'">'.$requeststep.'</option>';
+                    file_options($row);
+                    break;
+                  case 'notes':
+                    echo '<option value="'.$notes.'">'.$notes.'</option>';
+                    file_options($row);
+                    break;
+                  case 'requestor':
+                    echo '<option value="'.$requestor.'">'.$requestor.'</option>';
+                    file_options($row);
+                }
+
+              }
+              //if mapping cookie is not set, populate with the uploaded file headers
+              else {
+                echo '<option value="">--Select Choice--</option>';
+                file_options($row);
               }
             }
             include('import_form.php');
@@ -195,6 +265,16 @@ if (isset($_POST['submit'])) {
    $requestor_col = $_POST['requestor'];
    $notes_col = $_POST['notes'];
    $target_file = $_SESSION["the_file"];
+
+   //if mapping cookie is not set insert header selections into array and set cookie
+   if(!isset($_COOKIE[$cookie_name])) {
+     $mapping = array($app_id_col, $app_name_col, $app_version_col,
+      $cmp_id_col, $cmp_name_col, $cmp_version_col, $cmp_type_col, $app_status_col,
+      $cmp_status_col, $request_id_col, $request_date_col, $request_status_col,
+      $request_step_col, $notes_col, $requestor_col);
+
+     $set_map = setcookie($cookie_name, json_encode($mapping), $expire);
+   }
 
    $headers = array($app_id_col, $app_name_col, $app_version_col, $cmp_id_col, $cmp_name_col,
    $cmp_version_col, $cmp_type_col, $app_status_col, $cmp_status_col, $request_id_col, $request_date_col,
