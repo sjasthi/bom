@@ -67,12 +67,14 @@ table.center {
       echo '<tr>
         <td>'.$row["app_id"].'</td>
         <td>'.$row["name"].'</td>
-      </tr>
-      </table>';
+      </tr>';
     }
+
+    echo '</table>';
   } else {
       echo "<br><font size = '+1'>No preference cookie found.</font><br>";
   }
+
   ?>
   
 
