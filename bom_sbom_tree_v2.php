@@ -14,7 +14,7 @@
   $DB_PASS = constant('DB_PASS');
   //PDO connection
   $pdo = new PDO("mysql:host=$DB_SERVER;dbname=$DB_NAME", $DB_USER, $DB_PASS);
-  
+   $cookie_name = 'preference';
   $cookie_name = 'preference';
 
   $def = "false";
@@ -97,8 +97,8 @@
     $c=1;
     $gc=1;
 
-    //If log enabled, store query to file
-    if($logpref){
+    //If logging enabled and query failure, store query to log file
+    if($logpref && $result_parent == FALSE){
       $querylog = $sql_parent."\r\n";
       error_log($querylog, 3, $logfile);
     }
@@ -113,13 +113,15 @@
         $p_id = $p;
         $app_id = "NONE";
 
-        //If log enabled, store parent info to file
+
+        /*If log enabled, store parent info to file. This commented out code is for examining query return values
         if($logpref){
           $parentlog = $p_id." ".$app_name." ".$app_version." ".$div_class."\r\n";
           error_log($parentlog, 3, $logfile);
         }
+        */
 
-        //If the default scope is
+        //If the default scope is enabled then hide all table rows that are outside the system scope
         if ($def == "true"){
           $app_id = $row_parent["app_id"];
           if (in_array($app_id, $scopeArray) && $def == "true") {
@@ -150,8 +152,8 @@
           from sbom where app_name = '".$app_name."' and app_version = '".$app_version."' and app_status = '".$app_status."'";
         $result_child = $db->query($sql_child);
 
-        // if log enabled store query to file
-        if($logpref){
+        //If logging enabled and query failure, store child query to log file
+        if($logpref && $result_child == FALSE){
           $querylog = $sql_child."\r\n";
           error_log($querylog, 3, $logfile);
         }
@@ -169,11 +171,12 @@
             $c_class = $row_child["class"];
             $c_id=$p_id."-".$c;
 
-            //If log enabled, store child info to file
-            if($logpref){
+            //If log enabled, store child info to file. Commented out code is for examining child query return values
+            /*if($logpref){
               $childlog = $c_id." ".$cmp_name." ".$cmp_version." ".$c_class."\r\n";
               error_log($childlog, 3, $logfile);
             }
+            */
 
             echo "<tr data-tt-id = '".$c_id."' data-tt-parent-id='".$p_id."' class = 'component' >
             <td class='text-capitalize'> <div class = 'btn ".$c_class."'> <span class = 'cmp_name'>".$cmp_name."</span>&nbsp; &nbsp;&nbsp; &nbsp;</div></td>
@@ -193,7 +196,7 @@
             $result_gchild = $db->query($sql_gchild);
 
             //if log enabled store query to file
-            if($logpref){
+            if($logpref && $result_gchild == FALSE){
               $querylog = $sql_gchild."\r\n";
               error_log($querylog, 3, $logfile);
             }
@@ -211,12 +214,13 @@
                 $gc_class = $row_gchild["class"];
                 $gc_id=$c_id."-".$gc;
 
-                // if log enabled store grandchild info to log
-                if($logpref){
+                // if log enabled store grandchild info to log. Commented out code is for examining grandchild query return values.
+                /*if($logpref){
                   $gchildlog = $gc_id." ".$gcmp_name." ".$gcmp_version." ".$gc_class."\r\n";
                   error_log($gchildlog, 3, $logfile);
                 }
-
+                */
+                
                 echo "<tr data-tt-id = '".$gc_id."' data-tt-parent-id='".$c_id."' >
                 <td class='text-capitalize'> <div class = 'btn ".$gc_class."'> <span class = 'cmp_name'>".$gcmp_name."</span>&nbsp; &nbsp;&nbsp; &nbsp;</div></td>
                 <td class = 'cmp_version'>".$gcmp_version."</td>
