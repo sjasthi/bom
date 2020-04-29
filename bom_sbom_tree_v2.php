@@ -250,9 +250,8 @@
   function getAllBoms($db) {
     $sql_parent = "SELECT DISTINCT app_name as name,
       app_version as version, app_status as status, color as div_class,
-      CASE WHEN color = 'yellow' THEN 'child' 
-      ELSE 'parent' 
-      END AS class from sbom 
+      CASE WHEN color = 'red' THEN 'parent'
+      END AS class from sbom where color = 'red'
       GROUP BY name, version, status";
 
       $starttime = microtime(true);
