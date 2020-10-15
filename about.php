@@ -52,6 +52,8 @@
       <li>Christopher Corcoran (christohper.corcoran@my.metrostate.edu)</li>
       <li>Jaclyn Cao (jaclyn.cao@my.metrostate.edu)</li>  
       <li>Rei Weikleenget (rei.weikleengety@my.metrostate.edu)</li>
+
+      <li>Kevin (emaily@my.metrostate.edu)</li>
       
 		</ul>
 
