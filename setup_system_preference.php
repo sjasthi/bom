@@ -16,6 +16,21 @@ table.center {
     margin-left:auto;
     margin-right:auto;
   }
+
+#apps {
+  border-collapse: collapse;
+}
+
+#apps td , #apps th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+  padding-right: 100px;
+}
+
+#apps tr:nth-child(even) {
+  background-color: #dddddd;
+}
 </style>
 </head>
 
@@ -24,7 +39,7 @@ table.center {
 
   </form>
 
-  <table style="width:100%">
+  <table id = "apps">
   <caption>System Scope Applications<caption>
   <tr>
     <th>App ID</th>
@@ -88,6 +103,8 @@ table.center {
       margin-right: 1rem;'>Enable Logging</button>
     </form>";
   }
+
+  echo "<br><font size='+2'>To change system scope you must be logged in as an administrator and select BOMs from the releases list.</font>"; 
 
   if(isset($_POST['disable'])){
     $sql = "UPDATE preferences

@@ -40,10 +40,6 @@
   if(isset($_POST['save']) && isset($_POST['app'])) {
     $apps = $_POST['app'];
 
-    if(count($apps) > 5) {
-      $count_err = "You can't select more than 5 BOMS.";
-
-    }else {
       echo '<p
         style="font-size: 2.5rem;
         text-align: center;
@@ -52,7 +48,6 @@
         header("Refresh:1.75");
       $preference = $apps;
       $set_pref = setcookie($cookie_name, json_encode($preference), $expire);
-    }
 
   }elseif(isset($_POST['save']) && !isset($_POST['app'])) {
     if(!isset($apps)) {
@@ -61,10 +56,6 @@
   }elseif(isset($_POST['saveScope']) && isset($_POST['app']) && isset($_SESSION['login_user']) && isset($_SESSION['admin'])) {
     $apps = $_POST['app'];
 
-    if(count($apps) > 5) {
-      $count_err = "You can't select more than 5 BOMS.";
-
-    }else {
       echo '<p
         style="font-size: 2.5rem;
         text-align: center;
@@ -72,7 +63,6 @@
         color: white;">Default BOM scope successfully set.</p>';
       $newScope = implode(",",$apps);
       updateScope($db, $newScope);
-    }
   } elseif (isset($_POST['saveScope']) && !isset($_POST['app']) && isset($_SESSION['login_user']) && isset($_SESSION['admin'])){
     if(!isset($apps)){
       $count_err = "You have set the system scope to be empty";
