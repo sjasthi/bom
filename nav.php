@@ -27,7 +27,7 @@
         <link rel="stylesheet" href="styles/custom_nav.css" type="text/css">
         
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-treetable/3.2.0/css/jquery.treetable.theme.default.css" />
-        <title>A Basic Composer</title>
+        <title>Software BOM (SBOM)</title>
         <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"/>
 
         <link rel="stylesheet" href="./mainStyleSheet.css">
