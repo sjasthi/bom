@@ -21,13 +21,13 @@
             <img src="./images/sbom_tree.png">
             <br/>BOM Tree<br/></div>
     </a>
-
-        <a href="bom_sbom_tree_v2.php">
+        <!-- // changed to v3 10-26-2020 -->
+        <a href="bom_sbom_tree_v3.php">
         <div <?php if ($left_selected == "SBOMTREE2") {
             echo 'class="menu-left-current-page"';
         } ?>>
             <img src="./images/sbom_tree.png">
-            <br/>BOM Tree V2<br/></div>
+            <br/>BOM Tree V3<br/></div>
     </a>
 
     <a href="bom_pieChart.php">
@@ -60,4 +60,6 @@
     </a>
     </div>
 </body>
+
+<!-- // Edit By Kevin (kevin.flanagan@my.metrostate.edu) -->
 </html>
